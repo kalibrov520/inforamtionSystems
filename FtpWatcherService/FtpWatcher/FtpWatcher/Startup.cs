@@ -29,6 +29,13 @@ namespace FtpWatcher
                     options.BaseUri = new Uri("http://localhost:8080/engine-rest");
                 })
                 .AddHandler<FtpWatcherHandler>();
+            services.AddCamundaWorker(options =>
+                {
+                    options.WorkerId = "calculateWorker";
+                    options.WorkerCount = 1;
+                    options.BaseUri = new Uri("http://localhost:8080/engine-rest");
+                })
+                .AddHandler<ExecuterHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
