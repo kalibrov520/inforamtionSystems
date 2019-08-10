@@ -33,3 +33,7 @@ DSDS/.vs/DSDS/v15/Server/sqlite3/storage.ide-wal
 DSDS/.vs/DSDS/v15/Server/sqlite3/storage.ide-shm
 DSDS/.vs/DSDS/v15/Server/sqlite3/storage.ide
 DSDS/.vs/DSDS/v15/Server/sqlite3/db.lock
+DSDS/Utils/FileChecker/obj/
+DSDS/Utils/FileChecker/bin/
+DSDS/Tests/FileCheckerTestConsoleApp/obj/
+DSDS/Tests/FileCheckerTestConsoleApp/bin/
