@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FileChecker.FileSystem
+namespace FileLoader.FileSystem
 {
     public class Directory : IFileSystemItem
     {

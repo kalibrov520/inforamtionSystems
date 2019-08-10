@@ -1,6 +1,6 @@
-﻿using FileChecker.FileSystem;
+﻿using FileLoader.FileSystem;
 
-namespace FileChecker
+namespace FileLoader
 {
     public interface IFileLoader
     {
