@@ -5,9 +5,7 @@ namespace FileLoader.FileSystem
 {
     public class Directory : IFileSystemItem
     {
-        public string FullPath { get; set; }
-
-        public IEnumerable<IFileSystemItem> Items { get; set; }
+        public List<IFileSystemItem> Items { get; set; }
 
         public string Name { get; set; }
 

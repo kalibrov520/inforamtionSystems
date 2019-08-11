@@ -1,9 +1,10 @@
-﻿using FileLoader.FileSystem;
+﻿using System.Collections.Generic;
+using FileLoader.FileSystem;
 
 namespace FileLoader
 {
     public interface IFileLoader
     {
-        IFileSystemItem GetFiles();
+        IEnumerable<IFileSystemItem> GetFiles();
     }
 }

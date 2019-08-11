@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Numerics;
 
 namespace FileLoader.FileSystem
 {
     public class File : IFileSystemItem
     {
-        public int Size { get; set; }
+        public double Size { get; set; }
 
         public string Name { get; set; }
 
