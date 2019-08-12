@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Camunda.Worker;
+using FileLoader.FTP;
 
 namespace FtpWatcherService.Handlers
 {
@@ -13,6 +14,8 @@ namespace FtpWatcherService.Handlers
 
         public override Task<IExecutionResult> Process(ExternalTask externalTask)
         {
+            var fileLoader = new FtpFileLoader("ftp://spb-mdspoc01.internal.corp", "ftpUser", "password123");
+
             using (var watcher = new FileSystemWatcher())
             {
                 watcher.Path = "path";

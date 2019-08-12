@@ -36,6 +36,13 @@ namespace FileLoader.FTP
             var checker = new WildCardPatternChecker(patterns);
             return checker.CheckMatches(items);
         }
+
+        public IEnumerable<IFileSystemItem> GetFilesWithFileExtensionPattern(IEnumerable<string> patterns)
+        {
+            var items = GetFiles();
+            var checker = new WildCardPatternChecker(patterns);
+            return checker.CheckFileExtensionMatches(items);
+        }
         
         private IEnumerable<IFileSystemItem> LoadFromPath(string path)
         {

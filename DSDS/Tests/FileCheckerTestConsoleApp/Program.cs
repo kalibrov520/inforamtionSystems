@@ -1,6 +1,7 @@
 ﻿using FileLoader.FTP;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace FileCheckerTestConsoleApp
 {
@@ -25,6 +26,22 @@ namespace FileCheckerTestConsoleApp
             var results = loader.GetFilesWithPattern(patterns);
 
             foreach (var item in results)
+            {
+                Console.WriteLine($"{item.LastModified} {item.FullPath}");
+            }
+
+            Console.ReadLine();
+
+            Console.WriteLine("===================");
+
+            var patternsForExtension = new List<string>
+            {
+                "*.txt"
+            };
+
+            var resultsForExtension = loader.GetFilesWithFileExtensionPattern(patternsForExtension);
+
+            foreach (var item in resultsForExtension)
             {
                 Console.WriteLine($"{item.LastModified} {item.FullPath}");
             }
