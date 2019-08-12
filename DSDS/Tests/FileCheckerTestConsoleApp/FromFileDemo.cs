@@ -21,18 +21,33 @@ namespace FileCheckerTestConsoleApp
 
             var patternsForExtension = new List<string>
             {
-                "*.txt"
+                "*.txt",
+                "*.csv",
+                "*.tsv",
+                "*.xls"
             };
 
-            var filesOnFtp = fileLoader.GetFilesWithFileExtensionPattern(patternsForExtension);
+            var filesOnFtp = new List<IFileSystemItem>();
+
+            using (var textReader = new StreamReader("FilesList.txt"))
+            {
+                while (!textReader.EndOfStream)
+                {
+                    var lineProperties = textReader.ReadLine()?.Split(' ');
+                    filesOnFtp.Add(new FileLoader.FileSystem.File
+                    {
+                        Name = lineProperties[0],
+                        FullPath = lineProperties[1],
+                        LastModified = Convert.ToDateTime(lineProperties[2] + " " + lineProperties[3] + lineProperties[4])
+                    });
+                }
+            }
 
             timer.Elapsed += (source, e) =>
             {
                 var newFiles = fileLoader.GetFilesWithFileExtensionPattern(patternsForExtension).ToList();
 
-                var check = filesOnFtp.SequenceEqual(newFiles);
-
-                if (check)
+                if (!filesOnFtp.SequenceEqual(newFiles))
                 {
                     using (var textWriter = new StreamWriter("FilesList.txt"))
                     {
@@ -42,25 +57,9 @@ namespace FileCheckerTestConsoleApp
                             textWriter.WriteLineAsync(lineToWrite);
                         }
                     }
-                    using (var textReader = new StreamReader("FilesList.txt"))
-                    {
-                        var files = new List<IFileSystemItem>();
-                        while (!textReader.EndOfStream)
-                        {
-                            var lineProperties = textReader.ReadLine()?.Split(' ');
-                            files.Add(new FileLoader.FileSystem.File
-                            {
-                                Name = lineProperties[0],
-                                FullPath = lineProperties[1],
-                                LastModified = Convert.ToDateTime(lineProperties[2] + " " + lineProperties[3] + lineProperties[4])
-                            });
-                        }
-                    }
                     _updateStatus = true;
                 }
             };
-
-            var firstDictionary = filesOnFtp.ToDictionary(entry => entry.Name, entry => entry.LastModified);
 
             timer.Enabled = true;
 
@@ -68,8 +67,6 @@ namespace FileCheckerTestConsoleApp
             {
 
             }
-
-            timer.Enabled = false;
         }
     }
 }

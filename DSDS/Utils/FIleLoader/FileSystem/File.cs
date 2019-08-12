@@ -17,7 +17,7 @@ namespace FileLoader.FileSystem
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Size.Equals(other.Size) && string.Equals(FullPath, other.FullPath) && string.Equals(Name, other.Name) && LastModified.Equals(other.LastModified);
+            return string.Equals(FullPath, other.FullPath) && string.Equals(Name, other.Name) && LastModified.Equals(other.LastModified);
         }
 
         public override bool Equals(object obj)
