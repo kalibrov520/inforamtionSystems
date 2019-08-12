@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +27,21 @@ namespace FtpWatcherService.Handlers
                 "*.txt"
             };
 
-            var filesOnFtp = fileLoader.GetFilesWithFileExtensionPattern(patternsForExtension);
+            var filesOnFtp = new List<IFileSystemItem>();
+
+            using (var textReader = new StreamReader("FilesList.txt"))
+            {
+                while (!textReader.EndOfStream)
+                {
+                    var lineProperties = textReader.ReadLine()?.Split(' ');
+                    filesOnFtp.Add(new FileLoader.FileSystem.File
+                    {
+                        Name = lineProperties[0],
+                        FullPath = lineProperties[1],
+                        LastModified = DateTime.Parse(lineProperties[2])
+                    });
+                }
+            }
 
             timer.Elapsed += (source, e) =>
             {
@@ -34,6 +49,14 @@ namespace FtpWatcherService.Handlers
 
                 if (!filesOnFtp.SequenceEqual(newFiles))
                 {
+                    using (var textWriter = new StreamWriter("FilesList.txt"))
+                    {
+                        foreach (var item in newFiles)
+                        {
+                            var lineToWrite = item.Name + " " + item.FullPath + " " + item.LastModified.ToString("f");
+                            textWriter.WriteLineAsync(lineToWrite);
+                        }
+                    }
                     _updateStatus = true;
                 }
             };
