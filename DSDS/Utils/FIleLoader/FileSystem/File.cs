@@ -7,6 +7,8 @@ namespace FileLoader.FileSystem
     {
         public double Size { get; set; }
 
+        public string FullPath { get; set; }
+
         public string Name { get; set; }
 
         public DateTime LastModified { get; set; }

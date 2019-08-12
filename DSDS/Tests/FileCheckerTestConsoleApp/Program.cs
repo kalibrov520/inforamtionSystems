@@ -1,5 +1,6 @@
 ﻿using FileLoader.FTP;
 using System;
+using System.Collections.Generic;
 
 namespace FileCheckerTestConsoleApp
 {
@@ -11,7 +12,21 @@ namespace FileCheckerTestConsoleApp
             var items = loader.GetFiles();
             foreach (var item in items)
             {
-                Console.WriteLine(item.Name);
+                Console.WriteLine($"{item.LastModified} {item.FullPath}");
+            }
+
+            Console.WriteLine("===================");
+
+            var patterns = new List<string>
+            {
+                "*.csv"
+            };
+
+            var results = loader.GetFilesWithPattern(patterns);
+
+            foreach (var item in results)
+            {
+                Console.WriteLine($"{item.LastModified} {item.FullPath}");
             }
 
             Console.ReadLine();

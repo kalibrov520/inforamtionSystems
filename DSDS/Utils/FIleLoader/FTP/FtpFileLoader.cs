@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using FileLoader.FileSystem;
 using Directory = FileLoader.FileSystem.Directory;
 
@@ -29,12 +30,25 @@ namespace FileLoader.FTP
             return LoadFromPath(RootPath);
         }
 
+        public IEnumerable<IFileSystemItem> GetFilesWithPattern(IEnumerable<string> patterns)
+        {
+            var items = GetFiles();
+            var checker = new WildCardPatternChecker(patterns);
+            return checker.CheckMatches(items);
+        }
+        
         private IEnumerable<IFileSystemItem> LoadFromPath(string path)
         {
             var request = CreateRequest(path);
             var response = request.GetResponse();
             var result = new List<IFileSystemItem>();
-            result.AddRange(GetItemsFromResponse(response.GetResponseStream()));
+            var items = GetItemsFromResponse(response.GetResponseStream()).ToList();
+
+            foreach (var item in items)
+            {
+                item.FullPath = $"{path}{PathDelimeter}{item.Name}";
+            }
+            result.AddRange(items);
             foreach (var directory in result.Where(x=> x is Directory).Cast<Directory>())
             {
                 var newPath = $"{path}{PathDelimeter}{directory.Name}";

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using FileLoader.FileSystem;
@@ -20,12 +22,16 @@ namespace FileLoader.FTP
 
             if (items.Count < 4)
                 return null;
-            //todo last modified date
-            return items[2] == DirString ? CreateDirectory(items) : CreateFile(items);
+            
+            var result = items[2] == DirString ? CreateDirectory(items) : CreateFile(items);
+            var dateString = $"{items[0]} {items[1]}";
+            var lastModifiedDateTime = DateTime.ParseExact(dateString, "MM-dd-yy hh:mmtt", CultureInfo.InvariantCulture);
+            result.LastModified = lastModifiedDateTime;
+            return result;
         }
 
 
-        private static IFileSystemItem CreateDirectory(List<string> items)
+        private static IFileSystemItem CreateDirectory(IList<string> items)
         {
             var directory = new Directory
             {
@@ -35,7 +41,7 @@ namespace FileLoader.FTP
             return directory;
         }
 
-        private static IFileSystemItem CreateFile(List<string> items)
+        private static IFileSystemItem CreateFile(IList<string> items)
         {
             var file = new File
             {
