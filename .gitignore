@@ -42,3 +42,5 @@ DSDS/Utils/FIleLoader/bin/
 DSDS/FtpWatcherService/bin/
 DSDS/FtpWatcherService/obj/
 DSDS/.vs/DSDS/
+FtpWatcherService/FtpWatcher/.vs/
+.vs/
