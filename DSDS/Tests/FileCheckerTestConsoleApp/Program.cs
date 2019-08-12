@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using FileLoader.FileSystem;
+using File = FileLoader.FileSystem.File;
 
 namespace FileCheckerTestConsoleApp
 {

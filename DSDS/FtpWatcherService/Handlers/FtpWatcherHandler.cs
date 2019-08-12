@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Camunda.Worker;
+using FileLoader.FileSystem;
 using FileLoader.FTP;
+using File = System.IO.File;
 
 namespace FtpWatcherService.Handlers
 {
@@ -14,38 +17,40 @@ namespace FtpWatcherService.Handlers
 
         public override Task<IExecutionResult> Process(ExternalTask externalTask)
         {
+            var timer = new System.Timers.Timer(10000); // every 10 seconds
+
             var fileLoader = new FtpFileLoader("ftp://spb-mdspoc01.internal.corp", "ftpUser", "password123");
 
-            using (var watcher = new FileSystemWatcher())
+            var patternsForExtension = new List<string>
             {
-                watcher.Path = "path";
-                watcher.NotifyFilter = NotifyFilters.LastAccess
-                                       | NotifyFilters.LastWrite
-                                       | NotifyFilters.FileName
-                                       | NotifyFilters.DirectoryName;
+                "*.txt"
+            };
 
-                watcher.Filter = "*.txt";
+            var filesOnFtp = fileLoader.GetFilesWithFileExtensionPattern(patternsForExtension);
 
-                watcher.Created += OnCreate;
+            timer.Elapsed += (source, e) =>
+            {
+                var newFiles = fileLoader.GetFilesWithFileExtensionPattern(patternsForExtension).ToList();
 
-                watcher.EnableRaisingEvents = true;
-
-
-                while (!_updateStatus)
+                if (!filesOnFtp.SequenceEqual(newFiles))
                 {
-
+                    _updateStatus = true;
                 }
+            };
 
-                return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
-                {
-                    ["batFile"] = Variable.Bytes(File.ReadAllBytes("path"))
-                }));
+            timer.Enabled = true;
+
+            while (!_updateStatus)
+            {
+
             }
-        }
 
-        private void OnCreate(object source, EventArgs e)
-        {
-            _updateStatus = true;
+            timer.Enabled = false;
+
+            return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
+            {
+                ["batFile"] = Variable.Bytes(File.ReadAllBytes("C:\\Users\\ikalibrov\\Desktop\\Autoload_Process.bat"))
+            }));
         }
     }
 }
