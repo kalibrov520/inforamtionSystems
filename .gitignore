@@ -39,3 +39,6 @@ DSDS/Tests/FileCheckerTestConsoleApp/obj/
 DSDS/Tests/FileCheckerTestConsoleApp/bin/
 DSDS/Utils/FIleLoader/obj/
 DSDS/Utils/FIleLoader/bin/
+DSDS/FtpWatcherService/bin/
+DSDS/FtpWatcherService/obj/
+DSDS/.vs/DSDS/
