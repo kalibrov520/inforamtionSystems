@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using FileLoader.FileSystem;
@@ -37,7 +38,7 @@ namespace FileCheckerTestConsoleApp
                     {
                         foreach (var item in newFiles)
                         {
-                            var lineToWrite = item.Name + " " + item.FullPath + " " + item.LastModified.ToString();
+                            var lineToWrite = item.Name + " " + item.FullPath + " " + item.LastModified.ToString("g");
                             textWriter.WriteLineAsync(lineToWrite);
                         }
                     }
@@ -51,7 +52,7 @@ namespace FileCheckerTestConsoleApp
                             {
                                 Name = lineProperties[0],
                                 FullPath = lineProperties[1],
-                                LastModified = DateTime.Parse(lineProperties[2])
+                                LastModified = Convert.ToDateTime(lineProperties[2] + " " + lineProperties[3] + lineProperties[4])
                             });
                         }
                     }

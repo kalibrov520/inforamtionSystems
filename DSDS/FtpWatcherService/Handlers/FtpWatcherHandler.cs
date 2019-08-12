@@ -24,7 +24,10 @@ namespace FtpWatcherService.Handlers
 
             var patternsForExtension = new List<string>
             {
-                "*.txt"
+                "*.txt",
+                "*.csv",
+                "*.tsv",
+                "*.xls"
             };
 
             var filesOnFtp = new List<IFileSystemItem>();
@@ -38,7 +41,7 @@ namespace FtpWatcherService.Handlers
                     {
                         Name = lineProperties[0],
                         FullPath = lineProperties[1],
-                        LastModified = DateTime.Parse(lineProperties[2])
+                        LastModified = Convert.ToDateTime(lineProperties[2] + " " + lineProperties[3] + lineProperties[4])
                     });
                 }
             }
@@ -53,7 +56,7 @@ namespace FtpWatcherService.Handlers
                     {
                         foreach (var item in newFiles)
                         {
-                            var lineToWrite = item.Name + " " + item.FullPath + " " + item.LastModified.ToString("f");
+                            var lineToWrite = item.Name + " " + item.FullPath + " " + item.LastModified.ToString("g");
                             textWriter.WriteLineAsync(lineToWrite);
                         }
                     }
