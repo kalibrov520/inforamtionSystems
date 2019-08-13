@@ -28,7 +28,7 @@ namespace FtpWatcherService.Handlers
 
             var filesOnFtp = new List<IFileSystemItem>();
 
-            using (var textReader = new StreamReader("FilesList.txt"))
+            using (var textReader = new StreamReader(".\\FilesList.txt"))
             {
                 while (!textReader.EndOfStream)
                 {
@@ -48,7 +48,7 @@ namespace FtpWatcherService.Handlers
 
                 if (!filesOnFtp.SequenceEqual(newFiles))
                 {
-                    using (var textWriter = new StreamWriter("FilesList.txt"))
+                    using (var textWriter = new StreamWriter(".\\FilesList.txt"))
                     {
                         foreach (var item in newFiles)
                         {
