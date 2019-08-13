@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Camunda.Worker;
 using FileLoader.FileSystem;
 using FileLoader.FTP;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using File = System.IO.File;
 
 namespace FtpWatcherService.Handlers
@@ -20,15 +22,9 @@ namespace FtpWatcherService.Handlers
         {
             var timer = new System.Timers.Timer(10000); // every 10 seconds
 
-            var fileLoader = new FtpFileLoader("ftp://spb-mdspoc01.internal.corp", "ftpUser", "password123");
+            var fileLoader = new FtpFileLoader(externalTask.Variables["rootPath"].AsString(),externalTask.Variables["userName"].AsString(),externalTask.Variables["password"].AsString());
 
-            var patternsForExtension = new List<string>
-            {
-                "*.txt",
-                "*.csv",
-                "*.tsv",
-                "*.xls"
-            };
+            var patterns = externalTask.Variables["patternsForExtension"].AsString().Trim().Split(',').ToList();
 
             var filesOnFtp = new List<IFileSystemItem>();
 
@@ -48,7 +44,7 @@ namespace FtpWatcherService.Handlers
 
             timer.Elapsed += (source, e) =>
             {
-                var newFiles = fileLoader.GetFilesWithFileExtensionPattern(patternsForExtension).ToList();
+                var newFiles = fileLoader.GetFilesWithFileExtensionPattern(patterns).ToList();
 
                 if (!filesOnFtp.SequenceEqual(newFiles))
                 {
