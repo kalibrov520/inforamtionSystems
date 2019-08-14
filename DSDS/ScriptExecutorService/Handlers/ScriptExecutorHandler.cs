@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Camunda.Worker;
+using System.Diagnostics;
 
 namespace ScriptExecutorService.Handlers
 {
@@ -16,6 +17,8 @@ namespace ScriptExecutorService.Handlers
                 {
                     fileWriter.Write(System.Text.Encoding.Default.GetString(variableValue.AsBytes()));
                 }
+
+                System.Diagnostics.Process.Start(variableKey + ".bat");
             }
 
             return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
