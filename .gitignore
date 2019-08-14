@@ -45,3 +45,6 @@ DSDS/.vs/DSDS/
 FtpWatcherService/FtpWatcher/.vs/
 .vs/
 FtpWatcherService/FtpWatcher/FtpWatcher/obj/
+DSDS/ScriptExecutorService/bin/
+
+DSDS/ScriptExecutorService/obj/

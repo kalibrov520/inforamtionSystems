@@ -71,7 +71,9 @@ namespace FtpWatcherService.Handlers
 
             return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
             {
-                ["batFile"] = Variable.Bytes(File.ReadAllBytes("C:\\Users\\ikalibrov\\Desktop\\Autoload_Process.bat"))
+                ["downloadFile"] = Variable.Bytes(File.ReadAllBytes("C:\\Users\\ikalibrov\\Desktop\\SS_Download.bat")),
+                ["reformatFile"] = Variable.Bytes(File.ReadAllBytes("C:\\Users\\ikalibrov\\Desktop\\Reformat_Process.bat")),
+                ["autoloadFile"] = Variable.Bytes(File.ReadAllBytes("C:\\Users\\ikalibrov\\Desktop\\Autoload_Process.bat"))
             }));
         }
     }
