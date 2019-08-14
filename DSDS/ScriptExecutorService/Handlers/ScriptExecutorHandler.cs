@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using Camunda.Worker;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Camunda.Worker;
-using System.Diagnostics;
 
 namespace ScriptExecutorService.Handlers
 {
@@ -11,14 +11,21 @@ namespace ScriptExecutorService.Handlers
     {
         public override Task<IExecutionResult> Process(ExternalTask externalTask)
         {
-            foreach (var (variableKey, variableValue) in externalTask.Variables)
+            try
             {
-                using (var fileWriter = new StreamWriter(".\\" + variableKey + ".bat"))
+                foreach (var (variableKey, variableValue) in externalTask.Variables)
                 {
-                    fileWriter.Write(System.Text.Encoding.Default.GetString(variableValue.AsBytes()));
-                }
+                    using (var fileWriter = new StreamWriter(".\\" + variableKey + ".bat"))
+                    {
+                        fileWriter.Write(System.Text.Encoding.Default.GetString(variableValue.AsBytes()));
+                    }
 
-                System.Diagnostics.Process.Start(variableKey + ".bat");
+                    System.Diagnostics.Process.Start(variableKey + ".bat");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<IExecutionResult>(ex);
             }
 
             return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
