@@ -2,6 +2,7 @@
 using Camunda.Worker;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ScriptExecutorService.Handlers
@@ -13,7 +14,7 @@ namespace ScriptExecutorService.Handlers
         {
             try
             {
-                foreach (var (variableKey, variableValue) in externalTask.Variables)
+                foreach (var (variableKey, variableValue) in externalTask.Variables.Where(variable => variable.Value.Type == VariableType.Bytes))
                 {
                     using (var fileWriter = new StreamWriter(".\\" + variableKey + ".bat"))
                     {
