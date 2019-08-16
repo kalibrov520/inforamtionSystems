@@ -13,12 +13,12 @@ namespace FtpWatcher
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             try
             {
-                logger.Debug("init main");
+                logger.Info("Ftpwatcher init main...");
                 CreateWebHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error occured");
+                logger.Error(ex, "FtpWatcher stopped beause exception occured.");
                 throw;
             }
             finally
@@ -33,7 +33,7 @@ namespace FtpWatcher
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Warning);
+                    logging.SetMinimumLevel(LogLevel.Information);
                 })
                 .UseNLog();
     }

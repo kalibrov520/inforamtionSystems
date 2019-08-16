@@ -17,7 +17,7 @@ namespace FtpWatcherService.Handlers
     [HandlerTopics("FtpWatcher")]
     public class FtpWatcherHandler : ExternalTaskHandler
     {
-        private ILogger<FtpWatcherHandler> _logger;
+        private readonly ILogger<FtpWatcherHandler> _logger;
 
         public FtpWatcherHandler(ILogger<FtpWatcherHandler> logger)
         {
