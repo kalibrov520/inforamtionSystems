@@ -87,7 +87,7 @@ namespace FtpWatcherService.Handlers
             {
                 _logger.LogError(ex, "Exception occured, while executing FtpWatcherHandler");
 
-                return Task.FromResult<IExecutionResult>(new FailureResult(ex));
+                return Task.FromResult<IExecutionResult>(new BpmnErrorResult("11",ex.ToString()));
             }
         }
     }
