@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace ScriptExecutorService
 {
@@ -37,6 +38,7 @@ namespace ScriptExecutorService
                 {
                     logging.ClearProviders();
                     logging.SetMinimumLevel(LogLevel.Information);
-                });
+                })
+                .UseNLog();
     }
 }
