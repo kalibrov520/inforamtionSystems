@@ -11,6 +11,13 @@ namespace FileLoader.File
         {
             var filesOnFtp = new List<IFileSystemItem>();
 
+            if (!System.IO.File.Exists(".\\FilesList.txt"))
+            {
+                using (System.IO.File.Create(".\\FilesList.txt"))
+                {
+                }
+            }
+
             using (var textReader = new StreamReader(".\\FilesList.txt"))
             {
                 while (!textReader.EndOfStream)

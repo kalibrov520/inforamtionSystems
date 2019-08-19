@@ -43,7 +43,7 @@ namespace FileLoader.FTP
 
         private static IFileSystemItem CreateFile(IList<string> items)
         {
-            var file = new File
+            var file = new FileSystem.File
             {
                 Name = items[3],
                 Size = double.Parse(items[2])
