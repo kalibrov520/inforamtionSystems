@@ -9,6 +9,7 @@ using FileLoader;
 using FileLoader.File;
 using FileLoader.FileSystem;
 using FileLoader.FTP;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -21,10 +22,12 @@ namespace FtpWatcherService.Handlers
     {
         private readonly ILogger<FtpWatcherHandler> _logger;
         private readonly IFileWriter _fileWriter;
+        private readonly IFileLoader _fileLoader;
 
-        public FtpWatcherHandler(ILogger<FtpWatcherHandler> logger)
+        public FtpWatcherHandler(IFileLoader fileLoader, IFileWriter fileWriter,  ILogger<FtpWatcherHandler> logger)
         {
-            _fileWriter = new FileWriter();
+            _fileLoader = fileLoader;
+            _fileWriter = fileWriter;
             _logger = logger;
         }
 
@@ -37,7 +40,7 @@ namespace FtpWatcherService.Handlers
 
                 var patterns = externalTask.Variables["patternsForExtension"].AsString().Trim().Split(',').ToList();
 
-                var previousFilesOnFtp = new FromFileLoader().GetFiles();
+                var previousFilesOnFtp = _fileLoader.GetFiles();
 
                 var newFiles = fileLoader.GetFilesWithFileExtensionPattern(patterns).ToList();
 
@@ -55,9 +58,9 @@ namespace FtpWatcherService.Handlers
 
                 return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
                 {
-                    ["downloadFile"] = Variable.Bytes(File.ReadAllBytes("C:\\Users\\ikalibrov\\Desktop\\SS_Download.bat")),
-                    ["reformatFile"] = Variable.Bytes(File.ReadAllBytes("C:\\Users\\ikalibrov\\Desktop\\Reformat_Process.bat")),
-                    ["autoloadFile"] = Variable.Bytes(File.ReadAllBytes("C:\\Users\\ikalibrov\\Desktop\\Autoload_Process.bat")),
+                    ["downloadFile"] = Variable.Bytes(File.ReadAllBytes(".\\SS_Download.bat")),
+                    ["reformatFile"] = Variable.Bytes(File.ReadAllBytes(".\\Reformat_Process.bat")),
+                    ["autoloadFile"] = Variable.Bytes(File.ReadAllBytes(".\\Autoload_Process.bat")),
                     ["isUpdated"] = Variable.Boolean(true)
                 }));
             }

@@ -1,6 +1,8 @@
 ﻿using System;
 using Camunda.Worker;
 using Camunda.Worker.Extensions;
+using FileLoader;
+using FileLoader.File;
 using FtpWatcherService.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,6 +24,9 @@ namespace FtpWatcher
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IFileLoader, FromFileLoader>();
+            services.AddSingleton<IFileWriter, FileWriter>();
+
             services.AddCamundaWorker(options =>
                 {
                     options.WorkerId = "sampleWorker";
