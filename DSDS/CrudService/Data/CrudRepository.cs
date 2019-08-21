@@ -6,19 +6,26 @@ namespace CrudService.Data
 {
     public class CrudRepository : ICrudRepository
     {
-        public Task Add<T>(T entity) where T : class
+        private readonly DataContext _context;
+
+        public CrudRepository(DataContext context)
         {
-            throw new System.NotImplementedException();
+            _context = context;
         }
 
-        public Task Delete<T>(T entity) where T : class
+        public async Task Add<T>(T entity) where T : class
         {
-            throw new System.NotImplementedException();
+            await _context.AddAsync(entity);
         }
 
-        public Task<bool> SaveAll()
+        public void Delete<T>(T entity) where T : class
         {
-            throw new System.NotImplementedException();
+            _context.Remove(entity);
+        }
+
+        public async Task<bool> SaveAll()
+        {
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public Task<IEnumerable<ReformattedDocument>> GetDocumentsAsync()
