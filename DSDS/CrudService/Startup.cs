@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Camunda.Worker;
 using Camunda.Worker.Extensions;
+using CrudService.Data;
 using CrudService.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -35,6 +37,11 @@ namespace CrudService
                     options.BaseUri = new Uri("http://localhost:8080/engine-rest");
                 })
                 .AddHandler<CrudHandler>();
+            services.AddTransient<ICrudRepository, CrudRepository>();
+            services.AddDbContext<DataContext>(options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("DataContext"));
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

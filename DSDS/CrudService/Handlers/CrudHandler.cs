@@ -20,6 +20,8 @@ namespace CrudService.Handlers
 
         public override Task<IExecutionResult> Process(ExternalTask externalTask)
         {
+
+
             return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
         }
     }
