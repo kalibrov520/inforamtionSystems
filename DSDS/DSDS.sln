@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FtpWatcherService", "FtpWat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileLoader.Tests", "FileLoader.Tests\FileLoader.Tests.csproj", "{17BD4E99-49D1-4FCA-BA7D-0DC369B07930}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptExecutorService", "ScriptExecutorService\ScriptExecutorService.csproj", "{BA4873DF-EBA5-41DA-8FD4-DC67FFAD9DF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScriptExecutorService", "ScriptExecutorService\ScriptExecutorService.csproj", "{BA4873DF-EBA5-41DA-8FD4-DC67FFAD9DF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudService", "CrudService\CrudService.csproj", "{D9F82310-3F33-4D7F-87FD-709A25C24C7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{BA4873DF-EBA5-41DA-8FD4-DC67FFAD9DF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA4873DF-EBA5-41DA-8FD4-DC67FFAD9DF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA4873DF-EBA5-41DA-8FD4-DC67FFAD9DF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9F82310-3F33-4D7F-87FD-709A25C24C7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9F82310-3F33-4D7F-87FD-709A25C24C7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9F82310-3F33-4D7F-87FD-709A25C24C7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9F82310-3F33-4D7F-87FD-709A25C24C7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{0830E0BD-F509-44A8-AD11-563F9E08EDDA} = {62E3AF9B-63F0-47F0-B0A1-DE349951FD9B}
 		{17BD4E99-49D1-4FCA-BA7D-0DC369B07930} = {A226886D-18D9-42F7-8A8B-87A94DFF6CDC}
 		{BA4873DF-EBA5-41DA-8FD4-DC67FFAD9DF3} = {62E3AF9B-63F0-47F0-B0A1-DE349951FD9B}
+		{D9F82310-3F33-4D7F-87FD-709A25C24C7D} = {62E3AF9B-63F0-47F0-B0A1-DE349951FD9B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F52A72F-2A48-411F-B4AB-CC47C4A9DA58}
