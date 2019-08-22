@@ -2,26 +2,17 @@
 
 namespace CrudService.Models
 {
-    public class ReformattedDocument
+    public class Document
     {
-        public int Id { get; set; }
-
         public string BusinessEntityName { get; set; }
-
-        public int Isn { get; set; }
-
-        public string FundId { get; set; }
-
+        public string ISN { get; set; }
+        public string FundID { get; set; }
         public string FundName { get; set; }
-
-        public decimal MarketValue { get; set; }
-
-        public decimal Shares { get; set; }
-
-        public decimal Nav { get; set; }
-
+        public float MarketValue { get; set; }
+        public float Shares { get; set; }
+        public float NAV { get; set; }
         public DateTime MarketDate { get; set; }
-
         public DateTime ValidationDate { get; set; }
     }
+
 }

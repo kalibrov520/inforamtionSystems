@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata;
-using CrudService.Models;
+﻿using CrudService.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrudService.Data
@@ -8,6 +7,6 @@ namespace CrudService.Data
     {
      public DataContext(DbContextOptions<DataContext> options) : base(options) {}
 
-     public DbSet<ReformattedDocument> Documents { get; set; }
+     public DbSet<Document> Documents { get; set; }
     }
 }
