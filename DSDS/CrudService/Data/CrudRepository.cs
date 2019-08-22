@@ -33,9 +33,9 @@ namespace CrudService.Data
             throw new System.NotImplementedException();
         }
 
-        public Task<ReformattedDocument> GetDocumentByIdAsync(int id)
+        public async Task<ReformattedDocument> GetDocumentByIdAsync(int id)
         {
-            throw new System.NotImplementedException();
+            return await _context.Documents.FindAsync(id);
         }
     }
 }

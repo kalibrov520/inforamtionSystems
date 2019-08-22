@@ -37,11 +37,11 @@ namespace CrudService
                     options.BaseUri = new Uri("http://localhost:8080/engine-rest");
                 })
                 .AddHandler<CrudHandler>();
-            services.AddTransient<ICrudRepository, CrudRepository>();
-            services.AddDbContext<DataContext>(options =>
-                {
-                    options.UseSqlServer(Configuration.GetConnectionString("DataContext"));
-                });
+            //services.AddTransient<ICrudRepository, CrudRepository>();
+            //services.AddDbContext<DataContext>(options =>
+            //    {
+            //        options.UseSqlServer(Configuration.GetConnectionString("Default"));
+            //    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
