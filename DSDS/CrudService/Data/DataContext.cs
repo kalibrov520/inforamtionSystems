@@ -7,6 +7,6 @@ namespace CrudService.Data
     {
      public DataContext(DbContextOptions<DataContext> options) : base(options) {}
 
-     public DbSet<Document> Documents { get; set; }
+     public DbSet<Document> PlanAsset { get; set; }
     }
 }

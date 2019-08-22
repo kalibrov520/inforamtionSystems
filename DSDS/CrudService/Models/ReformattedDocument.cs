@@ -1,9 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CrudService.Models
 {
     public class Document
     {
+        [Key]
+        public int Id { get; set; }
         public string BusinessEntityName { get; set; }
         public string ISN { get; set; }
         public string FundID { get; set; }

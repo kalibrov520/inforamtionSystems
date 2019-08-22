@@ -23,19 +23,24 @@ namespace CrudService.Data
             _context.Remove(entity);
         }
 
+        public async Task AddRangeAsync(IEnumerable<Document> documents)
+        {
+            await _context.PlanAsset.AddRangeAsync(documents);
+        }
+
         public async Task<bool> SaveAll()
         {
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<ReformattedDocument>> GetDocumentsAsync()
+        public Task<IEnumerable<Document>> GetDocumentsAsync()
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<ReformattedDocument> GetDocumentByIdAsync(int id)
+        public async Task<Document> GetDocumentByIdAsync(int id)
         {
-            return await _context.Documents.FindAsync(id);
+            return await _context.PlanAsset.FindAsync(id);
         }
     }
 }

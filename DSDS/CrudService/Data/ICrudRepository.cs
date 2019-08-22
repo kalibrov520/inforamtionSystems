@@ -10,10 +10,12 @@ namespace CrudService.Data
 
         void Delete<T>(T entity) where T : class;
 
+        Task AddRangeAsync(IEnumerable<Document> documents);
+
         Task<bool> SaveAll();
 
-        Task<IEnumerable<ReformattedDocument>> GetDocumentsAsync();
+        Task<IEnumerable<Document>> GetDocumentsAsync();
 
-        Task<ReformattedDocument> GetDocumentByIdAsync(int id);
+        Task<Document> GetDocumentByIdAsync(int id);
     }
 }

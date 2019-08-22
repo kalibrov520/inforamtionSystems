@@ -16,11 +16,14 @@ namespace CrudService.Handlers
     [HandlerTopics("CrudHandler")]
     public class CrudHandler : ExternalTaskHandler
     {
+        private readonly DataContext _context;
+
         private readonly ICrudRepository _repo;
         private readonly ILogger<CrudHandler> _logger;
 
-        public CrudHandler(ICrudRepository repo, ILogger<CrudHandler> logger)
+        public CrudHandler(DataContext context, ICrudRepository repo, ILogger<CrudHandler> logger)
         {
+            _context = context;
             _repo = repo;
             _logger = logger;
         }
@@ -31,7 +34,29 @@ namespace CrudService.Handlers
             {
                 using (var package = new ExcelPackage(memStream))
                 {
+                    var workSheet = package.Workbook.Worksheets["PlanAsset"];
 
+                    var documentsList = new List<Document>();
+
+                    for (var i = 2; i <= workSheet.Dimension.Rows; i++)
+                    {
+                        documentsList.Add(new Document()
+                        {
+                            Id = i,
+                            BusinessEntityName = workSheet.Cells[i, 1].Value.ToString(),
+                            ISN = workSheet.Cells[i, 2].Value.ToString(),
+                            FundID = workSheet.Cells[i, 3].Value.ToString(),
+                            FundName = workSheet.Cells[i, 4].Value.ToString(),
+                            MarketValue = float.Parse(workSheet.Cells[i, 5].Value.ToString()),
+                            Shares = float.Parse(workSheet.Cells[i, 6].Value.ToString()),
+                            NAV = float.Parse(workSheet.Cells[i, 7].Value.ToString()),
+                            MarketDate = DateTime.Now,
+                            ValidationDate = DateTime.Now
+                        });
+                    }
+
+                    _context.PlanAsset.AddRange(documentsList);
+                    _context.SaveChanges();
                 }
             }
 
