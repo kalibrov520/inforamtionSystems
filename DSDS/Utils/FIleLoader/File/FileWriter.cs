@@ -13,7 +13,7 @@ namespace FileLoader.File
             {
                 foreach (var item in files)
                 {
-                    var lineToWrite = item.Name + " " + item.FullPath + " " + item.LastModified.ToString("g");
+                    var lineToWrite = item.Name + " " + item.FullPath + " " + item.LastModified.ToString("O");
 
                     await textWriter.WriteLineAsync(lineToWrite);
                 }

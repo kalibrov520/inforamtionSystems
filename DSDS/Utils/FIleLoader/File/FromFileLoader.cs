@@ -27,8 +27,8 @@ namespace FileLoader.File
                     {
                         Name = lineProperties?[0],
                         FullPath = lineProperties?[1],
-                        LastModified =
-                            Convert.ToDateTime(lineProperties?[2] + " " + lineProperties?[3] + lineProperties?[4])
+                        LastModified = DateTime.Parse(lineProperties?[2])
+                            //Convert.ToDateTime(lineProperties?[2])
                     });
                 }
             }
