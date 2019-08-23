@@ -54,8 +54,7 @@ namespace CrudService.Handlers
                         });
                     }
 
-                    _context.PlanAsset.AddRange(documentsList);
-                    _context.SaveChanges();
+                    _repo.AddRangeAsync(documentsList);
                 }
             }
 
