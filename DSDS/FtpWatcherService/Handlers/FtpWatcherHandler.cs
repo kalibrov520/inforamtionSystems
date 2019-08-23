@@ -9,6 +9,7 @@ using FileLoader;
 using FileLoader.File;
 using FileLoader.FileSystem;
 using FileLoader.FTP;
+using FtpWatcherService.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -20,12 +21,14 @@ namespace FtpWatcherService.Handlers
     [HandlerTopics("FtpWatcher")]
     public class FtpWatcherHandler : ExternalTaskHandler
     {
+        private readonly BatFileService _service;
         private readonly ILogger<FtpWatcherHandler> _logger;
         private readonly IFileWriter _fileWriter;
         private readonly IFileLoader _fileLoader;
 
-        public FtpWatcherHandler(IFileLoader fileLoader, IFileWriter fileWriter,  ILogger<FtpWatcherHandler> logger)
+        public FtpWatcherHandler(BatFileService service, IFileLoader fileLoader, IFileWriter fileWriter,  ILogger<FtpWatcherHandler> logger)
         {
+            _service = service;
             _fileLoader = fileLoader;
             _fileWriter = fileWriter;
             _logger = logger;

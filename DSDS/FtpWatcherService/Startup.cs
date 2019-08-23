@@ -4,11 +4,14 @@ using Camunda.Worker.Extensions;
 using FileLoader;
 using FileLoader.File;
 using FtpWatcherService.Handlers;
+using FtpWatcherService.Models;
+using FtpWatcherService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace FtpWatcher
 {
@@ -24,6 +27,13 @@ namespace FtpWatcher
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PoCDatabaseSettings>(
+                Configuration.GetSection(nameof(PoCDatabaseSettings)));
+
+            services.AddSingleton<IPoCDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<PoCDatabaseSettings>>().Value);
+
+            services.AddSingleton<BatFileService>();
             services.AddSingleton<IFileLoader, FromFileLoader>();
             services.AddSingleton<IFileWriter, FileWriter>();
 
