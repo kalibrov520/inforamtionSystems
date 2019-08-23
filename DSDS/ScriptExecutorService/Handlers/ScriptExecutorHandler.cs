@@ -34,7 +34,10 @@ namespace ScriptExecutorService.Handlers
                     _logger.LogInformation("Starting file {fileName}.bat...", variableKey);
                 }
 
-                return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
+                return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
+                {
+                    ["formattedFile"] = Variable.Bytes(File.ReadAllBytes(".\\doc.xlsx"))
+                }));
             }
             catch (Exception ex)
             {
