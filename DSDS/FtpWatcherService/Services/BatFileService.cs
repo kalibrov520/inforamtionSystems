@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using FtpWatcherService.Models;
 using MongoDB.Driver;
 
@@ -16,7 +18,13 @@ namespace FtpWatcherService.Services
             _files = database.GetCollection<BatFile>(settings.PoCCollectionName);
         }
 
-        public Task<IAsyncCursor<BatFile>> GetFileByName(string fileName)
-            => _files.FindAsync<BatFile>(file => file.FileName.Equals(fileName));
+        public BatFile GetFileByName(string fileName)
+            => _files.FindAsync<BatFile>(file => file.FileName == fileName).Result.Current.FirstOrDefault();
+
+        public IAsyncEnumerable<BatFile> GetBatFilesAsync()
+            => _files.FindAsync(file => true).Result.Current.ToAsyncEnumerable();
+
+        public List<BatFile> GetBatFiles() 
+            => _files.Find(file => true).ToList();
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Camunda.Worker;
@@ -59,11 +60,13 @@ namespace FtpWatcherService.Handlers
 
                 _fileWriter.WriteFilesOnFileAsync(newFiles);
 
+                var batFiles = _service.GetBatFiles();
+
                 return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
                 {
-                    ["downloadFile"] = Variable.Bytes(File.ReadAllBytes(".\\SS_Download.bat")),
-                    ["reformatFile"] = Variable.Bytes(File.ReadAllBytes(".\\Reformat_Process.bat")),
-                    ["autoloadFile"] = Variable.Bytes(File.ReadAllBytes(".\\Autoload_Process.bat")),
+                    ["downloadFile"] = Variable.Bytes(Encoding.UTF8.GetBytes(batFiles.FirstOrDefault(file => file.FileName.Equals("SS_Download"))?.FileContent)),
+                    ["reformatFile"] = Variable.Bytes(Encoding.UTF8.GetBytes(batFiles.FirstOrDefault(file => file.FileName.Equals("Reformat_Process"))?.FileContent)),
+                    ["autoloadFile"] = Variable.Bytes(Encoding.UTF8.GetBytes(batFiles.FirstOrDefault(file => file.FileName.Equals("Autoload_Process"))?.FileContent)),
                     ["isUpdated"] = Variable.Boolean(true)
                 }));
             }
