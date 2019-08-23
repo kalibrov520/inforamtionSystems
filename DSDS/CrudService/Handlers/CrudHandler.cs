@@ -42,7 +42,6 @@ namespace CrudService.Handlers
                     {
                         documentsList.Add(new Document()
                         {
-                            Id = i,
                             BusinessEntityName = workSheet.Cells[i, 1].Value.ToString(),
                             ISN = workSheet.Cells[i, 2].Value.ToString(),
                             FundID = workSheet.Cells[i, 3].Value.ToString(),
