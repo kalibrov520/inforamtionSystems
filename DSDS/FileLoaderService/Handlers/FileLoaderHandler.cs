@@ -23,28 +23,13 @@ namespace FileLoaderService.Handlers
         {
             try
             {
-                var a = JsonConvert.DeserializeObject<List<FileLoader.FileSystem.File>>(externalTask.Variables["newFiles"].AsString());
+                var filesToReformat = JsonConvert.DeserializeObject<List<FileLoader.FileSystem.File>>(externalTask.Variables["newFiles"].AsString());
 
-                foreach (var (variableKey, variableValue) in externalTask.Variables.Where(variable => variable.Value.Type == VariableType.Bytes))
-                {
-                    using (var fileWriter = new StreamWriter(".\\" + variableKey + ".bat"))
-                    {
-                        fileWriter.Write(System.Text.Encoding.Default.GetString(variableValue.AsBytes()));
-                        _logger.LogInformation("Copy {fileName}.bat locally...", variableKey);
-                    }
-
-                    System.Diagnostics.Process.Start(variableKey + ".bat");
-                    _logger.LogInformation("Starting file {fileName}.bat...", variableKey);
-                }
-
-                return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
-                {
-                    ["formattedFile"] = Variable.Bytes(File.ReadAllBytes(".\\doc.xlsx"))
-                }));
+                return Task.FromResult<IExecutionResult>(new CompleteResult(filesToReformat.ToDictionary(k => k.Name, v => Variable.Bytes(File.ReadAllBytes(v.FullPath)))));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occured, while executing ScriptExecutorHandler");
+                _logger.LogError(ex, "Exception occured, while executing FileLoaderHandler");
                 return Task.FromException<IExecutionResult>(ex);
             }
         }
