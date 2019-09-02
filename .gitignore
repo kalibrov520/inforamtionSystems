@@ -50,3 +50,5 @@ DSDS/ScriptExecutorService/obj/
 DSDS/CrudService/bin/
 DSDS/CrudService/obj/
 DSDS/Dummy-Document/
+DSDS/FileLoaderService/bin/
+DSDS/FileLoaderService/obj/
