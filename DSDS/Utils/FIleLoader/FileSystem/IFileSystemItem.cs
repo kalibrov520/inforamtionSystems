@@ -9,5 +9,7 @@ namespace FileLoader.FileSystem
         string Name { get; set; }
 
         DateTime LastModified { get; set; }
+
+        string Extension { get; set; }
     }
 }

@@ -58,6 +58,7 @@ namespace FileLoader
             {
                 if (IsMatchExtension(item.FullPath))
                 {
+                    item.Extension = new FileInfo(item.FullPath).Extension;
                     result.Add(item);
                 }
 

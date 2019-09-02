@@ -12,19 +12,21 @@ namespace FileLoader.FileSystem
         public string Name { get; set; }
 
         public DateTime LastModified { get; set; }
+        public string Extension { get; set; }
 
         public bool Equals(File other)
         {
-            if (other is null) return false;
+            if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return string.Equals(FullPath, other.FullPath) && string.Equals(Name, other.Name) && LastModified.Equals(other.LastModified);
+            return Size.Equals(other.Size) && string.Equals(FullPath, other.FullPath) && string.Equals(Name, other.Name) && LastModified.Equals(other.LastModified) && string.Equals(Extension, other.Extension);
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == this.GetType() && Equals((File) obj);
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((File) obj);
         }
     }
 }

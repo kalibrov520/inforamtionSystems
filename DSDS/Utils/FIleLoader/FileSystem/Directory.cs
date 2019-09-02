@@ -12,5 +12,7 @@ namespace FileLoader.FileSystem
         public string Name { get; set; }
 
         public DateTime LastModified { get; set; }
+
+        public string Extension { get; set; } = null;
     }
 }
