@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using FileLoader.FileSystem;
 using Directory = FileLoader.FileSystem.Directory;
@@ -30,6 +31,11 @@ namespace FileLoader.FTP
             return LoadFromPath(RootPath);
         }
 
+        public byte[] GetFileContent(string fullPath)
+        {
+            return LoadFileContentFromPath(fullPath);
+        }
+
         public IEnumerable<IFileSystemItem> GetFilesWithPattern(IEnumerable<string> patterns)
         {
             var items = GetFiles();
@@ -42,6 +48,22 @@ namespace FileLoader.FTP
             var items = GetFiles();
             var checker = new WildCardPatternChecker(patterns);
             return checker.CheckFileExtensionMatches(items);
+        }
+
+        private byte[] LoadFileContentFromPath(string fullPath)
+        {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(fullPath);
+            request.Credentials = new NetworkCredential(UserName, Password);
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+            request.EnableSsl = true;
+            ServicePointManager.ServerCertificateValidationCallback =
+                (s, certificate, chain, sslPolicyErrors) => true;
+
+            var response = request.GetResponse();
+
+            var content = GetContentFromResponse(response.GetResponseStream());
+
+            return content;
         }
         
         private IEnumerable<IFileSystemItem> LoadFromPath(string path)
@@ -63,6 +85,15 @@ namespace FileLoader.FTP
                 directory.Items.AddRange(subItems);
             }
             return result;
+        }
+
+        private byte[] GetContentFromResponse(Stream responseStream)
+        {
+            using (var memStream = new MemoryStream())
+            {
+                responseStream.CopyTo(memStream);
+                return memStream.ToArray();
+            }
         }
 
         private IEnumerable<IFileSystemItem> GetItemsFromResponse(Stream responseStream)

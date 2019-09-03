@@ -4,8 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Camunda.Worker;
+using FileLoader.FTP;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -29,6 +32,9 @@ namespace TalendService.Handlers
             {
                 var url = externalTask.Variables["url"].AsString();
 
+                var fileLoader = new FtpFileLoader("",
+                    externalTask.Variables["userName"].AsString(), externalTask.Variables["password"].AsString());
+
                 var filesToReformat = JsonConvert.DeserializeObject<List<FileLoader.FileSystem.File>>(externalTask.Variables["newFiles"].AsString());
 
                 var reformattedFiles = new List<Document>();
@@ -39,13 +45,16 @@ namespace TalendService.Handlers
                     {
                         using (var formData = new MultipartFormDataContent())
                         {
-                            formData.Add(new ByteArrayContent(File.ReadAllBytes(file.FullPath)));
+                            formData.Add(new ByteArrayContent(fileLoader.GetFileContent(file.FullPath)));
 
+                            //TODO: deal with PostAsync andResult. Do not block Task.
                             var response = client.PostAsync(url, formData);
+
+                            var responseContent = response.Result.Content.ReadAsStringAsync().Result;
 
                             if (response.IsCompletedSuccessfully)
                             {
-                                reformattedFiles.Add(JsonConvert.DeserializeObject<Document>(response.Result.Content.ToString()));
+                                reformattedFiles.Add(JsonConvert.DeserializeObject<Document>(responseContent));
                             }
                             else
                             {
