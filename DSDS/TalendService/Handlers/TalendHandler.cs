@@ -35,7 +35,6 @@ namespace TalendService.Handlers
 
                 foreach (var file in filesToReformat)
                 {
-                    var request = WebRequest.Create(url) as HttpWebRequest;
                     using (var client = new HttpClient())
                     {
                         using (var formData = new MultipartFormDataContent())
