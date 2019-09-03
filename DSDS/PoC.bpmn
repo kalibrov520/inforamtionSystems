@@ -52,7 +52,9 @@
     <bpmn:serviceTask id="TalendService" name="TalendService" camunda:type="external" camunda:topic="TalendService">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="url">http://localhost:8080/endpoint</camunda:inputParameter>
+          <camunda:inputParameter name="url">http://spb-mdspoc01.internal.corp/ssta</camunda:inputParameter>
+          <camunda:inputParameter name="userName">ftpUser</camunda:inputParameter>
+          <camunda:inputParameter name="password">password123</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1poxbct</bpmn:incoming>
