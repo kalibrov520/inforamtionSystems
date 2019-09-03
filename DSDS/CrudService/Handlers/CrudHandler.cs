@@ -35,6 +35,12 @@ namespace CrudService.Handlers
             {
                 var reformattedFiles = JsonConvert.DeserializeObject<List<Document>>(externalTask.Variables["reformattedFiles"].AsString());
 
+                foreach (var file in reformattedFiles.Where(i => i != null))
+                {
+                    _context.Items.AddRange(file.Items);
+                    _context.SaveChanges();
+                }
+
                 _context.AddRange(reformattedFiles);
 
                 _logger.LogInformation("Provided Json was parsed and added to the database {json}", externalTask.Variables["reformattedFiles"].AsString());

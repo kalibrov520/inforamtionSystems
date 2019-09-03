@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -6,17 +7,26 @@ namespace CrudService.Models
 {
     public class Document
     {
+        public IEnumerable<Item> Items { get; set; }
+    }
+
+    public class Item
+    {
         [Key]
         public int Id { get; set; }
-        public string BusinessEntityName { get; set; }
-        public string ISN { get; set; }
-        public string FundID { get; set; }
-        public string FundName { get; set; }
-        public float MarketValue { get; set; }
-        public float Shares { get; set; }
-        public float NAV { get; set; }
-        public DateTime MarketDate { get; set; }
-        public DateTime ValidationDate { get; set; }
+        public int FundId { get; set; }
+
+        public int PlanId { get; set; }
+
+        public decimal Asset { get; set; }
+
+        public decimal ShareBalance { get; set; }
+
+        public decimal NAV { get; set; }
+
+        public string PostDate { get; set; }
+
+        public string ValuationDate { get; set; }
     }
 
 }

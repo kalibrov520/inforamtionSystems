@@ -52,6 +52,7 @@ namespace FileLoader.FTP
 
         private byte[] LoadFileContentFromPath(string fullPath)
         {
+            //TODO: remove
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create(fullPath);
             request.Credentials = new NetworkCredential(UserName, Password);
             request.Method = WebRequestMethods.Ftp.DownloadFile;
