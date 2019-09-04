@@ -34,7 +34,7 @@ namespace CrudService
 
             services.AddDbContext<DataContext>(options =>
                 {
-                    options.UseSqlServer("Data Source=IKALIBROV;Initial Catalog=PoC;Integrated Security=True");
+                    options.UseSqlServer("Data Source=SPB-MDSPOC01\\SQLEXPRESS01;Initial Catalog=PoC;User ID=dsUser;Password=password123;");
                 });
 
             services.AddTransient<ICrudRepository, CrudRepository>();
