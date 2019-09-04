@@ -12,10 +12,11 @@ namespace FileLoader.FileSystem
         public string Name { get; set; }
 
         public DateTime LastModified { get; set; }
+        public string Extension { get; set; }
 
         public bool Equals(File other)
         {
-            if (other is null) return false;
+            if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return string.Equals(FullPath, other.FullPath) && string.Equals(Name, other.Name) && LastModified.Equals(other.LastModified);
         }
@@ -24,7 +25,19 @@ namespace FileLoader.FileSystem
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == this.GetType() && Equals((File) obj);
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((File) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (FullPath != null ? FullPath.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ LastModified.GetHashCode();
+                return hashCode;
+            }
         }
     }
 }

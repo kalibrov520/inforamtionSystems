@@ -9,6 +9,7 @@ using Camunda.Worker;
 using CrudService.Data;
 using CrudService.Models;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 
 namespace CrudService.Handlers
@@ -30,35 +31,25 @@ namespace CrudService.Handlers
 
         public override Task<IExecutionResult> Process(ExternalTask externalTask)
         {
-            using (var memStream = new MemoryStream(externalTask.Variables["reformatFile"].AsBytes()))
+            try
             {
-                using (var package = new ExcelPackage(memStream))
+                var reformattedFiles = JsonConvert.DeserializeObject<List<Document>>(externalTask.Variables["reformattedFiles"].AsString());
+
+                foreach (var file in reformattedFiles.Where(i => i != null))
                 {
-                    var workSheet = package.Workbook.Worksheets["PlanAsset"];
-
-                    var documentsList = new List<Document>();
-
-                    for (var i = 2; i <= workSheet.Dimension.Rows; i++)
-                    {
-                        documentsList.Add(new Document()
-                        {
-                            BusinessEntityName = workSheet.Cells[i, 1].Value.ToString(),
-                            ISN = workSheet.Cells[i, 2].Value.ToString(),
-                            FundID = workSheet.Cells[i, 3].Value.ToString(),
-                            FundName = workSheet.Cells[i, 4].Value.ToString(),
-                            MarketValue = float.Parse(workSheet.Cells[i, 5].Value.ToString()),
-                            Shares = float.Parse(workSheet.Cells[i, 6].Value.ToString()),
-                            NAV = float.Parse(workSheet.Cells[i, 7].Value.ToString()),
-                            MarketDate = DateTime.Now,
-                            ValidationDate = DateTime.Now
-                        });
-                    }
-
-                    _repo.AddRangeAsync(documentsList);
+                    _context.Items.AddRange(file.Items);
+                    _context.SaveChanges();
                 }
-            }
 
-            return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
+                _logger.LogInformation("Provided Json was parsed and added to the database {json}", externalTask.Variables["reformattedFiles"].AsString());
+
+                return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occured, while executing CrudService");
+                return Task.FromResult<IExecutionResult>(new BpmnErrorResult("12", ex.ToString()));
+            }
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace CrudService.Models
+namespace TalendService.Models
 {
     public class Document
     {
@@ -12,8 +11,6 @@ namespace CrudService.Models
 
     public class Item
     {
-        [Key]
-        public int Id { get; set; }
         public int FundId { get; set; }
 
         public int PlanId { get; set; }
@@ -28,5 +25,4 @@ namespace CrudService.Models
 
         public string ValuationDate { get; set; }
     }
-
 }

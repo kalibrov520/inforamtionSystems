@@ -13,6 +13,7 @@ using FileLoader.FTP;
 using FtpWatcherService.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using File = System.IO.File;
@@ -60,13 +61,9 @@ namespace FtpWatcherService.Handlers
 
                 _fileWriter.WriteFilesOnFileAsync(newFiles);
 
-                var batFiles = _service.GetBatFiles();
-
                 return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
                 {
-                    ["downloadFile"] = Variable.Bytes(Encoding.UTF8.GetBytes(batFiles.FirstOrDefault(file => file.FileName.Equals("SS_Download"))?.FileContent)),
-                    ["reformatFile"] = Variable.Bytes(Encoding.UTF8.GetBytes(batFiles.FirstOrDefault(file => file.FileName.Equals("Reformat_Process"))?.FileContent)),
-                    ["autoloadFile"] = Variable.Bytes(Encoding.UTF8.GetBytes(batFiles.FirstOrDefault(file => file.FileName.Equals("Autoload_Process"))?.FileContent)),
+                    ["newFiles"] = Variable.String(JsonConvert.SerializeObject(newFiles)),
                     ["isUpdated"] = Variable.Boolean(true)
                 }));
             }

@@ -4,19 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Camunda.Worker;
 using Camunda.Worker.Extensions;
-using CrudService.Data;
-using CrudService.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TalendService.Handlers;
 
-namespace CrudService
+namespace TalendService
 {
     public class Startup
     {
@@ -32,19 +30,12 @@ namespace CrudService
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDbContext<DataContext>(options =>
-                {
-                    options.UseSqlServer("Data Source=SPB-MDSPOC01\\SQLEXPRESS01;Initial Catalog=PoC;User ID=dsUser;Password=password123;");
-                });
-
-            services.AddTransient<ICrudRepository, CrudRepository>();
             services.AddCamundaWorker(options =>
-                {
-                    options.WorkerId = "crudWorker";
-                    options.WorkerCount = 1;
-                    options.BaseUri = new Uri("http://localhost:8080/engine-rest");
-                })
-                .AddHandler<CrudHandler>();
+            {
+                options.WorkerId = "talend";
+                options.WorkerCount = 1;
+                options.BaseUri = new Uri("http://localhost:8080/engine-rest");
+            }).AddHandler<TalendHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +52,11 @@ namespace CrudService
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
+
         }
     }
 }

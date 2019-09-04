@@ -15,7 +15,7 @@ namespace CrudService.Data
 
         public async Task AddRangeAsync(IEnumerable<Document> documents)
         {
-            await _context.PlanAsset.AddRangeAsync(documents);
+            await _context.AddRangeAsync(documents);
 
             _context.SaveChanges();
         }
