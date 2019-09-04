@@ -54,3 +54,12 @@ DSDS/FileLoaderService/bin/
 DSDS/FileLoaderService/obj/
 DSDS/TalendService/bin/
 DSDS/TalendService/obj/
+DSDS/CrudService/CrudService.csproj.user
+DSDS/TalendService/Properties/PublishProfiles/FolderProfile.pubxml.user
+DSDS/TalendService/Properties/PublishProfiles/FolderProfile.pubxml
+DSDS/FtpWatcherService/Properties/PublishProfiles/FolderProfile.pubxml.user
+DSDS/FtpWatcherService/Properties/PublishProfiles/FolderProfile.pubxml
+DSDS/CrudService/Properties/PublishProfiles/FolderProfile.pubxml.user
+DSDS/CrudService/Properties/PublishProfiles/FolderProfile.pubxml
+DSDS/TalendService/TalendService.csproj.user
+DSDS/FtpWatcherService/FtpWatcherService.csproj.user
