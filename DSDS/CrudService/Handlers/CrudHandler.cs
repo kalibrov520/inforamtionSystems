@@ -41,8 +41,6 @@ namespace CrudService.Handlers
                     _context.SaveChanges();
                 }
 
-                _context.AddRange(reformattedFiles);
-
                 _logger.LogInformation("Provided Json was parsed and added to the database {json}", externalTask.Variables["reformattedFiles"].AsString());
 
                 return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
