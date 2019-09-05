@@ -63,3 +63,7 @@ DSDS/CrudService/Properties/PublishProfiles/FolderProfile.pubxml.user
 DSDS/CrudService/Properties/PublishProfiles/FolderProfile.pubxml
 DSDS/TalendService/TalendService.csproj.user
 DSDS/FtpWatcherService/FtpWatcherService.csproj.user
+DSDS/LookupApi/bin/
+DSDS/LookupApi/obj/
+DSDS/LookupApi/.vs/
+
