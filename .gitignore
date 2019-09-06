@@ -66,4 +66,6 @@ DSDS/FtpWatcherService/FtpWatcherService.csproj.user
 DSDS/LookupApi/bin/
 DSDS/LookupApi/obj/
 DSDS/LookupApi/.vs/
-
+DSDS/LogSenderService/bin/
+DSDS/LogSenderService/obj/
+DSDS/LogSenderService/.vs/
