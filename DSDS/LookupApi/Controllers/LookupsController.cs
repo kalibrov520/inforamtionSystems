@@ -13,11 +13,13 @@ namespace LookupApi.Controllers
     public class LookupsController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly ILookupRepository _repo;
         private readonly ILogger<LookupsController> _logger;
 
-        public LookupsController(DataContext context, ILogger<LookupsController> logger)
+        public LookupsController(DataContext context, ILookupRepository repo, ILogger<LookupsController> logger)
         {
             _context = context;
+            _repo = repo;
             _logger = logger;
         }
 
@@ -27,9 +29,7 @@ namespace LookupApi.Controllers
         {
             try
             {
-                await _context.Items.AddRangeAsync(value.Items);
-
-                await _context.SaveChangesAsync();
+                await _repo.PostItems(value);
 
                 _logger.LogInformation("Provided Json was parsed and added to the database {json}", value);
             }

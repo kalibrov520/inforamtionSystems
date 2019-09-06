@@ -27,21 +27,13 @@ namespace LookupApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlServer("Data Source=IKALIBROV;Initial Catalog=PoC;Integrated Security=True");
             });
-
-            //services.AddTransient<ICrudRepository, CrudRepository>();
-            /*services.AddCamundaWorker(options =>
-                {
-                    options.WorkerId = "crudWorker";
-                    options.WorkerCount = 1;
-                    options.BaseUri = new Uri("http://localhost:8080/engine-rest");
-                })
-                .AddHandler<CrudHandler>();*/
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddCors();
+            services.AddScoped<ILookupRepository, LookUpRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +44,7 @@ namespace LookupApi
                 .UseStartup<Startup>()
                 .Build();
 
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader());
             app.UseMvc();
 
             if (env.IsDevelopment())

@@ -32,6 +32,7 @@ namespace TalendService.Handlers
             try
             {
                 var url = externalTask.Variables["url"].AsString();
+                //var apiUrl = externalTask.Variables["apiUrl"].AsString();
 
                 var fileLoader = new FtpFileLoader("",
                     externalTask.Variables["userName"].AsString(), externalTask.Variables["password"].AsString());
