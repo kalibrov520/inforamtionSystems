@@ -12,13 +12,11 @@ namespace LookupApi.Controllers
     [ApiController]
     public class LookupsController : ControllerBase
     {
-        private readonly DataContext _context;
         private readonly ILookupRepository _repo;
         private readonly ILogger<LookupsController> _logger;
 
-        public LookupsController(DataContext context, ILookupRepository repo, ILogger<LookupsController> logger)
+        public LookupsController(ILookupRepository repo, ILogger<LookupsController> logger)
         {
-            _context = context;
             _repo = repo;
             _logger = logger;
         }
