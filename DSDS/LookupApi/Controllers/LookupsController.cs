@@ -23,13 +23,11 @@ namespace LookupApi.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task Post([FromBody] string value)
+        public async Task Post(TalendDocument value)
         {
             try
             {
-                var talendDocument = JsonConvert.DeserializeObject<TalendDocument>(value);
-
-                await _context.Items.AddRangeAsync(talendDocument.SuccessfulItems);
+                await _context.Items.AddRangeAsync(value.Items);
 
                 await _context.SaveChangesAsync();
 

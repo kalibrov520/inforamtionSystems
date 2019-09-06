@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 using Camunda.Worker;
 using FileLoader.FTP;
@@ -37,8 +38,6 @@ namespace TalendService.Handlers
 
                 var filesToReformat = JsonConvert.DeserializeObject<List<FileLoader.FileSystem.File>>(externalTask.Variables["newFiles"].AsString());
 
-                var reformattedFiles = new List<Document>();
-
                 foreach (var file in filesToReformat)
                 {
                     using (var client = new HttpClient())
@@ -54,10 +53,12 @@ namespace TalendService.Handlers
 
                             if (response.IsCompletedSuccessfully)
                             {
-                                reformattedFiles.Add(JsonConvert.DeserializeObject<Document>(responseContent));
+                                client.PostAsync("http://localhost:59295/api/lookups", new StringContent(responseContent, Encoding.UTF8, "application/json"));
                             }
                             else
                             {
+                                client.PostAsync("",
+                                    new StringContent(responseContent, Encoding.UTF8, "application/json"));
                                 _logger.LogError("Something went wrong in reformat process! {File} transformation went wrong.", file.Name);
                                 throw new Exception($"{file.Name} failed to transform.");
                             }
@@ -66,10 +67,8 @@ namespace TalendService.Handlers
                     
                 }
 
-                return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
-                {
-                    ["reformattedFiles"] = Variable.String(JsonConvert.SerializeObject(reformattedFiles))
-                }));
+                //TODO: no Database service now
+                return Task.FromResult<IExecutionResult>(new CompleteResult());
             }
             catch (Exception ex)
             {
