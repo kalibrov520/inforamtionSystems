@@ -57,7 +57,7 @@
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1odtux8" sourceRef="TalendService" targetRef="Task_0cpg8po" />
     <bpmn:sequenceFlow id="SequenceFlow_0sje7g8" sourceRef="IntermediateThrowEvent_1cfam7d" targetRef="Task_0x70jqq" />
-    <bpmn:serviceTask id="Task_0cpg8po" name="LogService" camunda:type="external" camunda:topic="LogService">
+    <bpmn:serviceTask id="Task_0cpg8po" name="LogSender" camunda:type="external" camunda:topic="LogSender">
       <bpmn:incoming>SequenceFlow_1o6l7r9</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1odtux8</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_180p63j</bpmn:outgoing>

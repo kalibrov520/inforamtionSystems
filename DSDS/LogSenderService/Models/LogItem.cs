@@ -4,15 +4,18 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace LogSenderService.Models
 {
-    public class FailedItem
+    public class LogItem
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonRepresentation(BsonType.DateTime)]
-        public DateTime Date { get; set; }
+        public bool IsSucceeded { get; set; }
 
-        public string Content { get; set; }
+        public string SuccessfulItems { get; set; }
+
+        public string FailedItems { get; set; }
+
+        public DateTime StartDate { get; set; }
     }
 }

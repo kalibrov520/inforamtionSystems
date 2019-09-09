@@ -11,30 +11,26 @@ namespace LogSenderService.Handlers
     [HandlerTopics("LogSender")]
     public class LogSenderHandler : ExternalTaskHandler
     {
-        private readonly FailedItemsService _failedItemsService;
+        private readonly SmtpService _smtpService;
+        private readonly LogItemsService _logItemsService;
         private readonly ILogger<LogSenderHandler> _logger;
 
-        public LogSenderHandler(FailedItemsService failedItemsService, ILogger<LogSenderHandler> logger)
+        public LogSenderHandler(SmtpService smtpService, LogItemsService logItemsService, ILogger<LogSenderHandler> logger)
         {
-            _failedItemsService = failedItemsService;
+            _smtpService = smtpService;
+            _logItemsService = logItemsService;
             _logger = logger;
         }
 
-        public override Task<IExecutionResult> Process(ExternalTask externalTask)
+        public override async Task<IExecutionResult> Process(ExternalTask externalTask)
         {
-            var smtpClient = new SmtpClient("smtp.gmail.com", 587)
-            {
-                Credentials = new NetworkCredential("", ""),
-                EnableSsl = true
-            };
+            var from = new MailAddress("test@gmail.com", "test");
+            var to = new MailAddress("test@emergn.com");
+            var m = new MailMessage(from, to) {Subject = "test", Body = "test"};
 
-            var from = new MailAddress("", "");
-            var to = new MailAddress("");
-            var m = new MailMessage(from, to) {Subject = "", Body = ""};
+            await _smtpService.SendEmailAsync(m);
 
-            smtpClient.Send(m);
-
-            return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
+            return await Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
         }
     }
 }
