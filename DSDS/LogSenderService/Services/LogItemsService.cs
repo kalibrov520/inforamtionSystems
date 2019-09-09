@@ -17,11 +17,11 @@ namespace LogSenderService.Services
             _logItems = database.GetCollection<LogItem>(settings.CollectionName);
         }
 
-        public async Task LogSingleItem(LogItem item) 
+        public async Task LogSingleItemAsync(LogItem item) 
             => await _logItems.InsertOneAsync(item);
         
 
-        public async Task LogAllItems(IEnumerable<LogItem> items) 
+        public async Task LogAllItemsAsync(IEnumerable<LogItem> items) 
             => await _logItems.InsertManyAsync(items);
 
     }

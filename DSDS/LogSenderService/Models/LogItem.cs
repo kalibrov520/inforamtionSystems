@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -12,10 +13,20 @@ namespace LogSenderService.Models
 
         public bool IsSucceeded { get; set; }
 
-        public string SuccessfulItems { get; set; }
+        public IEnumerable<SuccessfulItem> SuccessfulItems { get; set; }
 
-        public string FailedItems { get; set; }
+        public IEnumerable<FailedItem> FailedItems { get; set; }
 
         public DateTime StartDate { get; set; }
+    }
+
+    public class SuccessfulItem
+    {
+
+    }
+
+    public class FailedItem
+    {
+
     }
 }

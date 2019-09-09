@@ -8,6 +8,7 @@ namespace LogSenderService.Services
     public class SmtpService
     {
         private readonly SmtpClient _smtpClient;
+        private readonly MailAddress _fromAddress;
 
         public SmtpService(ISmtpSettings smtpSettings)
         {
@@ -16,10 +17,14 @@ namespace LogSenderService.Services
                 Credentials = new NetworkCredential(smtpSettings.Username, smtpSettings.Password),
                 EnableSsl = smtpSettings.Ssl
             };
+
+            _fromAddress = new MailAddress(smtpSettings.Username, smtpSettings.Username);
         }
 
-        public async Task SendEmailAsync(MailMessage message) 
-            =>  await _smtpClient.SendMailAsync(message);
-
+        public async Task SendEmailAsync(MailMessage message)
+        {
+            message.From = _fromAddress;
+            await _smtpClient.SendMailAsync(message);
+        }
     }
 }
