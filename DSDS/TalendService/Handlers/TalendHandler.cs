@@ -58,8 +58,6 @@ namespace TalendService.Handlers
                             }
                             else
                             {
-                                client.PostAsync("",
-                                    new StringContent(responseContent, Encoding.UTF8, "application/json"));
                                 _logger.LogError("Something went wrong in reformat process! {File} transformation went wrong.", file.Name);
                                 throw new Exception($"{file.Name} failed to transform.");
                             }
