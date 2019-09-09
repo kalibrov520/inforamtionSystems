@@ -13,8 +13,7 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0nekwjt" sourceRef="StartEvent_0zaclaf" targetRef="Task_0x70jqq" />
     <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_1cfam7d">
-      <bpmn:incoming>SequenceFlow_1o6l7r9</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_1bbn6ma</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_180p63j</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0sje7g8</bpmn:outgoing>
       <bpmn:timerEventDefinition>
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P0Y0M0DT0H1M</bpmn:timeDuration>
@@ -42,7 +41,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_1poxbct" sourceRef="ExclusiveGateway_0o2799t" targetRef="TalendService">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isUpdated}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1o6l7r9" name="There is no changes" sourceRef="ExclusiveGateway_0o2799t" targetRef="IntermediateThrowEvent_1cfam7d">
+    <bpmn:sequenceFlow id="SequenceFlow_1o6l7r9" name="There is no changes" sourceRef="ExclusiveGateway_0o2799t" targetRef="Task_0cpg8po">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!isUpdated}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="TalendService" name="TalendService" camunda:type="external" camunda:topic="TalendService">
@@ -62,7 +61,13 @@
       <bpmn:incoming>SequenceFlow_1odtux8</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1bbn6ma</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1bbn6ma" sourceRef="Task_05o3f57" targetRef="IntermediateThrowEvent_1cfam7d" />
+    <bpmn:sequenceFlow id="SequenceFlow_1bbn6ma" sourceRef="Task_05o3f57" targetRef="Task_0cpg8po" />
+    <bpmn:serviceTask id="Task_0cpg8po" name="LogService" camunda:type="external" camunda:topic="LogService">
+      <bpmn:incoming>SequenceFlow_1o6l7r9</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1bbn6ma</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_180p63j</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_180p63j" sourceRef="Task_0cpg8po" targetRef="IntermediateThrowEvent_1cfam7d" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0swyzid">
@@ -92,11 +97,11 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1o6l7r9_di" bpmnElement="SequenceFlow_1o6l7r9">
         <di:waypoint x="530" y="145" />
-        <di:waypoint x="530" y="260" />
-        <di:waypoint x="460" y="260" />
-        <di:waypoint x="460" y="362" />
+        <di:waypoint x="530" y="208" />
+        <di:waypoint x="460" y="208" />
+        <di:waypoint x="460" y="230" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="466" y="226" width="56" height="27" />
+          <dc:Bounds x="466" y="174" width="56" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0v9ojn9_di" bpmnElement="TalendService">
@@ -116,8 +121,15 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1bbn6ma_di" bpmnElement="SequenceFlow_1bbn6ma">
         <di:waypoint x="900" y="160" />
-        <di:waypoint x="900" y="380" />
-        <di:waypoint x="478" y="380" />
+        <di:waypoint x="900" y="270" />
+        <di:waypoint x="510" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1jn6svr_di" bpmnElement="Task_0cpg8po">
+        <dc:Bounds x="410" y="230" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_180p63j_di" bpmnElement="SequenceFlow_180p63j">
+        <di:waypoint x="460" y="310" />
+        <di:waypoint x="460" y="362" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
