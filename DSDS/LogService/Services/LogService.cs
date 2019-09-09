@@ -18,7 +18,7 @@ namespace LogService.Services
         }
 
         public async Task LogSingleItem(LogItem item)
-            => await _logItems.InsertOne(item);
+            => await _logItems.InsertOneAsync(item);
 
 
         public async Task LogAllItems(IEnumerable<LogItem> items)
