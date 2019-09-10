@@ -37,21 +37,19 @@ namespace LogSenderService.Handlers
             }
             else
             {
-                var isSucceeded = string.IsNullOrWhiteSpace(externalTask.Variables["failedItems"].AsString());
+                var failedItems = externalTask.Variables["failedItems"].AsString();
 
                 var logItem = new LogItem()
                 {
-                    IsSucceeded = isSucceeded,
+                    IsSucceeded = string.IsNullOrWhiteSpace(failedItems),
                     SuccessfulItems = JsonConvert.DeserializeObject<IEnumerable<SuccessfulItem>>(externalTask.Variables["successfulItems"].AsString()),
-                    FailedItems = isSucceeded ? null : JsonConvert.DeserializeObject<IEnumerable<FailedItem>>(externalTask.Variables["failedItems"].AsString()),
+                    FailedItems = JsonConvert.DeserializeObject<IEnumerable<FailedItem>>(failedItems),
                     StartDate = DateTime.Now
                 };
 
                 await _logItemsService.LogSingleItemAsync(logItem);
 
-                var message = new MailMessage() { Subject = "test", Body = logItem.FailedItems.ToString(), To = { new MailAddress(externalTask.Variables["mailAddress"].AsString()) } };
-
-                await _smtpService.SendEmailAsync(message);
+                await _smtpService.SendEmailAsync(externalTask.Variables["email"].AsString(), "Error", failedItems);
             }
 
             return await Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));

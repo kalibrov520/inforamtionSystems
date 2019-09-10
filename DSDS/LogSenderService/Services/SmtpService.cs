@@ -26,5 +26,18 @@ namespace LogSenderService.Services
             message.From = _fromAddress;
             await _smtpClient.SendMailAsync(message);
         }
+
+        public async Task SendEmailAsync(string email, string subject, string message)
+        {
+            var mailMessage = new MailMessage()
+            {
+                From = _fromAddress,
+                To = {email},
+                Subject = subject,
+                Body = message
+            };
+
+            await _smtpClient.SendMailAsync(mailMessage);
+        }
     }
 }
