@@ -13,20 +13,8 @@ namespace LogSenderService.Models
 
         public bool IsSucceeded { get; set; }
 
-        public IEnumerable<SuccessfulItem> SuccessfulItems { get; set; }
-
-        public IEnumerable<FailedItem> FailedItems { get; set; }
+        public IEnumerable<string> FailedRows { get; set; }
 
         public DateTime StartDate { get; set; }
-    }
-
-    public class SuccessfulItem
-    {
-
-    }
-
-    public class FailedItem
-    {
-
     }
 }

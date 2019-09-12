@@ -7,7 +7,7 @@ namespace LookupApi.Data
 {
     public interface ILookupRepository
     {
-        Task PostItems(TalendDocument docs);
+        Task PostItems(IEnumerable<TalendResponseObject> docs);
 
         Task<List<TransferAgentPlan>> GetTransferAgentPlanList();
     }

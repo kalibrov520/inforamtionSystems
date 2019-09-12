@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LookupApi.Models;
+using Models;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -17,9 +17,9 @@ namespace LookupApi.Data
             _context = context;
         }
 
-        public async Task PostItems(TalendDocument docs)
+        public async Task PostItems(IEnumerable<TalendResponseObject> docs)
         {
-            await _context.Items.AddRangeAsync(docs.Items);
+            await _context.SuccessfulRows.AddRangeAsync(docs);
 
             await _context.SaveChangesAsync();
         }

@@ -12,8 +12,10 @@ using Camunda.Worker;
 using FileLoader.FTP;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Models;
 using Newtonsoft.Json;
-using TalendService.Models;
+using Newtonsoft.Json.Linq;
+using TalendService.Utils;
 
 namespace TalendService.Handlers
 {
@@ -31,8 +33,10 @@ namespace TalendService.Handlers
         {
             try
             {
+                var failedRows = new List<string>();
+                var successfulRows = new List<TalendResponseObject>();
+
                 var url = externalTask.Variables["url"].AsString();
-                //var apiUrl = externalTask.Variables["apiUrl"].AsString();
 
                 var fileLoader = new FtpFileLoader("",
                     externalTask.Variables["userName"].AsString(), externalTask.Variables["password"].AsString());
@@ -48,13 +52,18 @@ namespace TalendService.Handlers
                             formData.Add(new ByteArrayContent(fileLoader.GetFileContent(file.FullPath)));
 
                             //TODO: deal with PostAsync andResult. Do not block Task.
-                            var response = client.PostAsync(url, formData);
+                            var response = client.PostAsync(url, formData).Result;
 
-                            var responseContent = response.Result.Content.ReadAsStringAsync().Result;
-
-                            if (response.IsCompletedSuccessfully)
+                            if (response.IsSuccessStatusCode)
                             {
-                                client.PostAsync("http://localhost:59295/api/lookups", new StringContent(responseContent, Encoding.UTF8, "application/json"));
+                                var responseContent = response.Content.ReadAsStringAsync().Result;
+
+                                (successfulRows, failedRows) = TalendResponseParser.ParseTalendResponse(responseContent);
+
+                                client.PostAsync("http://localhost:59295/api/lookups",
+                                    new StringContent(JsonConvert.SerializeObject(successfulRows), Encoding.UTF8,
+                                        "application/json"));
+
                             }
                             else
                             {
@@ -67,7 +76,10 @@ namespace TalendService.Handlers
                 }
 
                 //TODO: no Database service now
-                return Task.FromResult<IExecutionResult>(new CompleteResult());
+                return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
+                {
+                    ["failedItems"] = Variable.String(JsonConvert.SerializeObject(failedRows))
+                }));
             }
             catch (Exception ex)
             {

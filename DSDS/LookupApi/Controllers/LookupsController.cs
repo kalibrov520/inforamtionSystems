@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LookupApi.Data;
-using LookupApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models;
@@ -25,7 +24,7 @@ namespace LookupApi.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task Post(TalendDocument value)
+        public async Task Post(IEnumerable<TalendResponseObject> value)
         {
             try
             {
