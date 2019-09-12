@@ -42,8 +42,7 @@ namespace LogSenderService.Handlers
                 var logItem = new LogItem()
                 {
                     IsSucceeded = string.IsNullOrWhiteSpace(failedItems),
-                    SuccessfulItems = JsonConvert.DeserializeObject<IEnumerable<SuccessfulItem>>(externalTask.Variables["successfulItems"].AsString()),
-                    FailedItems = JsonConvert.DeserializeObject<IEnumerable<FailedItem>>(failedItems),
+                    FailedRows = JsonConvert.DeserializeObject<List<string>>(failedItems),
                     StartDate = DateTime.Now
                 };
 
