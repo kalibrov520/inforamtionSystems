@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TalendService.Utils;
 
 namespace TalendService.Handlers
 {
@@ -32,8 +33,10 @@ namespace TalendService.Handlers
         {
             try
             {
+                var failedRows = new List<string>();
+                var successfulRows = new List<TalendResponseObject>();
+
                 var url = externalTask.Variables["url"].AsString();
-                //var apiUrl = externalTask.Variables["apiUrl"].AsString();
 
                 var fileLoader = new FtpFileLoader("",
                     externalTask.Variables["userName"].AsString(), externalTask.Variables["password"].AsString());
@@ -55,31 +58,12 @@ namespace TalendService.Handlers
                             {
                                 var responseContent = response.Content.ReadAsStringAsync().Result;
 
-                                var successfulTokens = new List<TalendResponseObject>();
-                                var failedTokens = new List<string>();
+                                (successfulRows, failedRows) = TalendResponseParser.ParseTalendResponse(responseContent);
 
-                                foreach (var arrayElement in JArray.Parse(responseContent))
-                                {
-                                    var token = arrayElement.SelectToken("rows");
+                                client.PostAsync("http://localhost:59295/api/lookups",
+                                    new StringContent(JsonConvert.SerializeObject(successfulRows), Encoding.UTF8,
+                                        "application/json"));
 
-                                    if (arrayElement.Value<string>("key") == "success")
-                                    {
-                                        if (token is JArray)
-                                        {
-                                            successfulTokens.AddRange(token.ToObject<List<TalendResponseObject>>());
-                                        }
-                                        else
-                                        {
-                                            successfulTokens.Add(token.SelectToken("success").ToObject<TalendResponseObject>());
-                                        }
-                                    }
-                                    else
-                                    {
-                                        failedTokens.AddRange(token.ToObject<List<JObject>>().Select(obj => obj.ToString(Formatting.None)).ToList());
-                                    }
-                                }
-
-                                var b = client.PostAsync("http://localhost:59295/api/lookups", new StringContent(JsonConvert.SerializeObject(successfulTokens), Encoding.UTF8, "application/json")).Result;
                             }
                             else
                             {
@@ -92,7 +76,10 @@ namespace TalendService.Handlers
                 }
 
                 //TODO: no Database service now
-                return Task.FromResult<IExecutionResult>(new CompleteResult());
+                return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
+                {
+                    ["failedItems"] = Variable.String(JsonConvert.SerializeObject(failedRows))
+                }));
             }
             catch (Exception ex)
             {
