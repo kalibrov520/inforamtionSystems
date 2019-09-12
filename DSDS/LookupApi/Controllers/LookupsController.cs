@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using LookupApi.Data;
 using LookupApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Models;
 using Newtonsoft.Json;
 
 namespace LookupApi.Controllers
@@ -35,6 +37,22 @@ namespace LookupApi.Controllers
             {
                 // ignored
             }
+        }
+
+        
+        [HttpGet("transferplanlist")]
+        public async Task<List<TransferAgentPlan>> GetTransferAgentPlanList()
+        {
+            try
+            {
+                return await _repo.GetTransferAgentPlanList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
         }
     }
 }
