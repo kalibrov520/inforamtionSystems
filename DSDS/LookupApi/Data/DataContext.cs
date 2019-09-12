@@ -1,5 +1,4 @@
-﻿using LookupApi.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace LookupApi.Data
