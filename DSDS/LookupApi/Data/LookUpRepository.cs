@@ -15,7 +15,7 @@ namespace LookupApi.Data
 
         public async Task PostItems(IEnumerable<TalendResponseObject> docs)
         {
-            await _context.Items.AddRangeAsync(docs);
+            await _context.SuccessfulRows.AddRangeAsync(docs);
 
             await _context.SaveChangesAsync();
         }

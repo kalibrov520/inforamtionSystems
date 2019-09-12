@@ -7,6 +7,6 @@ namespace LookupApi.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<TalendResponseObject> Items { get; set; }
+        public DbSet<TalendResponseObject> SuccessfulRows { get; set; }
     }
 }
