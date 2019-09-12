@@ -12,8 +12,9 @@ using Camunda.Worker;
 using FileLoader.FTP;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Models;
 using Newtonsoft.Json;
-using TalendService.Models;
+using Newtonsoft.Json.Linq;
 
 namespace TalendService.Handlers
 {
@@ -48,13 +49,37 @@ namespace TalendService.Handlers
                             formData.Add(new ByteArrayContent(fileLoader.GetFileContent(file.FullPath)));
 
                             //TODO: deal with PostAsync andResult. Do not block Task.
-                            var response = client.PostAsync(url, formData);
+                            var response = client.PostAsync(url, formData).Result;
 
-                            var responseContent = response.Result.Content.ReadAsStringAsync().Result;
-
-                            if (response.IsCompletedSuccessfully)
+                            if (response.IsSuccessStatusCode)
                             {
-                                client.PostAsync("http://localhost:59295/api/lookups", new StringContent(responseContent, Encoding.UTF8, "application/json"));
+                                var responseContent = response.Content.ReadAsStringAsync().Result;
+
+                                var successfulTokens = new List<TalendResponseObject>();
+                                var failedTokens = new List<string>();
+
+                                foreach (var arrayElement in JArray.Parse(responseContent))
+                                {
+                                    var token = arrayElement.SelectToken("rows");
+
+                                    if (arrayElement.Value<string>("key") == "success")
+                                    {
+                                        if (token is JArray)
+                                        {
+                                            successfulTokens.AddRange(token.ToObject<List<TalendResponseObject>>());
+                                        }
+                                        else
+                                        {
+                                            successfulTokens.Add(token.SelectToken("success").ToObject<TalendResponseObject>());
+                                        }
+                                    }
+                                    else
+                                    {
+                                        failedTokens.AddRange(token.ToObject<List<JObject>>().Select(obj => obj.ToString(Formatting.None)).ToList());
+                                    }
+                                }
+
+                                var b = client.PostAsync("http://localhost:59295/api/lookups", new StringContent(JsonConvert.SerializeObject(successfulTokens), Encoding.UTF8, "application/json")).Result;
                             }
                             else
                             {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using LookupApi.Models;
+using Models;
 
 namespace LookupApi.Data
 {
@@ -13,9 +13,9 @@ namespace LookupApi.Data
             _context = context;
         }
 
-        public async Task PostItems(TalendDocument docs)
+        public async Task PostItems(IEnumerable<TalendResponseObject> docs)
         {
-            await _context.Items.AddRangeAsync(docs.Items);
+            await _context.Items.AddRangeAsync(docs);
 
             await _context.SaveChangesAsync();
         }

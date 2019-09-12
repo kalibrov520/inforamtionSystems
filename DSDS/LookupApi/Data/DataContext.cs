@@ -1,5 +1,5 @@
-﻿using LookupApi.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace LookupApi.Data
 {
@@ -7,6 +7,6 @@ namespace LookupApi.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<SuccessfulItem> Items { get; set; }
+        public DbSet<TalendResponseObject> Items { get; set; }
     }
 }
