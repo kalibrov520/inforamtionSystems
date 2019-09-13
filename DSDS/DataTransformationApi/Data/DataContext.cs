@@ -7,6 +7,6 @@ namespace DataTransformationApi.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<DataFeedInfo> SuccessfulRows { get; set; }
+        public DbSet<DataFeedInfo> DataFeedInfo { get; set; }
     }
 }
