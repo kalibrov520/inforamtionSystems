@@ -75,3 +75,5 @@ DSDS/LogSenderService/.vs/
 DSDS/LookupApi/LookupApi.csproj.user
 DSDS/Models/bin/
 DSDS/Models/obj/
+DSDS/DataTransformationApi/obj/
+DSDS/DataTransformationApi/bin/
