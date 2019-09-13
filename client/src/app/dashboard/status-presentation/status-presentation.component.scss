@@ -1,0 +1,80 @@
+@import 'project.config';
+
+.status-presentation-row {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.status-visual-presentation {
+	width: rem-calc(150);
+	height: rem-calc(150);
+	margin: rem-calc(10 auto 25);
+	padding-top: rem-calc(40);
+	background: url(./sprite-pending-clients-status.png) 0 0 no-repeat;
+
+	a {
+		display: block;
+		padding: rem-calc(0 24);
+		text-align: center;
+		text-decoration: none;
+	}
+
+	.files-amount {
+		font-size: rem-calc(12);
+		letter-spacing: rem-calc(2);
+		line-height: 1;
+		text-transform: uppercase;
+		color: $onyx-dark;
+
+		.number {
+			display: block;
+			font-size: rem-calc(48);
+			letter-spacing: 0;
+			line-height: 1;
+		}
+	}
+}
+
+.cutoff-status-red {
+	color: $alert-color;
+}
+
+.cutoff-status-yellow {
+	color: $amber-bright;
+
+	.status-visual-presentation {
+        background-position: 0 -150px;
+    }
+}
+
+.cutoff-status-orange {
+	color: $topaz-bright;
+
+	.status-visual-presentation {
+        background-position: 0 -300px;
+    }
+}
+
+.cutoff-status-green {
+	color: $emerald-bright;
+
+	.status-visual-presentation {
+        background-position: 0 -450px;
+    }
+}
+
+.cutoff-status-blue {
+	color: $sapphire-bright;
+
+	.status-visual-presentation {
+        background-position: 0 -600px;
+    }
+}
+
+.cutoff-status-gray {
+	color: $sapphire-bright;
+
+	.status-visual-presentation {
+        background-position: 0 -750px;
+    }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "merceros-ui-starter",
+  "version": "0.10.4",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "ng build",
+    "ci": "ng lint && ng test --code-coverage --browsers=ChromeHeadless --no-watch && ng build --prod",
+    "e2e": "ng e2e",
+    "lint": "ng lint",
+    "postversion": "git push && git push --tags",
+    "start": "ng serve",
+    "start:hmr": "ng serve --hmr --configuration=hmr",
+    "test": "ng test",
+    "version": "standard-changelog && git add -A CHANGELOG.md"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "ngpd-merceros-ui-meta": "git+ssh://git@bitbucket.org:oliverwymantechssg/ngpd-merceros-ui-meta.git"
+  }
+}

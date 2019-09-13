@@ -1,0 +1,10 @@
+@import 'project.config';
+
+.calendar-range {
+    display: flex;
+    align-items: center;
+}
+
+.calendar-range-input {
+    margin: rem-calc(0 16);
+}

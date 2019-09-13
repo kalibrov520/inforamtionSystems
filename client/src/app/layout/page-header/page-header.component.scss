@@ -1,0 +1,37 @@
+@import 'project.config';
+
+.page-header-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: rem-calc(80);
+    margin: rem-calc(32 0);
+
+    &:before {
+        content: '';
+        position: absolute;
+		top: 0;
+		bottom: 0;
+		left: rem-calc(30);
+		border-left: 1px solid $mos-white-color;
+    }
+}
+
+.page-header-container {
+    margin: rem-calc(0 30);
+    padding-left: rem-calc(20);
+}
+
+.page-header {
+    margin-bottom: 0;
+    text-transform: uppercase;
+    font-family: "proxima_nova_ltsemibold", Helvetica, Arial, sans-serif;
+    font-size: rem-calc(36);
+    letter-spacing: rem-calc(3);
+    line-height: 1;
+    color: $mos-white-color;
+}
+
+.page-subheader {
+    color: $mos-white-color;
+}

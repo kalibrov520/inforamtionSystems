@@ -1,0 +1,19 @@
+@import 'project.config';
+
+.dashboard {
+    padding: rem-calc(32 0);
+    background: $mos-white-color;
+    border-radius: rem-calc(4);
+    box-shadow: 3px 1px 3px 0 rgba(0,0,0,.1);
+}
+
+.dashboard-item {
+    margin: rem-calc(48);
+}
+
+.dashboard-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: rem-calc(12);
+}

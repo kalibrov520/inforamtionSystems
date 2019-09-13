@@ -1,0 +1,12 @@
+@import 'project.config';
+
+.data-feed {
+    padding: rem-calc(32 0);
+    background: $mos-white-color;
+    border-radius: rem-calc(4);
+    box-shadow: 3px 1px 3px 0 rgba(0,0,0,.1);
+}
+
+.data-feed-item {
+    margin: rem-calc(48);
+}

@@ -1,0 +1,57 @@
+<mercer-header [isAuth]="true">
+  <mercer-header-title>
+    <a href="#/"><span>Mercer</span></a>
+  </mercer-header-title>
+
+  <mercer-header-links class="show-for-large">
+    <ul class="row collapse mos-c-header__menu">
+      <li class="columns shrink mos-c-header__menu-item--active">
+        <a href="#/">Inbound</a>
+      </li>
+      <li class="columns shrink">
+        <a href="#/">Outbound</a>
+      </li>
+    </ul>
+  </mercer-header-links>
+  
+  <mercer-header-dropdown-account>
+    <mercer-dropdown position="right">
+      <mercer-dropdown-label>
+        <a>
+          <mercer-avatar theme="primary-alt" src="/assets/img/avatar.jpg" alt="MG" [dropdownIcon]="true">MG</mercer-avatar>
+        </a>
+      </mercer-dropdown-label>
+      <mercer-dropdown-item>
+        <mercer-hcard [left]="false" [right]="false">
+          <mercer-hcard-left>
+          </mercer-hcard-left>
+          <mercer-hcard-center>
+            <div class="vcard">
+              <h3 class="mos-c-hcard--fn fn">Marion Garland</h3>
+              <div class="mos-c-hcard__group">
+                <h5 class="mos-c-hcard--org org">ACME Corporation</h5>
+                <h6 class="mos-o-subheader-5 mos-c-hcard--title title">Sr. Supervisor of Accounts</h6>
+              </div>
+            </div>
+          </mercer-hcard-center>
+          <mercer-hcard-right>
+          </mercer-hcard-right>
+        </mercer-hcard>
+      </mercer-dropdown-item>
+      <mercer-dropdown-item>
+        <a href="#">Account</a>
+      </mercer-dropdown-item>
+      <mercer-dropdown-item>
+        <a href="#">Settings</a>
+      </mercer-dropdown-item>
+      <mercer-dropdown-item>
+        <a href="#">Logout</a>
+      </mercer-dropdown-item>
+    </mercer-dropdown>
+  </mercer-header-dropdown-account>
+
+  <mercer-header-logged-out>
+    <a href="#/">Sign In</a>
+  </mercer-header-logged-out>
+
+</mercer-header>

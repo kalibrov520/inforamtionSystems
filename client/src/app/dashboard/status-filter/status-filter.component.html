@@ -1,0 +1,30 @@
+<div class="status-filter-wrapper">
+  <label class="mos-o-subheader-3">Filter:</label>
+  <ul class="status-filter-items">
+    <li>
+      <a mercer-list-item [class.active]="activeEl == 'failed'" (click)="onStatusFilterClick('failed')">
+        <span class="indented"><ds-status-circle status="failed"></ds-status-circle></span>
+      </a>
+    </li>
+    <li>
+      <a mercer-list-item [class.active]="activeEl == 'success'" (click)="onStatusFilterClick('success')">
+        <span class="indented"><ds-status-circle status="success"></ds-status-circle></span>
+      </a>
+    </li>
+    <li>
+      <a mercer-list-item [class.active]="activeEl == 'late'" (click)="onStatusFilterClick('late')">
+        <span class="indented"><ds-status-circle status="late"></ds-status-circle></span>
+      </a>
+    </li>
+    <li>
+      <a mercer-list-item [class.active]="activeEl == 'inactive'" (click)="onStatusFilterClick('inactive')">
+        <span class="indented"><ds-status-circle status="inactive"></ds-status-circle></span>
+      </a>
+    </li>
+    <li>
+      <a mercer-list-item [class.active]="activeEl == 'all'" (click)="onStatusFilterClick('all')">
+        <span class="indented"><ds-status-circle status="all"></ds-status-circle></span>
+      </a>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,12 @@
+@import 'project.config';
+
+.header {
+
+    .account-icon {
+        padding: rem-calc(0 8);
+    }
+
+    a:hover mercer-icon .mos-t-icon--primary {
+        color: #0090ac;
+    }
+}

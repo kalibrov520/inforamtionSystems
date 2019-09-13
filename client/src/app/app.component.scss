@@ -1,0 +1,38 @@
+@import 'project.config';
+
+body {
+    background: $mos-primary-color;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+.footer {
+    .mos-c-brand-bar-content {
+        max-width: 100%;
+    }
+}
+
+.page-wrapper {
+    width: 100%;
+    margin: 0 auto;
+    padding: rem-calc(0 20 80);
+
+    @media screen and (min-width: 1025px) {
+        max-width: 1340px;        
+    }
+}
+
+.link-danger {
+    text-decoration: underline;
+    color: $alert-color;
+
+    &:hover {
+        text-decoration: none;
+        color: $alert-color;
+    }
+}

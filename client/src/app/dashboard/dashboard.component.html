@@ -1,0 +1,19 @@
+<div class="dashboard">
+  <div class="dashboard-item">
+    <ds-status-presentation [allDataFeeds]="rowDataAll"></ds-status-presentation>
+  </div>
+  <div class="dashboard-item">
+    <ds-data-search (searchClicked)="onSearchClicked($event)"></ds-data-search>
+  </div>
+  <div class="dashboard-item">
+    <div class="dashboard-row">
+      <ds-status-filter (activeFilter)="onFilterClicked($event)"></ds-status-filter>
+      <button mercer-button type="button" size="sm">Add</button>
+    </div>
+    <ds-data-table [searchFilter]="searchFilter" [statusFilter]="statusFilter" [rowDataAll]="rowDataAll"></ds-data-table>
+    <mercer-pagination
+      (paginationInfoRequest)="updatePage($event)"
+      [paginationInfo]="paginationInfo"
+    ></mercer-pagination>
+  </div>
+</div>

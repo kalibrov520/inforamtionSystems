@@ -1,0 +1,41 @@
+@import 'project.config';
+
+.search {
+    display: flex;
+    align-items: center;
+    padding: rem-calc(16);
+    background: #f0f0f0;
+    border-top: rem-calc(6) solid $mos-primary-color;
+}
+
+.search-input-wrapper {
+    flex-grow: 1;
+    position: relative;
+    margin-right: rem-calc(8);
+
+    .search-input {
+        box-sizing: border-box;
+        margin: 0;
+        padding: rem-calc(8 36 8 8);
+        background: $mos-white-color;
+        border: 1px solid $onyx-lighter;
+    }
+}
+
+.search-input-clear-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    &.mos-c-icon-button {
+        &:active,
+        &:focus {
+            background: none;
+        }
+
+        mercer-icon  {
+            color: $onyx-darker;
+            transition: all .3s;
+        }
+    }
+}

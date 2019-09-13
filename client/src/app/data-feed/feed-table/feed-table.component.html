@@ -1,0 +1,28 @@
+<div class="feed-table mos-u-spacer--margin-bottom-md">
+  <mercer-table
+    theme="tertiary"
+    [bordered]="true"
+    [columnBordered]="true"
+    [headers]="headerData"
+    [rows]="rowData"
+    [headerTruncateText]="false"
+    [striped]="true"
+    [rowHighlight]="true"
+    [sortable]="true"
+  >
+    <ng-template mercer-table-row let-row="row" >
+      <td>{{row.status}}</td>
+      <td>{{row.date}}</td>
+      <td>{{row.successRows}}</td>
+      <td>
+          <a href="/failes" class="link-danger" *ngIf="row.failedRows > 0">{{row.failedRows}}</a>
+          <span *ngIf="row.failedRows == 0">{{row.failedRows}}</span>
+      </td>
+      <td>
+        <a href="javascript:;">
+          <mercer-icon icon="get_app" size="lg" theme="accent2" alt="Download file"></mercer-icon>
+        </a>
+      </td>
+    </ng-template>
+  </mercer-table>
+</div>

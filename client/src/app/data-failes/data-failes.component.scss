@@ -1,0 +1,24 @@
+@import 'project.config';
+
+.data-failes {
+    display: flex;
+    align-items: stretch;
+    background: $mos-white-color;
+    border-radius: rem-calc(4);
+    box-shadow: 3px 1px 3px 0 rgba(0,0,0,.1);
+    overflow: hidden;
+}
+
+.data-failes-controls {
+    display: flex;
+    justify-content: center;
+    width: rem-calc(64);
+    padding: rem-calc(8 0);
+    background: #f4f4f4;
+    border-right: 1px solid #e4e4e4;
+}
+
+.data-failes-table {
+    flex-grow: 1;
+    padding: rem-calc(48);
+}

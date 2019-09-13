@@ -1,0 +1,35 @@
+@import 'project.config';
+
+.status-filter-wrapper {
+    display: flex;
+    align-items: center;
+
+    .mos-o-subheader-3 {
+        margin-right: rem-calc(16);
+        margin-bottom: 0;
+    }
+
+    mercer-nav-list .mos-c-list-item {
+        line-height: 1;
+    }
+}
+
+.status-filter-items {
+    display: flex;
+    margin: 0;
+
+    li {
+        list-style-type: none;
+        padding: rem-calc(0 12);
+        border-right: 1px solid #404040;
+
+        &:first-child {
+            padding-left: 0;
+        }
+
+        &:last-child {
+            padding-right: 0;
+            border-right: none;
+        }
+    }
+}

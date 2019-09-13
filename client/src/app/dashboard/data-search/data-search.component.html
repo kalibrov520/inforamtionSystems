@@ -1,0 +1,10 @@
+<div class="search">
+    <div class="search-input-wrapper">
+      <input type="text" [(ngModel)]="searchFilter" class="search-input" placeholder="Search by DataFeed">
+      <button mercer-icon-button type="button" class="search-input-clear-button" icon="highlight_off" size="xlg" alt="Clean" (click)="clearFilter()"></button>
+    </div>
+    <button mercer-button type="button" size="sm" 
+            (click)="onSearchButtonClicked()">
+      Search
+    </button>
+  </div>
