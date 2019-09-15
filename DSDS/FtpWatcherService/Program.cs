@@ -34,6 +34,8 @@ namespace FtpWatcher
                     logging.ClearProviders();
                     logging.SetMinimumLevel(LogLevel.Information);
                 })
+                .UseIISIntegration()
+                .UseStartup<Startup>()
                 .UseStartup<Startup>()
                 .UseNLog();
     }

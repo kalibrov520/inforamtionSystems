@@ -3,6 +3,7 @@ using Camunda.Worker;
 using Camunda.Worker.Extensions;
 using FileLoader;
 using FileLoader.File;
+using FtpWatcherService.FileLoader;
 using FtpWatcherService.Handlers;
 using FtpWatcherService.Models;
 using FtpWatcherService.Services;
@@ -36,8 +37,8 @@ namespace FtpWatcher
                 sp.GetRequiredService<IOptions<PoCDatabaseSettings>>().Value);
 
             services.AddSingleton<BatFileService>();
-            services.AddSingleton<IFileLoader, FromFileLoader>();
-            services.AddSingleton<IFileWriter, FileWriter>();
+            services.AddSingleton<IFileChecker, FileSystemFileChecker>();
+            services.AddSingleton<IFileManager, FileSystemFileManager>();
 
             services.AddCamundaWorker(options =>
                 {
@@ -45,17 +46,12 @@ namespace FtpWatcher
                     options.WorkerCount = 1;
                     options.BaseUri = new Uri("http://localhost:8080/engine-rest");
                 })
-                .AddHandler<FtpWatcherHandler>();
+                .AddHandler<FileLoaderHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            var host = new WebHostBuilder()
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
-
             app.UseMvc();
 
             if (env.IsDevelopment())

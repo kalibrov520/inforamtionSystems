@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Utils\CamundaUtils\CamundaUtils.csproj" />
     <ProjectReference Include="..\Utils\FIleLoader\FileLoader.csproj" />
   </ItemGroup>
 

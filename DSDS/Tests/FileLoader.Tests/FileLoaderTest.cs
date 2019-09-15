@@ -5,7 +5,6 @@ using System.Linq;
 using FileLoader.FileSystem;
 using FileLoader.FTP;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace FileLoader.Tests
 {

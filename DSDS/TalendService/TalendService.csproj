@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Utils\FIleLoader\FileLoader.csproj" />
+    <ProjectReference Include="..\Utils\Models\Models.csproj" />
   </ItemGroup>
 
 </Project>
