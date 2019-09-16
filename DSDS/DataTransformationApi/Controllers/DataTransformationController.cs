@@ -1,6 +1,9 @@
-﻿using DataTransformationApi.Data;
+﻿using System;
+using System.Threading.Tasks;
+using DataTransformationApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Models;
 
 namespace DataTransformationApi.Controllers
 {
@@ -15,6 +18,25 @@ namespace DataTransformationApi.Controllers
         {
             _repo = repo;
             _logger = logger;
+        }
+
+        [HttpPost]
+        public async Task PostDataFeedInfoAsync(DataFeedInfo info)
+        {
+            try
+            {
+                await _repo.PostDataFeedInfoAsync(info);
+            }
+            catch (Exception e)
+            {
+                //ignored
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDataFeedsInfoAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
