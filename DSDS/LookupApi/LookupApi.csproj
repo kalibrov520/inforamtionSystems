@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataTransformationApi\DataTransformationApi.csproj" />
     <ProjectReference Include="..\Utils\Models\Models.csproj" />
   </ItemGroup>
 

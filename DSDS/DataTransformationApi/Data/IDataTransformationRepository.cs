@@ -7,6 +7,8 @@ namespace DataTransformationApi.Data
 {
     public interface IDataTransformationRepository
     {
+        Task PostDataFeedInfoAsync(DataFeedInfo info);
+        
         Task LogFileReading(FileReadingLogRecord logItem);
 
         Task LogDataTransformation(FileTransformationLogRecord logItem);

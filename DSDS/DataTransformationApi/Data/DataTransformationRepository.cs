@@ -17,6 +17,20 @@ namespace DataTransformationApi.Data
         {
             _context = context;
         }
+        
+        public async Task PostDataFeedInfoAsync(DataFeedInfo info)
+        {
+            try
+            {
+                await _context.DataFeedInfo.AddAsync(info);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                //ignored 
+            }
+        }
 
         public async Task LogFileReading(FileReadingLogRecord logItem)
         {
@@ -28,7 +42,7 @@ namespace DataTransformationApi.Data
                 RunDateTime = DateTime.Now
             };
             await _context.DataFeedRunLog.AddAsync(runLogItem);
-            
+
 
             var fileLogItems = logItem.FilePathList.Select(file => new DataFeedFileLoadingLog
             {

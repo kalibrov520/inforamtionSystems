@@ -8,9 +8,13 @@ namespace Models
         [Key]
         public int Id { get; set; }
 
-        public string Status { get; set; }
+        public string RunId { get; set; }
 
-        public string DataFeed { get; set; }
+        public string DeploymentId { get; set; }
+
+        public string InstanceId { get; set; }
+
+        public string Status { get; set; }
 
         public DateTime LastRunning { get; set; }
 
