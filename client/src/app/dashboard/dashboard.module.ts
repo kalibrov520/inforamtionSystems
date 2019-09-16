@@ -10,8 +10,8 @@ import { StatusCircleComponent } from './status-circle/status-circle.component';
 import { StatusFilterComponent } from './status-filter/status-filter.component';
 import { StatusPresentationComponent } from './status-presentation/status-presentation.component';
 import { DataSearchComponent } from './data-search/data-search.component';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     MercerOSModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpModule
   ],
   exports: [
     DashboardComponent,
