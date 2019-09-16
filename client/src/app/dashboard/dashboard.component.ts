@@ -10,7 +10,7 @@ import { IDataFeed } from '../models/dataFeed';
 })
 export class DashboardComponent implements OnInit {
   searchFilter: string;
-  statusFilter: string;
+  statusFilter: string = "all";
   rowDataAll: IDataFeed[] = [];
   errorMessage: string;
   

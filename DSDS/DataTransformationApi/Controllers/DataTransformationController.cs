@@ -40,53 +40,35 @@ namespace DataTransformationApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<DataFeedMainInfo> GetDataFeedsInfoAsync()
+        public async Task<IEnumerable<DataFeedMainInfo>> GetDataFeedsInfoAsync()
         {
             try
             {
                 using (var client = new WebClient())
                 {
-                    var deployment = new Dictionary<string, string>();
                     var response = client.DownloadString("http://localhost:8080/engine-rest/process-definition");
 
-                    foreach (var processDefinition in JArray.Parse(response))
+                    // TODO convert deploymetnId to GUID
+
+                    var deployment = JArray.Parse(response).Select(x => new
                     {
-                        deployment.Add((string) processDefinition.SelectToken("deploymentId"),
-                            (string) processDefinition.SelectToken("name"));
+                        DataFeedId = ((string) x.SelectToken("deploymentId")).Split(":").Last(),
+                        DataFeedName = (string) x.SelectToken("name")
+                    }).ToDictionary(x => x.DataFeedId, y => y.DataFeedName);
+
+                   
+
+                    var dataFeedList = await _repo.GetDataFeedsMainInfo(new List<string>() { "7CBD1348-D875-11E9-BD45-0242AC110002" });
+
+                    foreach (var info in dataFeedList)
+                    {
+                        if (deployment.ContainsKey(info.DeploymentId.ToString()))
+                        {
+                            info.DataFeed = deployment[info.DeploymentId.ToString()];
+                        }
                     }
 
-                    //var fullInfo = await _repo.GetDataFeedsMainInfo(deployment.Keys);
-
-                    var result = @"[
-                            {
-                                ""deploymentId"": ""7CBD1348-D875-11E9-BD45-0242AC110002"",
-                                ""status"": ""failed"",
-                                ""dataFeed"": ""State Street Data Feed"",
-                                ""lastRunning"": ""02/09/2019"",
-                                ""successRows"": 100,
-                                ""failedRows"": 2 
-                            },
-                            {
-                                ""deploymentId"": ""7CBD1348-D875-11E9-BD45-0242AC110003"",
-                                ""status"": ""failed"",
-                                ""dataFeed"": ""Open Finance Data Feed"",
-                                ""lastRunning"": ""01/08/2019"",
-                                ""successRows"": 75,
-                                ""failedRows"": 15 
-                            },
-                            {
-                                ""deploymentId"": ""7CBD1348-D875-11E9-BD45-0242AC110004"",
-                                ""status"": ""success"",
-                                ""dataFeed"": ""Capital Street Data Feed"",
-                                ""lastRunning"": ""03/09/2019"",
-                                ""successRows"": 234,
-                                ""failedRows"": 0 
-                            }
-                        ]";
-
-                    return JsonConvert.DeserializeObject<List<DataFeedMainInfo>>(result);
-
-
+                    return dataFeedList;
                 }
             }
             catch (Exception e)

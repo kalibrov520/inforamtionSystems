@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 using DataTransformationApi.Controllers;
 using DataTransformationApi.DataModels;
@@ -74,11 +75,12 @@ namespace DataTransformationApi.Data
             await _context.SaveChangesAsync();
         }
 
-        //TODO: status! add late and inactive
-        /*public async Task<IEnumerable<>> GetDataFeedsMainInfo(IEnumerable<string> deploymentIds)
-        {
-            var resultList = new DataFeedInfo();
+       
 
+        //TODO: status! add late and inactive
+        public async Task<IList<DataFeedMainInfo>> GetDataFeedsMainInfo(IEnumerable<string> deploymentIds)
+        {
+            //todo add get data feeds by id, not all
             var rows = await (from runLog in _context.DataFeedRunLog
                 join fileLog in _context.DataFeedFileLoadingLog on runLog.FileReadingLogId equals fileLog
                     .FileReadingLogId
@@ -86,14 +88,56 @@ namespace DataTransformationApi.Data
                     transformationLog.DataFeedFileLoadingLogId
                 select new
                 {
-                    DeploymentId = runLog.DataFeedId, LastRunning = runLog.RunDateTime, 
+                    DeploymentId = runLog.DataFeedId,
+                    RunId = runLog.RunId,
+                    LastRunning = runLog.RunDateTime, 
                     ErrorRecordText = transformationLog.ErrorRecordText,
                     FilePath = fileLog.FilePath
                 }).ToListAsync();
+            var dataFeedList = rows.GroupBy(k => k.DeploymentId, v => v, (k, v) =>
+            {
+                return new DataFeedMainInfo
+                {
+                    DeploymentId = k,
+                    DataFeedRuns = v.GroupBy(runKey => new {runKey.RunId, runKey.LastRunning}, runValue => runValue,
+                        (runKey, runValue) =>
+                        {
+                            return new DataFeedRunSummaryInfo
+                            {
+                                RunId = runKey.RunId,
+                                RunDate = runKey.LastRunning,
+                                Errors = runValue.GroupBy(fileKey => fileKey.FilePath,
+                                        fileValue => fileValue.ErrorRecordText)
+                                    .ToDictionary(g => g.Key, g => g.ToList())
+                            };
+                        }).ToList()
+                };
+            }).ToList();
 
-            var failedRows = rows.Count(r => r.DeploymentId.ToString() == deploymentIds.First());
+            foreach (var dataFeed in dataFeedList)
+            {
+                var lastRun = dataFeed.DataFeedRuns.OrderBy(x => x.RunDate).LastOrDefault();
+                if (lastRun != null)
+                {
+                    dataFeed.FailedRows = lastRun.Errors.Values.Sum(list => list.Count);
 
-            
-        }*/
+                    if (lastRun.Errors.Keys.Count == 0)
+                    {
+                        dataFeed.Status = "late";
+                    }
+                    else if (dataFeed.FailedRows > 0)
+                    {
+                        dataFeed.Status = "failed";
+                    }
+                    else
+                    {
+                        dataFeed.Status = "success";
+                    }
+                    dataFeed.LastRunning = lastRun.RunDate;
+                }
+            }
+
+            return dataFeedList;
+        }
     }
 }
