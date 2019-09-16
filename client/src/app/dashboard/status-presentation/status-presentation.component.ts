@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { IDataFeed } from '../../models/dataFeed';
 
 @Component({
@@ -19,11 +19,11 @@ export class StatusPresentationComponent implements OnInit {
   ngOnInit() {}
 
   ngOnChanges(): void {
-    this.failed= this.allDataFeeds.filter(data => data.status === "failed").length;
-    this.success= this.allDataFeeds.filter(data => data.status === "success").length;
-    this.late= this.allDataFeeds.filter(data => data.status === "late").length;
-    this.inactive= this.allDataFeeds.filter(data => data.status === "inactive").length;
-    this.all= this.allDataFeeds.length;
+    this.failed= this.allDataFeeds ? this.allDataFeeds.filter(data => data.status === "failed").length : 0;
+    this.success=  this.allDataFeeds ? this.allDataFeeds.filter(data => data.status === "success").length : 0;
+    this.late= this.allDataFeeds ? this.allDataFeeds.filter(data => data.status === "late").length : 0;
+    this.inactive= this.allDataFeeds ? this.allDataFeeds.filter(data => data.status === "inactive").length: 0;
+    this.all= this.allDataFeeds ?  this.allDataFeeds.length : 0;
   }
 
 }

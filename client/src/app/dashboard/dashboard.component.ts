@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { PaginationInfo } from 'merceros-ui-components';
 import { DataFeedService } from '../services/dataFeed.service';
 import { IDataFeed } from '../models/dataFeed';
@@ -11,7 +11,7 @@ import { IDataFeed } from '../models/dataFeed';
 export class DashboardComponent implements OnInit {
   searchFilter: string;
   statusFilter: string;
-  rowDataAll: IDataFeed[];
+  rowDataAll: IDataFeed[] = [];
   errorMessage: string;
   
   public paginationInfo: PaginationInfo = {
@@ -34,12 +34,15 @@ export class DashboardComponent implements OnInit {
     this.statusFilter = message;
   }
   
-  constructor(private dataFeedService: DataFeedService) { }
+  constructor(private dataFeedService: DataFeedService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.dataFeedService.getAllDataFeedsInfo().subscribe({
-      next: dataFeeds => {
+    this.dataFeedService.getAllDataFeedsInfo().subscribe(
+      {
+      next: 
+       dataFeeds => {
         this.rowDataAll = dataFeeds;
+        this.cdr.detectChanges();
       },
       error: err => this.errorMessage = err
     });

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.dev';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { IDataFeed, DataFeed } from '../models/dataFeed';
@@ -17,12 +17,10 @@ export class DataFeedService {
 
   public getAllDataFeedsInfo(): Observable<IDataFeed[]> {
     return this.http
-      .get(API_URL + "/api/datatransformation")
-      .map(response => {
-        const dataFeeds = response.json();
-        return dataFeeds.map(dataFeed => new DataFeed(dataFeed));
-      })
-      .catch(this.handleError);
+      .get(API_URL + "/api/datatransformation").pipe(map(response => {
+           let dataFeeds = response.json();
+           return dataFeeds.map(dataFeed => new DataFeed(dataFeed));
+         })).catch(this.handleError);
   }
 
   private handleError (error: Response | any) {
