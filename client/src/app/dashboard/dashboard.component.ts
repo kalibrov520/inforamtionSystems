@@ -12,6 +12,7 @@ export class DashboardComponent implements OnInit {
   searchFilter: string;
   statusFilter: string;
   rowDataAll: IDataFeed[];
+  errorMessage: string;
   
   public paginationInfo: PaginationInfo = {
     offset: 0,
@@ -35,8 +36,13 @@ export class DashboardComponent implements OnInit {
   
   constructor(private dataFeedService: DataFeedService) { }
 
-  ngOnInit() {
-    this.rowDataAll = this.dataFeedService.getData();
+  ngOnInit(): void {
+    this.dataFeedService.getAllDataFeedsInfo().subscribe({
+      next: dataFeeds => {
+        this.rowDataAll = dataFeeds;
+      },
+      error: err => this.errorMessage = err
+    });
   }
 
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, HostListener, ViewEncapsulation } from '@angular/core';
-import { DataFeedService } from '../../services/dataFeed.service';
 import { IDataFeed } from '../../models/dataFeed';
 
 @Component({
@@ -50,7 +49,7 @@ export class DataTableComponent implements OnInit {
     },
   ];
 
-  constructor(private dataFeedService: DataFeedService) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.rowData = this.rowDataAll;
