@@ -15,7 +15,7 @@
         <ds-status-circle status="{{row.status}}"></ds-status-circle>
       </td>
       <td>
-        <a href="/feed">{{row.dataFeed}}</a>
+        <a [routerLink]="['/dataFeed', row.deploymentId]">{{row.dataFeed}}</a>
       </td>
       <td>
         {{row.lastRunning}}

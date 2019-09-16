@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit {
   }
   
   constructor(private dataFeedService: DataFeedService, private cdr: ChangeDetectorRef) { }
+   
 
   ngOnInit(): void {
     this.dataFeedService.getAllDataFeedsInfo().subscribe(

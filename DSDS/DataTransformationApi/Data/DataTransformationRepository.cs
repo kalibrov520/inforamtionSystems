@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataTransformationApi.Controllers;
 using DataTransformationApi.DataModels;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
@@ -72,5 +73,27 @@ namespace DataTransformationApi.Data
             await _context.DataTransformationLog.AddRangeAsync(items);
             await _context.SaveChangesAsync();
         }
+
+        //TODO: status! add late and inactive
+        /*public async Task<IEnumerable<>> GetDataFeedsMainInfo(IEnumerable<string> deploymentIds)
+        {
+            var resultList = new DataFeedInfo();
+
+            var rows = await (from runLog in _context.DataFeedRunLog
+                join fileLog in _context.DataFeedFileLoadingLog on runLog.FileReadingLogId equals fileLog
+                    .FileReadingLogId
+                join transformationLog in _context.DataTransformationLog on fileLog.DataFeedFileLoadingLogId equals
+                    transformationLog.DataFeedFileLoadingLogId
+                select new
+                {
+                    DeploymentId = runLog.DataFeedId, LastRunning = runLog.RunDateTime, 
+                    ErrorRecordText = transformationLog.ErrorRecordText,
+                    FilePath = fileLog.FilePath
+                }).ToListAsync();
+
+            var failedRows = rows.Count(r => r.DeploymentId.ToString() == deploymentIds.First());
+
+            
+        }*/
     }
 }

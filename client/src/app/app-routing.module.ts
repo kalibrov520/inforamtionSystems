@@ -6,7 +6,7 @@ import { FailesComponent } from './layout/failes/failes.component';
 
 const routes: Routes = [
   { path: '', component: LayoutComponent },
-  { path: 'feed', component: FeedComponent },
+  { path: 'dataFeed/:id', component: FeedComponent },
   { path: 'failes', component: FailesComponent },
 ];
 
