@@ -22,13 +22,4 @@ namespace Models
 
         public int FailedRows { get; set; }
     }
-
-    public class DataFeedInfoToReturn
-    {
-        public string DataFeed { get; set; }
-        public string Status { get; set; }
-        public DateTime LastRunning { get; set; }
-        public int SuccessRows { get; set; }
-        public int FailedRows { get; set; }
-    }
 }

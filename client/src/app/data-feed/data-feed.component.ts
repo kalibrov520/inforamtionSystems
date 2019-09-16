@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PaginationInfo } from 'merceros-ui-components';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DataFeedService } from '../services/dataFeed.service';
 
 @Component({
   selector: 'ds-data-feed',
@@ -7,6 +9,7 @@ import { PaginationInfo } from 'merceros-ui-components';
   styleUrls: ['./data-feed.component.scss'],
 })
 export class DataFeedComponent implements OnInit {
+  deploymentId: string;
  
   public paginationInfo: PaginationInfo = {
     offset: 0,
@@ -20,9 +23,11 @@ export class DataFeedComponent implements OnInit {
     this.paginationInfo.offset = model.offset;
   }
 
-  constructor() { }
+  constructor(private dataFeedService: DataFeedService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
+    this.deploymentId = this.activatedRoute.snapshot.paramMap.get('id');
+    
   }
 
 }
