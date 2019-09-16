@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using DataTransformationApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models;
-using System.Net.Http.Formatting;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace DataTransformationApi.Controllers
@@ -42,6 +39,11 @@ namespace DataTransformationApi.Controllers
         [HttpGet]
         public async Task<IEnumerable<DataFeedInfoToReturn>> GetDataFeedsInfoAsync()
         {
+            using (var client = new WebClient())
+            {
+                var response = client.DownloadString("http://localhost:8080/engine-rest/process-definition");
+
+            }
             var result = @"[
                             {
                                 ""status"": ""failed"",

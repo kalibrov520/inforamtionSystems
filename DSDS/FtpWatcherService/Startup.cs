@@ -4,9 +4,6 @@ using Camunda.Worker.Extensions;
 using FileLoader;
 using FileLoader.File;
 using FtpWatcherService.FileLoader;
-using FtpWatcherService.Handlers;
-using FtpWatcherService.Models;
-using FtpWatcherService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -30,13 +27,7 @@ namespace FtpWatcher
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.Configure<PoCDatabaseSettings>(
-                Configuration.GetSection(nameof(PoCDatabaseSettings)));
 
-            services.AddSingleton<IPoCDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<PoCDatabaseSettings>>().Value);
-
-            services.AddSingleton<BatFileService>();
             services.AddSingleton<IFileChecker, FileSystemFileChecker>();
             services.AddSingleton<IFileManager, FileSystemFileManager>();
 

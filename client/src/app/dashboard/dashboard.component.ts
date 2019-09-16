@@ -34,7 +34,8 @@ export class DashboardComponent implements OnInit {
     this.statusFilter = message;
   }
   
-  constructor(private dataFeedService: DataFeedService) { }
+  constructor(private dataFeedService: DataFeedService) {
+   }
 
   ngOnInit(): void {
     this.dataFeedService.getAllDataFeedsInfo().subscribe({

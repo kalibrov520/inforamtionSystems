@@ -16,6 +16,7 @@ using TalendService.Utils;
 
 namespace TalendService.Handlers
 {
+    [HandlerTopics("TalendService")]
     public class TalendTransformationHandler : CamundaTaskHandler
     {
         private readonly ILogger<TalendTransformationHandler> _logger;
@@ -83,9 +84,9 @@ namespace TalendService.Handlers
 
                         (successfulRows, failedRows) = TalendResponseParser.ParseTalendResponse(responseContent);
 
-                        await client.PostAsync("http://localhost:59295/api/lookups",
+                        /*await client.PostAsync("http://localhost:59295/api/lookups",
                             new StringContent(JsonConvert.SerializeObject(successfulRows), Encoding.UTF8,
-                                "application/json"));
+                                "application/json"));*/
 
                         var logItem = new FileTransformationLogRecord
                         {

@@ -11,8 +11,6 @@ using CamundaUtils;
 using FileLoader;
 using FileLoader.FileSystem;
 using FileLoader.FTP;
-using FtpWatcherService.Handlers;
-using FtpWatcherService.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Models;
