@@ -34,6 +34,7 @@ namespace LookupApi
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
                 {

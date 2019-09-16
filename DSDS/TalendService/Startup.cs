@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Camunda.Worker;
 using Camunda.Worker.Extensions;
+using FileLoader;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,6 +30,7 @@ namespace TalendService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSingleton<IFileManager, FileSystemFileManager>();
 
             services.AddCamundaWorker(options =>
             {

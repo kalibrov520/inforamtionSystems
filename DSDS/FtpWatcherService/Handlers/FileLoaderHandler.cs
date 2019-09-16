@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Camunda.Worker;
@@ -13,6 +15,7 @@ using FtpWatcherService.Handlers;
 using FtpWatcherService.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using Models;
 using Newtonsoft.Json;
 using File = System.IO.File;
 
@@ -76,6 +79,8 @@ namespace FtpWatcherService.FileLoader
 
                 await _fileChecker.WriteNewFilesOnFileAsync(_newFiles);
 
+                await LogFileReading();
+
                 _isUpdated = _savedFiles.Any();
 
                 if (!_isUpdated)
@@ -113,5 +118,22 @@ namespace FtpWatcherService.FileLoader
             var savedPath = await _fileManager.SaveFileAsync(DataFeedId, RunId, safeFilePath, _dataFeedFileLoader.GetFileContent(file.FullPath));
             _savedFiles.Add(savedPath);
         }
+
+        private async Task LogFileReading()
+        {
+            var logItem = new FileReadingLogRecord
+            {
+                DataFeedId = DataFeedId,
+                RunId = RunId,
+                FilePathList = _savedFiles
+            };
+            using (var client = new HttpClient()) 
+            {
+                await client.PostAsync("http://localhost:49691/api/datafeedrunlog", new StringContent(
+                    JsonConvert.SerializeObject(logItem), Encoding.UTF8,
+                    "application/json"));
+            }
+        }
+
     }
 }

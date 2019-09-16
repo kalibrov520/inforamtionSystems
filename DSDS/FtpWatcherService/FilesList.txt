@@ -1,2 +1,1 @@
-SS_MERCER_3.txt ftp://spb-mdspoc01.internal.corp/test/SS_MERCER_3.txt 2019-09-04T14:57:00.0000000
-SS_MERCER_5.txt ftp://spb-mdspoc01.internal.corp/test/SS_MERCER_5.txt 2019-09-04T14:57:00.0000000
+SS_MERCER_3.txt ftp://spb-mdspoc01.internal.corp/test/SS_MERCER_3.txt 2019-09-16T11:33:00.0000000

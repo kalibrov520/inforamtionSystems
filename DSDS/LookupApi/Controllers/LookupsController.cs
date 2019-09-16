@@ -26,32 +26,15 @@ namespace LookupApi.Controllers
         [HttpPost]
         public async Task Post(IEnumerable<TalendResponseObject> value)
         {
-            try
-            {
-                await _repo.PostItems(value);
-
-                _logger.LogInformation("Provided Json was parsed and added to the database {json}", value);
-            }
-            catch (Exception ex)
-            {
-                // ignored
-            }
+            await _repo.PostItems(value);
+            _logger.LogInformation("Provided Json was parsed and added to the database {json}", value);
         }
 
         
         [HttpGet("transferplanlist")]
         public async Task<List<TransferAgentPlan>> GetTransferAgentPlanList()
         {
-            try
-            {
-                return await _repo.GetTransferAgentPlanList();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            
+            return await _repo.GetTransferAgentPlanList();
         }
     }
 }

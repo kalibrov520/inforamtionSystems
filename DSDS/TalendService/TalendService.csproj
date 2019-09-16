@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Utils\CamundaUtils\CamundaUtils.csproj" />
     <ProjectReference Include="..\Utils\FIleLoader\FileLoader.csproj" />
     <ProjectReference Include="..\Utils\Models\Models.csproj" />
   </ItemGroup>

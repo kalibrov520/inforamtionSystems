@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataTransformationApi;
 using LookupApi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,7 @@ namespace LookupApi
                 .Build();
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader());
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
 
             if (env.IsDevelopment())
