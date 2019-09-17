@@ -166,6 +166,11 @@ namespace DataTransformationApi.Data
             }
         }
 
+        public IEnumerable<string> GetFailedRowsByRunId(string runId)
+        {
+            throw new NotImplementedException();
+        }
+
         private string StatusChecker(int filesNumber, int failedRows)
         {
             if (filesNumber == 0)

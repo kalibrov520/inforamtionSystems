@@ -19,5 +19,7 @@ namespace DataTransformationApi.Data
             IEnumerable<string> deploymentIds);
 
         Task<IEnumerable<DataFeedDetailsToReturn>> GetDataFeedDetails(string deploymentId);
+
+        IEnumerable<string> GetFailedRowsByRunId(string runId);
     }
 }
