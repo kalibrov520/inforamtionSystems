@@ -18,5 +18,6 @@ namespace DataTransformationApi.Data
         Task<IList<DataFeedMainInfo>> GetDataFeedsMainInfo(
             IEnumerable<string> deploymentIds);
 
+        Task<IEnumerable<DataFeedDetailsToReturn>> GetDataFeedDetails(string deploymentId);
     }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
+import { DataFeedDetails } from '../../models/dataFeed';
 
 @Component({
   selector: 'ds-feed-table',
@@ -8,7 +9,7 @@ import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input } 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FeedTableComponent implements OnInit {
-  @Input() rowDataAllId: string;
+  @Input() rowDataAll: DataFeedDetails[];
 
   headerData: any[] = [
     {
@@ -36,35 +37,17 @@ export class FeedTableComponent implements OnInit {
     },
   ];
 
-  rowData: any[] = [
-    {
-      dataId: '1',
-      status: 'failed',
-      date: '01-May-2019 4:00:34 AM',
-      successRows: '500',
-      failedRows: '1',
-    },
-    {
-      dataId: '2',
-      status: 'success',
-      date: '01-May-2019 5:00:34 AM',
-      lastRunning: '02/09/2019',
-      successRows: '800',
-      failedRows: '0',
-    },
-    {
-      dataId: '3',
-      status: 'late',
-      date: '30-Apr-2019 4:00:34 AM',
-      lastRunning: '02/09/2019',
-      successRows: '430',
-      failedRows: '0',
-    },
-  ];
+  rowData: DataFeedDetails[];
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges(): void {
+    this.rowData = this.rowDataAll;
+
+    console.log(this.rowData);
   }
 
 }

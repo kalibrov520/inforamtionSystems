@@ -15,5 +15,7 @@ namespace DataTransformationApi.Data
         public DbSet<DataFeedFileLoadingLog> DataFeedFileLoadingLog { get; set; }
 
         public DbSet<DataTransformationLog> DataTransformationLog { get; set; }
+
+        public DbSet<DataFeedDetails> DataFeedDetails { get; set; }
     }
 }

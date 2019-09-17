@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { PaginationInfo } from 'merceros-ui-components';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataFeedService } from '../services/dataFeed.service';
+import { DataFeedDetails } from '../models/dataFeed';
 
 @Component({
   selector: 'ds-data-feed',
@@ -10,6 +11,8 @@ import { DataFeedService } from '../services/dataFeed.service';
 })
 export class DataFeedComponent implements OnInit {
   deploymentId: string;
+  dataFeedDetails: DataFeedDetails[];
+  errorMessage: string;
  
   public paginationInfo: PaginationInfo = {
     offset: 0,
@@ -23,11 +26,18 @@ export class DataFeedComponent implements OnInit {
     this.paginationInfo.offset = model.offset;
   }
 
-  constructor(private dataFeedService: DataFeedService, private activatedRoute: ActivatedRoute, private router: Router) { }
+  constructor(private dataFeedService: DataFeedService, private cdr: ChangeDetectorRef ,private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     this.deploymentId = this.activatedRoute.snapshot.paramMap.get('id');
-    
+
+    this.dataFeedService.getDataFeedDetails(this.deploymentId).subscribe({
+      next: dataFeedDetails => {
+        this.dataFeedDetails = dataFeedDetails;
+        this.cdr.detectChanges();
+      },
+      error: err => this.errorMessage = err
+    });
   }
 
 }

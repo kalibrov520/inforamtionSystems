@@ -3,7 +3,7 @@
     <ds-calendar></ds-calendar>
   </div>
   <div class="data-feed-item">
-    <ds-feed-table [rowDataAllId]="deploymentId"></ds-feed-table>
+    <ds-feed-table [rowDataAll]="dataFeedDetails"></ds-feed-table>
     <mercer-pagination
       (paginationInfoRequest)="updatePage($event)"
       [paginationInfo]="paginationInfo"

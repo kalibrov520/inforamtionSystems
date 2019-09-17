@@ -52,13 +52,13 @@ namespace DataTransformationApi.Controllers
 
                     var deployment = JArray.Parse(response).Select(x => new
                     {
-                        DataFeedId = ((string) x.SelectToken("deploymentId")).Split(":").Last(),
+                        DataFeedId = ((string) x.SelectToken("id")).Split(":").Last(),
                         DataFeedName = (string) x.SelectToken("name")
                     }).ToDictionary(x => x.DataFeedId, y => y.DataFeedName);
 
                    
 
-                    var dataFeedList = await _repo.GetDataFeedsMainInfo(new List<string>() { "7CBD1348-D875-11E9-BD45-0242AC110002" });
+                    var dataFeedList = await _repo.GetDataFeedsMainInfo(new List<string>() { "11231344-d916-11e9-bd45-0242ac110002" });
 
                     foreach (var info in dataFeedList)
                     {
@@ -70,6 +70,20 @@ namespace DataTransformationApi.Controllers
 
                     return dataFeedList;
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IEnumerable<DataFeedDetailsToReturn>> GetDataFeedDetailsInfo(string id)
+        {
+            try
+            {
+                return await _repo.GetDataFeedDetails(id);
             }
             catch (Exception e)
             {

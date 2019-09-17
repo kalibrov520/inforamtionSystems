@@ -139,5 +139,47 @@ namespace DataTransformationApi.Data
 
             return dataFeedList;
         }
+
+        //TODO: rework!
+        public async Task<IEnumerable<DataFeedDetailsToReturn>> GetDataFeedDetails(string deploymentId)
+        {
+            try
+            {
+                var info = _context.Set<DataFeedDetails>()
+                    .FromSql("GetDataFeedDetails @deploymentId = {0}", deploymentId);
+
+                var result = info.Select(r => new DataFeedDetailsToReturn()
+                {
+                    RunId = r.RunId,
+                    Date = r.Date,
+                    FailedRows = (r.Files == 0) ? r.FailedRows - 1 : r.FailedRows,
+                    Status = StatusChecker(r.Files, r.FailedRows),
+                    SuccessRows = 12
+                });
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        private string StatusChecker(int filesNumber, int failedRows)
+        {
+            if (filesNumber == 0)
+            {
+                return "late";
+            }
+            else if (failedRows > 0)
+            {
+                return "failed";
+            }
+            else
+            {
+                return "success";
+            }
+        }
     }
 }

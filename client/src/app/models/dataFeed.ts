@@ -16,6 +16,18 @@ export class DataFeed implements IDataFeed {
     failedRows: number;
 
     constructor(values: Object = {}) {
-        Object.assign(this,values);
+        Object.assign(this, values);
+    }
+}
+
+export class DataFeedDetails {
+    runId: string;
+    status: string;
+    date: string;
+    failedRows: number;
+    successRows: number;
+
+    constructor(values: Object = {}) {
+        Object.assign(this, values);
     }
 }
