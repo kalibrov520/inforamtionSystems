@@ -32,11 +32,14 @@ namespace TalendService
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IFileManager, FileSystemFileManager>();
 
+            services.Configure<ApiSettings>(Configuration.GetSection(nameof(ApiSettings)));
+            services.AddSingleton<IApiSettings>(sp => sp.GetRequiredService<IOptions<ApiSettings>>().Value);
+
             services.AddCamundaWorker(options =>
             {
                 options.WorkerId = "talend";
                 options.WorkerCount = 1;
-                options.BaseUri = new Uri("http://localhost:8080/engine-rest");
+                options.BaseUri = new Uri(Configuration.GetSection("CamundaApi").Value);
             }).AddHandler<TalendTransformationHandler>();
         }
 

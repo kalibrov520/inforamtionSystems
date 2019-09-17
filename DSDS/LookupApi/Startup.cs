@@ -30,7 +30,7 @@ namespace LookupApi
         {
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer("Data Source=SPB-MDSPOC01\\SQLEXPRESS01,49189;Initial Catalog=PoC;User ID=dsUser;Password=password123;");
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();

@@ -30,12 +30,11 @@ namespace FtpWatcher
 
             services.AddSingleton<IFileChecker, FileSystemFileChecker>();
             services.AddSingleton<IFileManager, FileSystemFileManager>();
-
             services.AddCamundaWorker(options =>
                 {
                     options.WorkerId = "sampleWorker";
                     options.WorkerCount = 1;
-                    options.BaseUri = new Uri("http://localhost:8080/engine-rest");
+                    options.BaseUri = new Uri(Configuration.GetSection("CamundaApi").Value);
                 })
                 .AddHandler<FileLoaderHandler>();
         }

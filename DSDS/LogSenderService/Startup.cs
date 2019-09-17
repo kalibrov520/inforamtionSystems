@@ -42,7 +42,7 @@ namespace LogSenderService
                 {
                     options.WorkerId = "logSender";
                     options.WorkerCount = 1;
-                    options.BaseUri = new Uri("http://localhost:8080/engine-rest");
+                    options.BaseUri = new Uri(Configuration.GetSection("CamundaApi").Value);
                 })
                 .AddHandler<LogSenderHandler>();
         }

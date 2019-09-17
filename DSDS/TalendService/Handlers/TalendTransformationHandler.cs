@@ -22,6 +22,7 @@ namespace TalendService.Handlers
         private readonly ILogger<TalendTransformationHandler> _logger;
         private IFileManager _fileManager;
         private string _talendUrl;
+        private readonly IApiSettings _settings;
 
         private List<string> _savedFiles = new List<string>();
         private Dictionary<string, List<string>> _failedRecords = new Dictionary<string, List<string>>();
@@ -29,8 +30,9 @@ namespace TalendService.Handlers
         private IEnumerable<IFileSystemItem> _newFiles = new List<IFileSystemItem>();
 
 
-        public TalendTransformationHandler(ILogger<TalendTransformationHandler> logger, IFileManager fileManager)
+        public TalendTransformationHandler(IApiSettings settings, ILogger<TalendTransformationHandler> logger, IFileManager fileManager)
         {
+            _settings = settings;
             _logger = logger;
             _fileManager = fileManager;
         }
@@ -84,9 +86,9 @@ namespace TalendService.Handlers
 
                         (successfulRows, failedRows) = TalendResponseParser.ParseTalendResponse(responseContent);
 
-                        /*await client.PostAsync("http://localhost:59295/api/lookups",
+                        await client.PostAsync(_settings.LookupApiUrl,
                             new StringContent(JsonConvert.SerializeObject(successfulRows), Encoding.UTF8,
-                                "application/json"));*/
+                                "application/json"));
 
                         var logItem = new FileTransformationLogRecord
                         {
@@ -96,7 +98,7 @@ namespace TalendService.Handlers
                             InvalidRows = failedRows
                         };
 
-                        await client.PostAsync("http://localhost:49691/api/datatransformationlog", new StringContent(
+                        await client.PostAsync(_settings.DataTransformationApiUrl, new StringContent(
                             JsonConvert.SerializeObject(logItem), Encoding.UTF8,
                             "application/json"));
 

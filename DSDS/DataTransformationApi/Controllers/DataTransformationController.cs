@@ -52,13 +52,13 @@ namespace DataTransformationApi.Controllers
 
                     var deployment = JArray.Parse(response).Select(x => new
                     {
-                        DataFeedId = ((string) x.SelectToken("id")).Split(":").Last(),
+                        DataFeedId = ((string) x.SelectToken("deploymentId")).Split(":").Last(),
                         DataFeedName = (string) x.SelectToken("name")
                     }).ToDictionary(x => x.DataFeedId, y => y.DataFeedName);
 
                    
 
-                    var dataFeedList = await _repo.GetDataFeedsMainInfo(new List<string>() { "11231344-d916-11e9-bd45-0242ac110002" });
+                    var dataFeedList = await _repo.GetDataFeedsMainInfo(deployment.Keys);
 
                     foreach (var info in dataFeedList)
                     {
