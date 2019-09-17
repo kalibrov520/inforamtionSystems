@@ -82,3 +82,10 @@ DSDS/Utils/Models/obj/
 DSDS/Utils/Models/bin/
 DSDS/Utils/CamundaUtils/bin/
 DSDS/Utils/CamundaUtils/obj/
+DSDS/TalendService/Properties/PublishProfiles/FTPProfile.pubxml.user
+DSDS/LogSenderService/Properties/PublishProfiles/FtpProfile.pubxml.user
+DSDS/LogSenderService/Properties/PublishProfiles/FolderProfile.pubxml.user
+DSDS/LogSenderService/Properties/PublishProfiles/FolderProfile.pubxml
+DSDS/LogSenderService/LogSenderService.csproj.user
+DSDS/FtpWatcherService/Properties/PublishProfiles/FTP.pubxml.user
+DSDS/DataTransformationApi/Properties/PublishProfiles/FolderProfile.pubxml.user
