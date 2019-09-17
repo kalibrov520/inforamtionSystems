@@ -12,7 +12,7 @@
   >
     <ng-template mercer-table-row let-row="row" >
       <td>{{row.status}}</td>
-      <td>{{row.date}}</td>
+      <td>{{row.date | date:'medium'}}</td>
       <td>{{row.successRows}}</td>
       <td>
           <a href="/failes" class="link-danger" *ngIf="row.failedRows > 0">{{row.failedRows}}</a>
