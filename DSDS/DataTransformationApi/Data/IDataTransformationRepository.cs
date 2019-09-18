@@ -21,5 +21,7 @@ namespace DataTransformationApi.Data
         Task<IEnumerable<DataFeedDetailsToReturn>> GetDataFeedDetails(string deploymentId);
 
         IEnumerable<string> GetFailedRowsByRunId(string runId);
+
+        Task LogFileTotalRows(FileTransformationLogRecord logItem);
     }
 }

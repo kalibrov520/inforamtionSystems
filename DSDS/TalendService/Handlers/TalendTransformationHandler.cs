@@ -94,7 +94,8 @@ namespace TalendService.Handlers
                                 DataFeedId = DataFeedId,
                                 RunId = RunId,
                                 FilePath = filePath,
-                                InvalidRows = failedRows
+                                InvalidRows = failedRows,
+                                TotalRows = successfulRows.Count + failedRows.Count
                             };
 
                             await client.PostAsync(_settings.DataTransformationApiUrl, new StringContent(

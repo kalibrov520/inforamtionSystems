@@ -25,6 +25,8 @@ namespace DataTransformationApi.Controllers
         public async Task Post(FileTransformationLogRecord logItem)
         {
             await _repo.LogDataTransformation(logItem);
+
+            await _repo.LogFileTotalRows(logItem);
         }
 
         [HttpGet("{runId}")]

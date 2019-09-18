@@ -11,6 +11,8 @@ namespace Models
 
         public string FilePath { get; set; }
 
+        public int? TotalRows { get; set; }
+
         public List<string> InvalidRows { get; set; }
     }
 }
