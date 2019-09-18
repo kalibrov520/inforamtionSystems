@@ -27,6 +27,7 @@ namespace FtpWatcherService.FileLoader
         private readonly IFileLoader _fileLoader;
         private readonly IFileChecker _fileChecker;
         private readonly IFileManager _fileManager;
+        private readonly IApiSettings _settings;
 
         private bool _isUpdated;
 
@@ -46,11 +47,12 @@ namespace FtpWatcherService.FileLoader
 
 
 
-        public FileLoaderHandler(IFileChecker fileChecker, IFileManager fileManager, ILogger<FileLoaderHandler> logger)
+        public FileLoaderHandler(IFileChecker fileChecker, IFileManager fileManager, ILogger<FileLoaderHandler> logger, IApiSettings settings)
         {
             _fileManager = fileManager;
             _fileChecker = fileChecker;
             _logger = logger;
+            _settings = settings;
         }
 
         public override void ParseContext(ExternalTask externalTask)
@@ -127,7 +129,7 @@ namespace FtpWatcherService.FileLoader
             };
             using (var client = new HttpClient()) 
             {
-                await client.PostAsync("http://localhost:49691/api/datafeedrunlog", new StringContent(
+                await client.PostAsync(_settings.DataTransformationApiUrl, new StringContent(
                     JsonConvert.SerializeObject(logItem), Encoding.UTF8,
                     "application/json"));
             }
