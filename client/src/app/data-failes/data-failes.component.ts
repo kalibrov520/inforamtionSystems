@@ -36,8 +36,6 @@ export class DataFailesComponent implements OnInit {
       next: dataFeedFailes => {
         this.dataFeedFailes = dataFeedFailes;
         this.cdr.detectChanges();
-
-        console.log(dataFeedFailes);
       },
       error: err => this.errorMessage = err
     });
