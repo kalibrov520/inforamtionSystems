@@ -168,7 +168,13 @@ namespace DataTransformationApi.Data
 
         public IEnumerable<string> GetFailedRowsByRunId(string runId)
         {
-            throw new NotImplementedException();
+            var fileReadingLogId = _context.DataFeedRunLog.FirstOrDefault(x => x.RunId.ToString().Equals(runId))?.FileReadingLogId;
+            var dataFeedFileLoadingLogId = _context.DataFeedFileLoadingLog
+                .FirstOrDefault(x => x.FileReadingLogId.Equals(fileReadingLogId))?.DataFeedFileLoadingLogId;
+            var failedRows =
+                _context.DataTransformationLog.Where(x => x.DataFeedFileLoadingLogId.Equals(dataFeedFileLoadingLogId)).Select(x => x.ErrorRecordText).ToList();
+
+            return failedRows;
         }
 
         private string StatusChecker(int filesNumber, int failedRows)

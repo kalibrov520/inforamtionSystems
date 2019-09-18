@@ -12,57 +12,6 @@ using Newtonsoft.Json;
 
 namespace LogSenderService.Handlers
 {
-    /*[HandlerTopics("LogSender")]
-    public class LogSenderHandler : ExternalTaskHandler
-    {
-        private readonly SmtpService _smtpService;
-        private readonly LogItemsService _logItemsService;
-        private readonly ILogger<LogSenderHandler> _logger;
-
-        public LogSenderHandler(SmtpService smtpService, LogItemsService logItemsService, ILogger<LogSenderHandler> logger)
-        {
-            _smtpService = smtpService;
-            _logItemsService = logItemsService;
-            _logger = logger;
-        }
-
-        public override async Task<IExecutionResult> Process(ExternalTask externalTask)
-        {
-            try
-            {
-                if (!externalTask.Variables["isUpdated"].AsBoolean())
-                {
-                    await _logItemsService.LogSingleItemAsync(new LogItem()
-                    {
-                        IsSucceeded = true,
-                        StartDate = DateTime.Now
-                    });
-                }
-                else
-                {
-                    var failedItems = externalTask.Variables["failedItems"].AsString();
-
-                    var logItem = new LogItem()
-                    {
-                        IsSucceeded = string.IsNullOrWhiteSpace(failedItems),
-                        FailedRows = JsonConvert.DeserializeObject<List<string>>(failedItems),
-                        StartDate = DateTime.Now
-                    };
-
-                    await _logItemsService.LogSingleItemAsync(logItem);
-
-                    await _smtpService.SendEmailAsync(externalTask.Variables["email"].AsString(), "Error", failedItems);
-                }
-
-                return await Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-    }*/
     [HandlerTopics("LogSender")]
     public class LogSenderHandler : CamundaTaskHandler
     {
@@ -71,12 +20,14 @@ namespace LogSenderService.Handlers
         private readonly SmtpService _smtpService;
         private readonly LogItemsService _logItemsService;
         private readonly ILogger<LogSenderHandler> _logger;
+        private readonly IApiSettings _settings;
 
-        public LogSenderHandler(SmtpService smtpService, LogItemsService logItemsService, ILogger<LogSenderHandler> logger)
+        public LogSenderHandler(SmtpService smtpService, LogItemsService logItemsService, ILogger<LogSenderHandler> logger, IApiSettings settings)
         {
             _smtpService = smtpService;
             _logItemsService = logItemsService;
             _logger = logger;
+            _settings = settings;
         }
 
         public override void ParseContext(ExternalTask externalTask)
@@ -99,18 +50,23 @@ namespace LogSenderService.Handlers
                 }
                 else
                 {
-                    var failedItems = "";
-
-                    var logItem = new LogItem()
+                    using (var client = new WebClient())
                     {
-                        IsSucceeded = string.IsNullOrWhiteSpace(failedItems),
-                        FailedRows = JsonConvert.DeserializeObject<List<string>>(failedItems),
-                        StartDate = DateTime.Now
-                    };
+                        var failedItems = client.DownloadString(_settings.DataTransformationApiUrl + RunId);
 
-                    await _logItemsService.LogSingleItemAsync(logItem);
+                        var logItem = new LogItem()
+                        {
+                            IsSucceeded = string.IsNullOrWhiteSpace(failedItems),
+                            FailedRows = JsonConvert.DeserializeObject<List<string>>(failedItems),
+                            StartDate = DateTime.Now
+                        };
 
-                    await _smtpService.SendEmailAsync(_email, "Error", failedItems);
+                        await _logItemsService.LogSingleItemAsync(logItem);
+
+                        if (!string.IsNullOrWhiteSpace(failedItems))
+                            await _smtpService.SendEmailAsync(_email, "Error", failedItems);
+                    }
+
                 }
             }
             catch (Exception ex)
