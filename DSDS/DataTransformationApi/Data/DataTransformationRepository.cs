@@ -75,17 +75,17 @@ namespace DataTransformationApi.Data
             await _context.SaveChangesAsync();
         }
 
-       
-
         //TODO: status! add late and inactive
-        public async Task<IList<DataFeedMainInfo>> GetDataFeedsMainInfo(IEnumerable<string> deploymentIds)
+        public async Task<IList<DataFeedMainInfo>> GetDataFeedsMainInfo(IEnumerable<Guid> deploymentIds)
         {
+            var d = _context.DataFeedRunLog.Where(x => deploymentIds.Contains(x.DataFeedId)).ToList();
             //todo add get data feeds by id, not all
             var rows = await (from runLog in _context.DataFeedRunLog
-                join fileLog in _context.DataFeedFileLoadingLog on runLog.FileReadingLogId equals fileLog
-                    .FileReadingLogId
-                join transformationLog in _context.DataTransformationLog on fileLog.DataFeedFileLoadingLogId equals
-                    transformationLog.DataFeedFileLoadingLogId
+                join fileLog in _context.DataFeedFileLoadingLog 
+                    on runLog.FileReadingLogId equals fileLog.FileReadingLogId
+                join transformationLog in _context.DataTransformationLog 
+                    on fileLog.DataFeedFileLoadingLogId equals transformationLog.DataFeedFileLoadingLogId
+                where deploymentIds.Contains(runLog.DataFeedId)
                 select new
                 {
                     DeploymentId = runLog.DataFeedId,

@@ -16,7 +16,7 @@ namespace DataTransformationApi.Data
         Task LogDataTransformation(FileTransformationLogRecord logItem);
 
         Task<IList<DataFeedMainInfo>> GetDataFeedsMainInfo(
-            IEnumerable<string> deploymentIds);
+            IEnumerable<Guid> deploymentIds);
 
         Task<IEnumerable<DataFeedDetailsToReturn>> GetDataFeedDetails(string deploymentId);
 
