@@ -56,7 +56,7 @@ namespace DataTransformationApi.Controllers
 
                     var deploymentList = JArray.Parse(response).Select(x => new
                     {
-                        DataFeedId = Guid.Parse(((string) x.SelectToken("deploymentId")).Split(":").Last()),
+                        DataFeedId = Guid.Parse(((string) x.SelectToken("id")).Split(":").Last()),
                         DataFeedName = (string) x.SelectToken("name")
                     }).ToDictionary(x => x.DataFeedId, y => y.DataFeedName);
 
