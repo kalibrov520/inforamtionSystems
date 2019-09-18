@@ -31,6 +31,13 @@ export class DataFeedService {
          })).catch(this.handleError);
   }
 
+  public getDataFeedFailesInfo(runId: string): Observable<string[]> {
+    return this.http.get(API_URL + "/api/datatransformation/datafeedfailes/" + runId).pipe(map(response => {
+      let data = response.json();
+      return data;
+    })).catch(this.handleError);
+  }
+
   private handleError (error: Response | any) {
     console.error('ApiService::handleError', error);
     return Observable.throw(error);
