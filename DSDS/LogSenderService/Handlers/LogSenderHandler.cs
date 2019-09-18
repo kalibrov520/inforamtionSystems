@@ -81,7 +81,6 @@ namespace LogSenderService.Handlers
 
         public override void ParseContext(ExternalTask externalTask)
         {
-            var a = RunId;
             _isUpdated = externalTask.Variables["isUpdated"].AsBoolean();
             _email = externalTask.Variables["email"].AsString();
         }
