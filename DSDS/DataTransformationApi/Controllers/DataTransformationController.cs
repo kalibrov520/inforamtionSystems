@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DataTransformationApi.Data;
 using DataTransformationApi.DataModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Models;
 using Newtonsoft.Json;
@@ -18,12 +19,14 @@ namespace DataTransformationApi.Controllers
     public class DataTransformationController
     {
         private readonly IDataTransformationRepository _repo;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<DataTransformationController> _logger;
 
-        public DataTransformationController(IDataTransformationRepository repo, ILogger<DataTransformationController> logger)
+        public DataTransformationController(IDataTransformationRepository repo, ILogger<DataTransformationController> logger, IConfiguration configuration)
         {
             _repo = repo;
             _logger = logger;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -46,34 +49,41 @@ namespace DataTransformationApi.Controllers
             {
                 using (var client = new WebClient())
                 {
-                    var response = client.DownloadString("http://localhost:8080/engine-rest/process-definition");
+                    var camundaUrl = _configuration.GetSection("CamundaApi").Value;
+                    var response = client.DownloadString($"{camundaUrl}/process-definition");
 
                     // TODO convert deploymetnId to GUID
 
-                    var deployment = JArray.Parse(response).Select(x => new
+                    var deploymentList = JArray.Parse(response).Select(x => new
                     {
-                        DataFeedId = ((string) x.SelectToken("deploymentId")).Split(":").Last(),
+                        DataFeedId = Guid.Parse(((string) x.SelectToken("deploymentId")).Split(":").Last()),
                         DataFeedName = (string) x.SelectToken("name")
                     }).ToDictionary(x => x.DataFeedId, y => y.DataFeedName);
 
-                   
-
-                    var dataFeedList = await _repo.GetDataFeedsMainInfo(deployment.Keys);
+                    var dataFeedList = await _repo.GetDataFeedsMainInfo(deploymentList.Keys.ToList());
+                    var result = new List<DataFeedMainInfo>();
 
                     foreach (var info in dataFeedList)
                     {
-                        if (deployment.ContainsKey(info.DeploymentId.ToString()))
-                        {
-                            info.DataFeed = deployment[info.DeploymentId.ToString()];
-                        }
+                        var key = info.DeploymentId;
+                        info.DataFeed = deploymentList[key];
+                        deploymentList.Remove(key);
+                        result.Add(info);
                     }
-
-                    return dataFeedList;
+                    foreach (var (key, value) in deploymentList)
+                    {
+                        result.Add(new DataFeedMainInfo
+                        {
+                            DeploymentId = key,
+                            DataFeed = value
+                        });
+                    }
+                    return result;
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError("Get DataFeed Info error");
                 throw;
             }
         }
