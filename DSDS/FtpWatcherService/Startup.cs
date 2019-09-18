@@ -28,7 +28,7 @@ namespace FtpWatcher
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ApiSettings>(Configuration.GetSection(nameof(ApiSettings)));
-            services.AddSingleton<ApiSettings>(sp => sp.GetRequiredService<IOptions<ApiSettings>>().Value);
+            services.AddSingleton<IApiSettings>(sp => sp.GetRequiredService<IOptions<ApiSettings>>().Value);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSingleton<IFileChecker, FileSystemFileChecker>();
