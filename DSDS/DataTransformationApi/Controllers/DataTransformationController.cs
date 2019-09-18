@@ -89,11 +89,25 @@ namespace DataTransformationApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IEnumerable<DataFeedDetailsToReturn>> GetDataFeedDetailsInfo(string id)
+        public async Task<IEnumerable<DataFeedDetailsToReturn>> GetDataFeedDetailsInfoAsync(string id)
         {
             try
             {
                 return await _repo.GetDataFeedDetails(id);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        [HttpGet("datafeedfailes/{runId}")]
+        public async Task<IEnumerable<string>> GetDataFeedFailsAsync(string runId)
+        {
+            try
+            {
+                return await _repo.GetDataFeedFails(runId);
             }
             catch (Exception e)
             {

@@ -237,5 +237,18 @@ namespace DataTransformationApi.Data
                 throw;
             }
         }
+
+        public async Task<IEnumerable<string>> GetDataFeedFails(string runId)
+        {
+            var filedReadingLogId = _context.DataFeedRunLog.FirstOrDefault(x => x.RunId.ToString().Equals(runId))?.FileReadingLogId;
+
+            var dataFeedFileLoadingLogId = _context.DataFeedFileLoadingLog.FirstOrDefault(x => x.FileReadingLogId.Equals(filedReadingLogId))?.DataFeedFileLoadingLogId;
+
+            var result = await _context.DataTransformationLog
+                .Where(x => x.DataFeedFileLoadingLogId.Equals(dataFeedFileLoadingLogId)).Select(x => x.ErrorRecordText)
+                .ToListAsync();
+
+            return result;
+        }
     }
 }

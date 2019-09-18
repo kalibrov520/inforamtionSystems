@@ -40,7 +40,7 @@ namespace DataTransformationApi
                 .UseStartup<Startup>()
                 .Build();
 
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader());
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader().AllowAnyMethod());
             app.UseMvc();
 
             if (env.IsDevelopment())
