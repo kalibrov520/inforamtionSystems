@@ -6,6 +6,7 @@ namespace Models
     public class DataFeedMainInfo
     {
         public Guid DeploymentId { get; set; }
+        public string ProcessDefinitionId { get; set; }
         public string DataFeed { get; set; }
         public DateTime LastRunning { get; set; }
         public string Status { get; set; }

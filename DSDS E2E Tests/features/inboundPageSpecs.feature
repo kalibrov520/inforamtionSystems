@@ -1,24 +1,22 @@
-Feature: To test Inbound page functional
+#  Feature: To test Inbound page functional
 
-    @SpaceSearch
-    Scenario: Space search on Inbound page
-        Given I am on "inbound" page
-            And I see N rows in the table
-        When I click on "search" button
-        Then I see same rows Count in the table
-
-
+#      @SpaceSearch
+#      Scenario: Space search on Inbound page
+#          Given I am on "inbound" page
+#              And I see N rows in the table
+#          When I click on "search" button
+#          Then I see same rows Count in the table
 
 
-    @CleanButton
-    Scenario: Clean text in search field
-        Given I am on "inbound" page
-        When I type "test"
-            And I click on "clean" button
-        Then I see clear search field
 
-      Given I am in "inbound" page
-      When I type "test"
+
+#      @CleanButton
+#      Scenario: Clean text in search field
+#          Given I am on "inbound" page
+#          When I type "test"
+#              And I click on "clean" button
+#          Then I see clear search field
+
 
 Feature: File Management: List of inbound configurations
 
@@ -70,7 +68,7 @@ Feature: File Management: List of inbound configurations
     #Feature: Future
     
     
-       Future tests
+       #Future tests
     @DSDS-22
     Scenario Outline: Test user can search for a data feed
         Given There is at least one process run for selected 'Inbound Data Source'

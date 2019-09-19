@@ -52,4 +52,8 @@ export class DataFeedService {
     console.error('ApiService::handleError', error);
     return Observable.throw(error);
   }
+
+  public startProcess(processDefinitionId: string): Observable<Response>{
+    return this.http.post(API_URL + "/api/datatransformation/startprocess/" + processDefinitionId, null);
+  }
 }

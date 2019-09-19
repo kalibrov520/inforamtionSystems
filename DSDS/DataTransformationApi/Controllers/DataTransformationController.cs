@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using DataTransformationApi.Data;
 using DataTransformationApi.DataModels;
@@ -42,6 +44,17 @@ namespace DataTransformationApi.Controllers
             }
         }
 
+        [HttpPost("startprocess/{processDefinitionId}")]
+        public void StartProcess(string processDefinitionId)
+        {
+            using (var client = new HttpClient())
+            {
+                var requestUrl = _configuration.GetSection("CamundaApi").Value + "/process-definition/key/" +
+                                 processDefinitionId.Split(":").First() + "/start";
+                var result = client.PostAsync(requestUrl, new StringContent(string.Empty, Encoding.UTF8, "application/json")).Result;
+            }
+        }
+
         [HttpGet]
         public async Task<IEnumerable<DataFeedMainInfo>> GetDataFeedsInfoAsync()
         {
@@ -60,24 +73,28 @@ namespace DataTransformationApi.Controllers
                         DataFeedName = (string) x.SelectToken("name")
                     }).ToDictionary(x => x.DataFeedId, y => y.DataFeedName);
 
-                    var dataFeedList = await _repo.GetDataFeedsMainInfo(deploymentList.Keys.ToList());
+                    var list = JArray.Parse(response).Select(x => new
+                    {
+                        DataFeedId = Guid.Parse(((string) x.SelectToken("id")).Split(":").Last()),
+                        ProcessDefinitionKey = (string) x.SelectToken("id"),
+                        DataFeedName = (string) x.SelectToken("name")
+                    }).ToList();
+
+                    var dataFeedList = await _repo.GetDataFeedsMainInfo(list.Select(x => x.DataFeedId));
                     var result = new List<DataFeedMainInfo>();
+
 
                     foreach (var info in dataFeedList)
                     {
                         var key = info.DeploymentId;
-                        info.DataFeed = deploymentList[key];
-                        deploymentList.Remove(key);
+                        var element = list.FirstOrDefault(x => x.DataFeedId.Equals(key));
+                        info.DataFeed = element?.DataFeedName;
+                        info.DeploymentId = element.DataFeedId;
+                        info.ProcessDefinitionId = element.ProcessDefinitionKey;
+                        info.DataFeed = element.DataFeedName;
                         result.Add(info);
                     }
-                    foreach (var (key, value) in deploymentList)
-                    {
-                        result.Add(new DataFeedMainInfo
-                        {
-                            DeploymentId = key,
-                            DataFeed = value
-                        });
-                    }
+
                     return result;
                 }
             }
@@ -115,5 +132,7 @@ namespace DataTransformationApi.Controllers
                 throw;
             }
         }
+
+
     }
 }

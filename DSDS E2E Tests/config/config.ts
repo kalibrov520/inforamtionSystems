@@ -9,7 +9,7 @@ export const config: Config = {
 
     SELENIUM_PROMISE_MANAGER: false,
 
-    baseUrl: "http://spb-mdspoc01.internal.corp:4200/",
+    baseUrl: "http://spb-mdspoc01.internal.corp/",
 
     capabilities: {
         browserName: "chrome",
@@ -33,7 +33,6 @@ export const config: Config = {
         format: "json:./reports/json/cucumber_report.json",
         require: ["../../typeScript/stepdefinitions/*.js", "../../typeScript/support/*.js"],
         strict: true,
-        tags: "@SpaceSearch or @CleanButton",
     },
 
     onComplete: () => {
