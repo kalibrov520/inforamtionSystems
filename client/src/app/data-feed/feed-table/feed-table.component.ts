@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
 import { DataFeedDetails } from '../../models/dataFeed';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'ds-feed-table',
@@ -10,6 +11,7 @@ import { DataFeedDetails } from '../../models/dataFeed';
 })
 export class FeedTableComponent implements OnInit {
   @Input() rowDataAll: DataFeedDetails[];
+  dataFeedName: string;
 
   headerData: any[] = [
     {
@@ -39,9 +41,10 @@ export class FeedTableComponent implements OnInit {
 
   rowData: DataFeedDetails[];
 
-  constructor() { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
+    this.dataFeedName = this.activatedRoute.snapshot.paramMap.get('name');
   }
 
   ngOnChanges(): void {

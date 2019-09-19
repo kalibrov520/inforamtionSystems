@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
   selector: 'ds-feed',
@@ -8,7 +8,6 @@ import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FeedComponent implements OnInit {
-
   constructor() { }
 
   ngOnInit() {

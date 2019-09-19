@@ -15,7 +15,7 @@
       <td>{{row.date | date:'medium'}}</td>
       <td>{{row.successRows}}</td>
       <td>
-          <a [routerLink]="['/failes', row.runId]" class="link-danger" *ngIf="row.failedRows > 0">{{row.failedRows}}</a>
+          <a [routerLink]="['/failes', row.runId, dataFeedName]" class="link-danger" *ngIf="row.failedRows > 0">{{row.failedRows}}</a>
           <span *ngIf="row.failedRows == 0">{{row.failedRows}}</span>
       </td>
       <td>
