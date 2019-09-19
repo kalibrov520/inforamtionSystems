@@ -89,3 +89,4 @@ DSDS/LogSenderService/Properties/PublishProfiles/FolderProfile.pubxml
 DSDS/LogSenderService/LogSenderService.csproj.user
 DSDS/FtpWatcherService/Properties/PublishProfiles/FTP.pubxml.user
 DSDS/DataTransformationApi/Properties/PublishProfiles/FolderProfile.pubxml.user
+DSDS/DataTransformationApi/Properties/PublishProfiles/FTPProfile.pubxml.user
