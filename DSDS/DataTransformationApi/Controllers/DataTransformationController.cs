@@ -80,16 +80,10 @@ namespace DataTransformationApi.Controllers
                         DataFeedName = (string) x.SelectToken("name")
                     }).ToList();
 
-                    var dataFeedList = await _repo.GetDataFeedsMainInfo(/*deploymentList.Keys.ToList()*/ list.Select(x => x.DataFeedId));
+                    var dataFeedList = await _repo.GetDataFeedsMainInfo(list.Select(x => x.DataFeedId));
                     var result = new List<DataFeedMainInfo>();
 
-                    //foreach (var info in dataFeedList)
-                    //{
-                    //    var key = info.DeploymentId;
-                    //    info.DataFeed = deploymentList[key];
-                    //    deploymentList.Remove(key);
-                    //    result.Add(info);
-                    //}
+
                     foreach (var info in dataFeedList)
                     {
                         var key = info.DeploymentId;
@@ -100,14 +94,7 @@ namespace DataTransformationApi.Controllers
                         info.DataFeed = element.DataFeedName;
                         result.Add(info);
                     }
-                    //foreach (var (key, value) in deploymentList)
-                    //{
-                    //    result.Add(new DataFeedMainInfo
-                    //    {
-                    //        DeploymentId = key,
-                    //        DataFeed = value
-                    //    });
-                    //}
+
                     return result;
                 }
             }
