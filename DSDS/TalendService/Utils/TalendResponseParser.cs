@@ -13,7 +13,7 @@ namespace TalendService.Utils
             var successfulTokens = new List<TalendResponseObject>();
             var failedTokens = new List<string>();
 
-            foreach (var arrayElement in JArray.Parse(content))
+            foreach (var arrayElement in JToken.Parse(content))
             {
                 var token = arrayElement.SelectToken("rows");
 

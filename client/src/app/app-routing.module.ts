@@ -7,7 +7,7 @@ import { FailesComponent } from './layout/failes/failes.component';
 const routes: Routes = [
   { path: '', component: LayoutComponent },
   { path: 'dataFeed/:id', component: FeedComponent },
-  { path: 'failes', component: FailesComponent },
+  { path: 'failes/:id', component: FailesComponent },
 ];
 
 @NgModule({

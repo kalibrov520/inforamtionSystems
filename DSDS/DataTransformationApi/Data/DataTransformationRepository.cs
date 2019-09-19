@@ -75,17 +75,17 @@ namespace DataTransformationApi.Data
             await _context.SaveChangesAsync();
         }
 
-       
-
         //TODO: status! add late and inactive
-        public async Task<IList<DataFeedMainInfo>> GetDataFeedsMainInfo(IEnumerable<string> deploymentIds)
+        public async Task<IList<DataFeedMainInfo>> GetDataFeedsMainInfo(IEnumerable<Guid> deploymentIds)
         {
+            var d = _context.DataFeedRunLog.Where(x => deploymentIds.Contains(x.DataFeedId)).ToList();
             //todo add get data feeds by id, not all
             var rows = await (from runLog in _context.DataFeedRunLog
-                join fileLog in _context.DataFeedFileLoadingLog on runLog.FileReadingLogId equals fileLog
-                    .FileReadingLogId
-                join transformationLog in _context.DataTransformationLog on fileLog.DataFeedFileLoadingLogId equals
-                    transformationLog.DataFeedFileLoadingLogId
+                join fileLog in _context.DataFeedFileLoadingLog 
+                    on runLog.FileReadingLogId equals fileLog.FileReadingLogId
+                join transformationLog in _context.DataTransformationLog 
+                    on fileLog.DataFeedFileLoadingLogId equals transformationLog.DataFeedFileLoadingLogId
+                where deploymentIds.Contains(runLog.DataFeedId)
                 select new
                 {
                     DeploymentId = runLog.DataFeedId,
@@ -94,6 +94,12 @@ namespace DataTransformationApi.Data
                     ErrorRecordText = transformationLog.ErrorRecordText,
                     FilePath = fileLog.FilePath
                 }).ToListAsync();
+
+            var res = _context.DataFeedRunLog.FirstOrDefault(r => r.RunDateTime == _context.DataFeedRunLog.Max(x => x.RunDateTime));
+
+            var totalRows = _context.DataFeedFileLoadingLog
+                                .FirstOrDefault(x => x.FileReadingLogId == res.FileReadingLogId)?.TotalRows;
+
             var dataFeedList = rows.GroupBy(k => k.DeploymentId, v => v, (k, v) =>
             {
                 return new DataFeedMainInfo
@@ -120,6 +126,7 @@ namespace DataTransformationApi.Data
                 if (lastRun != null)
                 {
                     dataFeed.FailedRows = lastRun.Errors.Values.Sum(list => list.Count);
+                    dataFeed.SuccessRows = (totalRows == null) ? 0 : (int) totalRows - dataFeed.FailedRows;
 
                     if (lastRun.Errors.Keys.Count == 0)
                     {
@@ -154,8 +161,12 @@ namespace DataTransformationApi.Data
                     Date = r.Date,
                     FailedRows = (r.Files == 0) ? r.FailedRows - 1 : r.FailedRows,
                     Status = StatusChecker(r.Files, r.FailedRows),
-                    SuccessRows = 12
-                });
+                }).ToList();
+
+                foreach (var dataFeed in result)
+                {
+                    dataFeed.SuccessRows = TotalRowsByRunId(dataFeed.RunId) - dataFeed.FailedRows;
+                }
 
                 return result;
             }
@@ -164,6 +175,26 @@ namespace DataTransformationApi.Data
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        public IEnumerable<string> GetFailedRowsByRunId(string runId)
+        {
+            var fileReadingLogId = _context.DataFeedRunLog.FirstOrDefault(x => x.RunId.ToString().Equals(runId))?.FileReadingLogId;
+            var dataFeedFileLoadingLogId = _context.DataFeedFileLoadingLog
+                .FirstOrDefault(x => x.FileReadingLogId.Equals(fileReadingLogId))?.DataFeedFileLoadingLogId;
+            var failedRows =
+                _context.DataTransformationLog.Where(x => x.DataFeedFileLoadingLogId.Equals(dataFeedFileLoadingLogId)).Select(x => x.ErrorRecordText).ToList();
+
+            return failedRows;
+        }
+
+        private int TotalRowsByRunId(Guid runId)
+        {
+            var filedReadingLogId = _context.DataFeedRunLog.FirstOrDefault(x => x.RunId.Equals(runId))?.FileReadingLogId;
+
+            var totalRows = _context.DataFeedFileLoadingLog.FirstOrDefault(x => x.FileReadingLogId.Equals(filedReadingLogId))?.TotalRows;
+
+            return totalRows ?? 0;
         }
 
         private string StatusChecker(int filesNumber, int failedRows)
@@ -180,6 +211,44 @@ namespace DataTransformationApi.Data
             {
                 return "success";
             }
+        }
+
+        public async Task LogFileTotalRows(FileTransformationLogRecord logItem)
+        {
+            try
+            {
+                var readingFileLogId = await (from fileLog in _context.DataFeedFileLoadingLog
+                    join runLog in _context.DataFeedRunLog on fileLog.FileReadingLogId equals runLog.FileReadingLogId
+                    where fileLog.FilePath == logItem.FilePath
+                    select fileLog.DataFeedFileLoadingLogId).FirstOrDefaultAsync();
+
+                var entity = _context.DataFeedFileLoadingLog.AsNoTracking()
+                    .FirstOrDefault(x => x.DataFeedFileLoadingLogId.Equals(readingFileLogId));
+
+                entity.TotalRows = logItem.TotalRows;
+
+                _context.Entry(entity).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<string>> GetDataFeedFails(string runId)
+        {
+            var filedReadingLogId = _context.DataFeedRunLog.FirstOrDefault(x => x.RunId.ToString().Equals(runId))?.FileReadingLogId;
+
+            var dataFeedFileLoadingLogId = _context.DataFeedFileLoadingLog.FirstOrDefault(x => x.FileReadingLogId.Equals(filedReadingLogId))?.DataFeedFileLoadingLogId;
+
+            var result = await _context.DataTransformationLog
+                .Where(x => x.DataFeedFileLoadingLogId.Equals(dataFeedFileLoadingLogId)).Select(x => x.ErrorRecordText)
+                .ToListAsync();
+
+            return result;
         }
     }
 }

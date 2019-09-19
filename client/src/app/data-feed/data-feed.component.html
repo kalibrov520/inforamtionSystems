@@ -1,12 +1,10 @@
 <div class="data-feed">
   <div class="data-feed-item">
-    <ds-calendar></ds-calendar>
   </div>
   <div class="data-feed-item">
     <ds-feed-table [rowDataAll]="dataFeedDetails"></ds-feed-table>
     <mercer-pagination
       (paginationInfoRequest)="updatePage($event)"
-      [paginationInfo]="paginationInfo"
     ></mercer-pagination>
   </div>
 </div>

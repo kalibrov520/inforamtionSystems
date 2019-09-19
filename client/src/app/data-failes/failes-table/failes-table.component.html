@@ -10,22 +10,7 @@
     [rowHighlight]="true"
   >
     <ng-template mercer-table-row let-row="row" >
-      <td>{{row.fund}}</td>
-      <td>{{row.plan}}</td>
-      <td>{{row.asset}}</td>
-      <td>{{row.shareBalance}}</td>
-      <td>{{row.nav}}</td>
-      <td>{{row.error}}</td>
-      <td>
-        <a href="javascript:;">
-          <mercer-icon icon="mode_edit" size="lg" theme="accent2" alt="Edit"></mercer-icon>
-        </a>
-      </td>
-      <td>
-        <a href="javascript:;">
-          <mercer-icon icon="delete" size="lg" theme="accent2" alt="Delete"></mercer-icon>
-        </a>
-      </td>
+      <td *ngFor="let r of headerData">{{row[r.column]}}</td>
     </ng-template>
   </mercer-table>
 </div>

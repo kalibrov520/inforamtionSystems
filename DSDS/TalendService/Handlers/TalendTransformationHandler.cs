@@ -22,6 +22,7 @@ namespace TalendService.Handlers
         private readonly ILogger<TalendTransformationHandler> _logger;
         private IFileManager _fileManager;
         private string _talendUrl;
+        private readonly IApiSettings _settings;
 
         private List<string> _savedFiles = new List<string>();
         private Dictionary<string, List<string>> _failedRecords = new Dictionary<string, List<string>>();
@@ -29,8 +30,9 @@ namespace TalendService.Handlers
         private IEnumerable<IFileSystemItem> _newFiles = new List<IFileSystemItem>();
 
 
-        public TalendTransformationHandler(ILogger<TalendTransformationHandler> logger, IFileManager fileManager)
+        public TalendTransformationHandler(IApiSettings settings, ILogger<TalendTransformationHandler> logger, IFileManager fileManager)
         {
+            _settings = settings;
             _logger = logger;
             _fileManager = fileManager;
         }
@@ -56,57 +58,63 @@ namespace TalendService.Handlers
         public override Task<IExecutionResult> GetExecutionResult()
         {
             //TODO: no Database service now
-            return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()
-            {
-                ["failedItems"] = Variable.String(JsonConvert.SerializeObject(_failedRecords))
-            }));
+            return Task.FromResult<IExecutionResult>(new CompleteResult(new Dictionary<string, Variable>()));
         }
 
         private async Task ProcessFile(string filePath)
         {
-            var failedRows = new List<string>();
-            var successfulRows = new List<TalendResponseObject>();
-
-            var file = await _fileManager.GetFileAsync(filePath);
-
-            using (var client = new HttpClient())
+            try
             {
-                using (var formData = new MultipartFormDataContent())
+                var failedRows = new List<string>();
+                var successfulRows = new List<TalendResponseObject>();
+
+                var file = await _fileManager.GetFileAsync(filePath);
+
+                using (var client = new HttpClient())
                 {
-                    formData.Add(new ByteArrayContent(file));
-
-                    //TODO: deal with PostAsync andResult. Do not block Task.
-                    var response = client.PostAsync(_talendUrl, formData).Result;
-
-                    if (response.IsSuccessStatusCode)
+                    using (var formData = new MultipartFormDataContent())
                     {
-                        var responseContent = response.Content.ReadAsStringAsync().Result;
+                        formData.Add(new ByteArrayContent(file));
 
-                        (successfulRows, failedRows) = TalendResponseParser.ParseTalendResponse(responseContent);
+                        //TODO: deal with PostAsync andResult. Do not block Task.
+                        var response = client.PostAsync(_talendUrl, formData).Result;
 
-                        /*await client.PostAsync("http://localhost:59295/api/lookups",
-                            new StringContent(JsonConvert.SerializeObject(successfulRows), Encoding.UTF8,
-                                "application/json"));*/
-
-                        var logItem = new FileTransformationLogRecord
+                        if (response.IsSuccessStatusCode)
                         {
-                            DataFeedId = DataFeedId,
-                            RunId = RunId,
-                            FilePath = filePath,
-                            InvalidRows = failedRows
-                        };
+                            var responseContent = response.Content.ReadAsStringAsync().Result;
 
-                        await client.PostAsync("http://localhost:49691/api/datatransformationlog", new StringContent(
-                            JsonConvert.SerializeObject(logItem), Encoding.UTF8,
-                            "application/json"));
+                            (successfulRows, failedRows) = TalendResponseParser.ParseTalendResponse(responseContent);
 
-                    }
-                    else
-                    {
-                        _logger.LogError("Something went wrong in reformat process! {File} transformation went wrong.", filePath);
-                        throw new Exception($"{filePath} failed to transform.");
+                            await client.PostAsync(_settings.LookupApiUrl,
+                                new StringContent(JsonConvert.SerializeObject(successfulRows), Encoding.UTF8,
+                                    "application/json"));
+
+                            var logItem = new FileTransformationLogRecord
+                            {
+                                DataFeedId = DataFeedId,
+                                RunId = RunId,
+                                FilePath = filePath,
+                                InvalidRows = failedRows,
+                                TotalRows = successfulRows.Count + failedRows.Count
+                            };
+
+                            await client.PostAsync(_settings.DataTransformationApiUrl, new StringContent(
+                                JsonConvert.SerializeObject(logItem), Encoding.UTF8,
+                                "application/json"));
+
+                        }
+                        else
+                        {
+                            _logger.LogError("Something went wrong in reformat process! {File} transformation went wrong.", filePath);
+                            throw new Exception($"{filePath} failed to transform.");
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
         }
     }

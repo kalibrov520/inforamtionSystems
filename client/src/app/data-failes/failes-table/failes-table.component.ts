@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
   selector: 'ds-failes-table',
@@ -8,75 +8,26 @@ import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FailesTableComponent implements OnInit {
+  @Input() dataFeedFailes: string[];
   
-  headerData: any[] = [
-    {
-      name: 'Fund',
-      column: 'fund',
-    },
-    {
-      name: 'Plan',
-      column: 'plan',
-    },
-    {
-      name: 'Asset',
-      column: 'asset',
-    },
-    {
-      name: 'Share Balance',
-      column: 'shareBalance',
-    },
-    {
-      name: 'NAV',
-      column: 'nav',
-    },
-    {
-      name: 'Error',
-      column: 'error',
-    },
-    {
-      name: 'Edit',
-      column: 'edit',
-    },
-    {
-      name: 'Delete',
-      column: 'delete',
-    },
-  ];
+  headerData: any[];
 
-  rowData: any[] = [
-    {
-      dataId: '1',
-      fund: 'Fund name #1',
-      plan: 'Plan name #1',
-      asset: '5',
-      shareBalance: '23%',
-      nav: '18',
-      error: 'Unable to identify a Plan Name',
-    },
-    {
-      dataId: '2',
-      fund: 'Fund name #2',
-      plan: 'Plan name #2',
-      asset: '2',
-      shareBalance: '10%',
-      nav: '21',
-      error: 'Unable to identify a Plan Name',
-    },
-    {
-      dataId: '3',
-      fund: 'Fund name #3',
-      plan: 'Plan name #3',
-      asset: '8',
-      shareBalance: '70%',
-      nav: '11',
-      error: '0 balance record',
-    },
-  ];
+  rowData: any[] = [];
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  ngOnChanges(): void {
+    let headerKeys = Object.keys(JSON.parse(this.dataFeedFailes[0]));
+
+    this.headerData = headerKeys.map(element => ({ name: element, column: element}));
+
+    let result = this.dataFeedFailes.forEach(element => {
+      let values  = Object.values(JSON.parse(element));
+
+      this.rowData.push(JSON.parse(element));
+    })
   }
 
 }

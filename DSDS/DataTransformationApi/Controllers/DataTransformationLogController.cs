@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using DataTransformationApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,6 +25,14 @@ namespace DataTransformationApi.Controllers
         public async Task Post(FileTransformationLogRecord logItem)
         {
             await _repo.LogDataTransformation(logItem);
+
+            await _repo.LogFileTotalRows(logItem);
+        }
+
+        [HttpGet("{runId}")]
+        public IEnumerable<string> GetFailedRowsByRunId(string runId)
+        {
+            return _repo.GetFailedRowsByRunId(runId);
         }
     }
 }

@@ -3,10 +3,9 @@
     <button mercer-icon-button type="button" icon="undo" size="xxxlg" alt="?"></button>
   </div>
   <div class="data-failes-table">
-    <ds-failes-table></ds-failes-table>
+    <ds-failes-table [dataFeedFailes]="dataFeedFailes"></ds-failes-table>
     <mercer-pagination
       (paginationInfoRequest)="updatePage($event)"
-      [paginationInfo]="paginationInfo"
     ></mercer-pagination>
   </div>
 </div>

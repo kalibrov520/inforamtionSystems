@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
 import { PaginationInfo } from 'merceros-ui-components';
+import { DataFeedService } from '../services/dataFeed.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'ds-data-failes',
@@ -9,6 +11,9 @@ import { PaginationInfo } from 'merceros-ui-components';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataFailesComponent implements OnInit {
+  @Input() runId: string;
+  dataFeedFailes: string[];
+  errorMessage: string;
 
   public paginationInfo: PaginationInfo = {
     offset: 0,
@@ -22,9 +27,18 @@ export class DataFailesComponent implements OnInit {
     this.paginationInfo.offset = model.offset;
   }
 
-  constructor() { }
+  constructor(private dataFeedService: DataFeedService, private cdr: ChangeDetectorRef ,private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
+    this.runId = this.activatedRoute.snapshot.paramMap.get('id');
+
+    this.dataFeedService.getDataFeedFailesInfo(this.runId).subscribe({
+      next: dataFeedFailes => {
+        this.dataFeedFailes = dataFeedFailes;
+        this.cdr.detectChanges();
+      },
+      error: err => this.errorMessage = err
+    });
   }
 
 }
