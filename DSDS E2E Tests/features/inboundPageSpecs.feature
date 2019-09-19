@@ -69,6 +69,7 @@ Feature: File Management: List of inbound configurations
 
     #Feature: Future
     
+    
        Future tests
     @DSDS-22
     Scenario Outline: Test user can search for a data feed
