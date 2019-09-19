@@ -13,6 +13,11 @@ export class FeedTableComponent implements OnInit {
   @Input() rowDataAll: DataFeedDetails[];
   dataFeedName: string;
 
+  public sortOption = {
+    column: 1,
+    direction: 'desc'
+  };
+
   headerData: any[] = [
     {
       name: 'Status',
