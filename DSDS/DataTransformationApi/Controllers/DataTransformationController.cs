@@ -70,29 +70,33 @@ namespace DataTransformationApi.Controllers
                     var deploymentList = JArray.Parse(response).Select(x => new
                     {
                         DataFeedId = Guid.Parse(((string) x.SelectToken("id")).Split(":").Last()),
-                        DataFeedName = (string) x.SelectToken("name")
-                    }).ToDictionary(x => x.DataFeedId, y => y.DataFeedName);
-
-                    var list = JArray.Parse(response).Select(x => new
-                    {
-                        DataFeedId = Guid.Parse(((string) x.SelectToken("id")).Split(":").Last()),
                         ProcessDefinitionKey = (string) x.SelectToken("id"),
                         DataFeedName = (string) x.SelectToken("name")
                     }).ToList();
 
-                    var dataFeedList = await _repo.GetDataFeedsMainInfo(list.Select(x => x.DataFeedId));
+                    var dataFeedList = await _repo.GetDataFeedsMainInfo(deploymentList.Select(x => x.DataFeedId));
                     var result = new List<DataFeedMainInfo>();
 
 
                     foreach (var info in dataFeedList)
                     {
                         var key = info.DeploymentId;
-                        var element = list.FirstOrDefault(x => x.DataFeedId.Equals(key));
+                        var element = deploymentList.FirstOrDefault(x => x.DataFeedId.Equals(key));
                         info.DataFeed = element?.DataFeedName;
                         info.DeploymentId = element.DataFeedId;
                         info.ProcessDefinitionId = element.ProcessDefinitionKey;
                         info.DataFeed = element.DataFeedName;
                         result.Add(info);
+                        deploymentList.RemoveAll(x => x.DataFeedId.Equals(key));
+                    }
+
+                    foreach (var info in deploymentList)
+                    {
+                        result.Add(new DataFeedMainInfo()
+                        {
+                            DeploymentId = info.DataFeedId,
+                            DataFeed = info.DataFeedName
+                        });
                     }
 
                     return result;
