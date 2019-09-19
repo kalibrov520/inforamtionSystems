@@ -24,12 +24,11 @@
         {{row.successRows}}
       </td>
       <td>
-        <a href="/failes" class="link-danger" *ngIf="row.failedRows > 0">{{row.failedRows}}</a>
-        <span *ngIf="row.failedRows == 0">{{row.failedRows}}</span>
+        <span>{{row.failedRows}}</span>
       </td>
       <td>
         <a href="javascript:;">
-          <mercer-icon icon="settings" size="lg" theme="accent2" alt="Settings"></mercer-icon>
+          <mercer-icon icon="settings" size="lg" theme="accent2" alt="Settings" (click)="startProcess(row.processDefinitionId)"></mercer-icon>
         </a>
       </td>
     </ng-template>
