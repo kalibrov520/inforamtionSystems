@@ -15,19 +15,14 @@ const API_URL = environment.apiUrl;
   providedIn: 'root'
 })
 export class DataFeedService {
-  httpOptions;  
 
   constructor(private http: Http) {
-    this.httpOptions = {
-      headers: new HttpHeaders({ 
-        'Access-Control-Allow-Origin':'*'
-      })
-    };
+   
   }
 
   public getAllDataFeedsInfo(): Observable<IDataFeed[]> {
     return this.http
-      .get(API_URL + "/api/datatransformation", this.httpOptions).pipe(map(response => {
+      .get(API_URL + "/api/datatransformation").pipe(map(response => {
            let dataFeeds = response.json();
            return dataFeeds.map(dataFeed => new DataFeed(dataFeed));
          })).catch(this.handleError);
@@ -35,14 +30,14 @@ export class DataFeedService {
 
   public getDataFeedDetails(deploymentId: string): Observable<DataFeedDetails[]> {
     return this.http
-      .get(API_URL + "/api/datatransformation/" + deploymentId, this.httpOptions).pipe(map(response => {
+      .get(API_URL + "/api/datatransformation/" + deploymentId).pipe(map(response => {
            let dataFeeds = response.json();
            return dataFeeds.map(dataFeed => new DataFeedDetails(dataFeed));
          })).catch(this.handleError);
   }
 
   public getDataFeedFailesInfo(runId: string): Observable<string[]> {
-    return this.http.get(API_URL + "/api/datatransformation/datafeedfailes/" + runId, this.httpOptions).pipe(map(response => {
+    return this.http.get(API_URL + "/api/datatransformation/datafeedfailes/" + runId).pipe(map(response => {
       let data = response.json();
       return data;
     })).catch(this.handleError);

@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PageHeaderComponent implements OnInit {
   pageTitle: string;
+  pageSubtitle: string;
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {

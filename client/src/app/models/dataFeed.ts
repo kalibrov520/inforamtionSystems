@@ -3,7 +3,7 @@ export interface IDataFeed {
     processDefinitionId: string;
     status: string;
     dataFeed: string;
-    lastRunning: string;
+    lastRunning: Date;
     successRows: number;
     failedRows: number;
 }
@@ -13,7 +13,7 @@ export class DataFeed implements IDataFeed {
     deploymentId: string;
     status: string;
     dataFeed: string;
-    lastRunning: string;
+    lastRunning: Date;
     successRows: number;
     failedRows: number;
 
@@ -25,7 +25,7 @@ export class DataFeed implements IDataFeed {
 export class DataFeedDetails {
     runId: string;
     status: string;
-    date: string;
+    date: Date;
     failedRows: number;
     successRows: number;
     constructor(values: Object = {}) {

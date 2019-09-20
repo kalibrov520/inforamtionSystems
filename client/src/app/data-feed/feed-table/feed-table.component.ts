@@ -44,7 +44,7 @@ export class FeedTableComponent implements OnInit {
     },
   ];
 
-  rowData: DataFeedDetails[];
+  rowData: DataFeedDetails[] = [];
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -53,9 +53,7 @@ export class FeedTableComponent implements OnInit {
   }
 
   ngOnChanges(): void {
-    this.rowData = this.rowDataAll;
-
-    console.log(this.rowData);
+    this.rowData = !this.rowDataAll ? [] : this.rowDataAll.sort(x=>(new Date(x.date)).getTime());
   }
 
 }
