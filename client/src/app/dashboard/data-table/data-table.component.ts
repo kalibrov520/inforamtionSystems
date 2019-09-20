@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, HostListener, ViewEncapsulation } from '@angular/core';
 import { IDataFeed } from '../../models/dataFeed';
+import { DataFeedService } from '../../services/dataFeed.service';
 
 @Component({
   selector: 'ds-data-table',
@@ -49,7 +50,7 @@ export class DataTableComponent implements OnInit {
     },
   ];
 
-  constructor() { }
+  constructor(private dataService: DataFeedService) { }
 
   ngOnInit(): void {
     this.rowData = this.rowDataAll;
@@ -66,6 +67,10 @@ export class DataTableComponent implements OnInit {
     else {
       this.rowData = dataFilteredByStatus
     }
+  }
+
+  startProcess(processDefinitionId: string): void {
+    this.dataService.startProcess(processDefinitionId).subscribe()
   }
 
 }

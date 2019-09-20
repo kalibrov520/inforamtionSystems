@@ -1,37 +1,26 @@
 <div class="data-table mos-u-spacer--margin-bottom-md">
-  <mercer-table
-    theme="tertiary"
-    [bordered]="true"
-    [columnBordered]="true"
-    [headers]="headerData"
-    [rows]="rowData"
-    [headerTruncateText]="false"
-    [striped]="true"
-    [rowHighlight]="true"
-    [sortable]="true"
-  >
-    <ng-template mercer-table-row let-row="row">
-      <td>
-        <ds-status-circle status="{{row.status}}"></ds-status-circle>
-      </td>
-      <td>
-        <a [routerLink]="['/dataFeed', row.deploymentId]">{{row.dataFeed}}</a>
-      </td>
-      <td>
-        {{row.lastRunning | date:'medium'}}
-      </td>
-      <td>
-        {{row.successRows}}
-      </td>
-      <td>
-        <a href="/failes" class="link-danger" *ngIf="row.failedRows > 0">{{row.failedRows}}</a>
-        <span *ngIf="row.failedRows == 0">{{row.failedRows}}</span>
-      </td>
-      <td>
-        <a href="javascript:;">
-          <mercer-icon icon="settings" size="lg" theme="accent2" alt="Settings"></mercer-icon>
-        </a>
-      </td>
-    </ng-template>
-  </mercer-table>
+    <mercer-table theme="tertiary" [bordered]="true" [columnBordered]="true" [headers]="headerData" [rows]="rowData" [headerTruncateText]="false" [striped]="true" [rowHighlight]="true" [sortable]="true">
+        <ng-template mercer-table-row let-row="row">
+            <td>
+                <ds-status-circle status="{{row.status}}"></ds-status-circle>
+            </td>
+            <td>
+                <a [routerLink]="['/dataFeed', row.deploymentId, row.dataFeed]">{{row.dataFeed}}</a>
+            </td>
+            <td>
+                {{row.lastRunning | date:'medium'}}
+            </td>
+            <td>
+                {{row.successRows}}
+            </td>
+            <td>
+                <span>{{row.failedRows}}</span>
+            </td>
+            <td>
+                <a>
+                    <mercer-icon icon="settings" size="lg" theme="accent2" alt="Settings" (click)="startProcess(row.processDefinitionId)"></mercer-icon>
+                </a>
+            </td>
+        </ng-template>
+    </mercer-table>
 </div>

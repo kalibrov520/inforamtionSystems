@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
+import { element } from '@angular/core/src/render3';
+import { jsonpCallbackContext } from '@angular/common/http/src/module';
 
 @Component({
   selector: 'ds-failes-table',
@@ -14,20 +16,22 @@ export class FailesTableComponent implements OnInit {
 
   rowData: any[] = [];
 
-  constructor() { }
+  constructor( ) { }
 
   ngOnInit() { }
 
   ngOnChanges(): void {
+    debugger;
+    if(!this.dataFeedFailes || this.dataFeedFailes.length == 0)
+    {
+      return;
+    }
+
     let headerKeys = Object.keys(JSON.parse(this.dataFeedFailes[0]));
 
     this.headerData = headerKeys.map(element => ({ name: element, column: element}));
 
-    let result = this.dataFeedFailes.forEach(element => {
-      let values  = Object.values(JSON.parse(element));
-
-      this.rowData.push(JSON.parse(element));
-    })
+    this.rowData = this.dataFeedFailes.map(element => JSON.parse(element));
   }
 
 }

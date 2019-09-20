@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
 import { DataFeedDetails } from '../../models/dataFeed';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'ds-feed-table',
@@ -10,6 +11,12 @@ import { DataFeedDetails } from '../../models/dataFeed';
 })
 export class FeedTableComponent implements OnInit {
   @Input() rowDataAll: DataFeedDetails[];
+  dataFeedName: string;
+
+  public sortOption = {
+    column: 1,
+    direction: 'desc'
+  };
 
   headerData: any[] = [
     {
@@ -37,17 +44,16 @@ export class FeedTableComponent implements OnInit {
     },
   ];
 
-  rowData: DataFeedDetails[];
+  rowData: DataFeedDetails[] = [];
 
-  constructor() { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
+    this.dataFeedName = this.activatedRoute.snapshot.paramMap.get('name');
   }
 
   ngOnChanges(): void {
-    this.rowData = this.rowDataAll;
-
-    console.log(this.rowData);
+    this.rowData = !this.rowDataAll ? [] : this.rowDataAll.sort(x=>(new Date(x.date)).getTime());
   }
 
 }
