@@ -36,12 +36,7 @@ export class FeedTableComponent implements OnInit {
       name: 'Failed Rows',
       column: 'failedRows',
       disableSort: true,
-    },
-    {
-      name: 'File',
-      column: 'file',
-      disableSort: true,
-    },
+    }
   ];
 
   rowData: DataFeedDetails[] = [];

@@ -8,5 +8,5 @@
 export const environment = {
   production: false,
   hmr: false,
-  apiUrl: 'http://localhost:49691'
+  apiUrl: 'http://spb-mdspoc01.internal.corp:810'
 };
