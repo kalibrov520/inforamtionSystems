@@ -22,7 +22,7 @@ Feature: File Management: List of inbound configurations
 
     As an Operator I want to be able to view a list of incoming configurations via DS portal
     Background: At leat one Inbound Data Source exists
-    Given At least one 'Inbound Data Source' exists in the system
+    Given At least one 'Inbound Data Source' exists in the system 
     And 'Operator' lands on the 'Dashboard' page
     And 'Operator' clicks on the 'Inbound' tab in top menu
 
