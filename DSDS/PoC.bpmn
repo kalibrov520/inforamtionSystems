@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_095shws" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.2.3">
-  <bpmn:process id="Process_0swyzid" name="ss_mercer_ta" isExecutable="true">
+  <bpmn:process id="Process_0swyzid" name="ss_mercer_ta_demo" isExecutable="true">
     <bpmn:extensionElements>
       <camunda:inputOutput>
         <camunda:outputParameter name="c">5</camunda:outputParameter>
@@ -19,12 +19,13 @@
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P0Y0M0DT0H1M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="Task_0x70jqq" name="FtpWatcher" camunda:type="external" camunda:topic="FtpWatcher">
+    <bpmn:serviceTask id="Task_0x70jqq" name="FileChecker" camunda:type="external" camunda:topic="FtpWatcher">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="rootPath">ftp://spb-mdspoc01.internal.corp</camunda:inputParameter>
-          <camunda:inputParameter name="userName">ftpUser</camunda:inputParameter>
-          <camunda:inputParameter name="password">password123</camunda:inputParameter>
+          <camunda:inputParameter name="rootPath">ftp://ftp.exigenservices.com</camunda:inputParameter>
+          <camunda:inputParameter name="userName">mdspoc</camunda:inputParameter>
+          <camunda:inputParameter name="password">=FYvF_7LZ
+</camunda:inputParameter>
           <camunda:inputParameter name="patternsForExtension">*.txt,*.csv,*.tsv,*.xls</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -41,9 +42,6 @@
     <bpmn:sequenceFlow id="SequenceFlow_1poxbct" sourceRef="ExclusiveGateway_0o2799t" targetRef="TalendService">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isUpdated}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1o6l7r9" name="There is no changes" sourceRef="ExclusiveGateway_0o2799t" targetRef="Task_0cpg8po">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!isUpdated}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:serviceTask id="TalendService" name="TalendService" camunda:type="external" camunda:topic="TalendService">
       <bpmn:extensionElements>
         <camunda:inputOutput>
@@ -55,14 +53,23 @@
       <bpmn:incoming>SequenceFlow_1poxbct</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1odtux8</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1odtux8" sourceRef="TalendService" targetRef="Task_0cpg8po" />
     <bpmn:sequenceFlow id="SequenceFlow_0sje7g8" sourceRef="IntermediateThrowEvent_1cfam7d" targetRef="Task_0x70jqq" />
     <bpmn:serviceTask id="Task_0cpg8po" name="LogSender" camunda:type="external" camunda:topic="LogSender">
-      <bpmn:incoming>SequenceFlow_1o6l7r9</bpmn:incoming>
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="email">delegated.solutions@hotmail.com
+</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1odtux8</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1o6l7r9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_180p63j</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_180p63j" sourceRef="Task_0cpg8po" targetRef="IntermediateThrowEvent_1cfam7d" />
+    <bpmn:sequenceFlow id="SequenceFlow_1odtux8" sourceRef="TalendService" targetRef="Task_0cpg8po" />
+    <bpmn:sequenceFlow id="SequenceFlow_1o6l7r9" name="There is no changes" sourceRef="ExclusiveGateway_0o2799t" targetRef="Task_0cpg8po">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!isUpdated}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0swyzid">
@@ -71,53 +78,50 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0nekwjt_di" bpmnElement="SequenceFlow_0nekwjt">
         <di:waypoint x="188" y="120" />
-        <di:waypoint x="340" y="120" />
+        <di:waypoint x="310" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="IntermediateCatchEvent_1hwrrei_di" bpmnElement="IntermediateThrowEvent_1cfam7d">
-        <dc:Bounds x="442" y="362" width="36" height="36" />
+        <dc:Bounds x="342" y="362" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0ykn45a_di" bpmnElement="Task_0x70jqq">
-        <dc:Bounds x="340" y="80" width="100" height="80" />
+        <dc:Bounds x="310" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_0o2799t_di" bpmnElement="ExclusiveGateway_0o2799t" isMarkerVisible="true">
-        <dc:Bounds x="505" y="95" width="50" height="50" />
+        <dc:Bounds x="495" y="95" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0zrlvrz_di" bpmnElement="SequenceFlow_0zrlvrz">
-        <di:waypoint x="440" y="120" />
-        <di:waypoint x="505" y="120" />
+        <di:waypoint x="410" y="120" />
+        <di:waypoint x="495" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1poxbct_di" bpmnElement="SequenceFlow_1poxbct">
-        <di:waypoint x="555" y="120" />
-        <di:waypoint x="650" y="120" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1o6l7r9_di" bpmnElement="SequenceFlow_1o6l7r9">
-        <di:waypoint x="530" y="145" />
-        <di:waypoint x="530" y="208" />
-        <di:waypoint x="460" y="208" />
-        <di:waypoint x="460" y="230" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="466" y="174" width="56" height="27" />
-        </bpmndi:BPMNLabel>
+        <di:waypoint x="545" y="120" />
+        <di:waypoint x="620" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0v9ojn9_di" bpmnElement="TalendService">
-        <dc:Bounds x="650" y="80" width="100" height="80" />
+        <dc:Bounds x="620" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_1odtux8_di" bpmnElement="SequenceFlow_1odtux8">
-        <di:waypoint x="700" y="160" />
-        <di:waypoint x="700" y="270" />
-        <di:waypoint x="510" y="270" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0sje7g8_di" bpmnElement="SequenceFlow_0sje7g8">
-        <di:waypoint x="442" y="380" />
-        <di:waypoint x="350" y="380" />
-        <di:waypoint x="350" y="160" />
+        <di:waypoint x="360" y="362" />
+        <di:waypoint x="360" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_1jn6svr_di" bpmnElement="Task_0cpg8po">
-        <dc:Bounds x="410" y="230" width="100" height="80" />
+        <dc:Bounds x="470" y="340" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_180p63j_di" bpmnElement="SequenceFlow_180p63j">
-        <di:waypoint x="460" y="310" />
-        <di:waypoint x="460" y="362" />
+        <di:waypoint x="470" y="380" />
+        <di:waypoint x="378" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1odtux8_di" bpmnElement="SequenceFlow_1odtux8">
+        <di:waypoint x="670" y="160" />
+        <di:waypoint x="670" y="380" />
+        <di:waypoint x="570" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1o6l7r9_di" bpmnElement="SequenceFlow_1o6l7r9">
+        <di:waypoint x="520" y="145" />
+        <di:waypoint x="520" y="340" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="462" y="174" width="56" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
