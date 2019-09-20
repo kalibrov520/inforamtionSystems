@@ -14,7 +14,7 @@ export const config: Config = {
     capabilities: {
         browserName: "chrome",
     },
-
+    
     framework: "custom",
     frameworkPath: require.resolve("protractor-cucumber-framework"),
 

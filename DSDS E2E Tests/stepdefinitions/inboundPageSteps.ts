@@ -1,11 +1,16 @@
 import { InboundPageObject } from "../pages/inboundPage";
 import { config } from "../config/config";
 import { browser, element, by, ElementFinder, ElementArrayFinder } from "protractor";
+import { TestObject } from "protractor/built/driverProviders";
 const { Given, When, Then, PendingException } = require("cucumber");
 const chai = require("chai").use(require("chai-as-promised"));
+const chaiHttp = require('chai-http');
+chai.use(chaiHttp);
 const expect = chai.expect;
+const request = require("request");
 
 const inboundPage: InboundPageObject = new InboundPageObject();
+
 
 Given(/^I am on "(.*?)" page$/, async (text) => {
     switch(text) {
@@ -51,8 +56,34 @@ Then(/^I see same rows Count in the table$/, async () => {
 
 //Background
 
-Given(/^At least one 'Inbound Data Source' exists in the system$/, async () => {
-    //skip for now
+Given(/^At least one 'Inbound Data Source' exists in the system$/, async () => { //bugged
+
+    
+    
+    request('http://spb-mdspoc01.internal.corp:8080/engine-rest/process-definition', function (error, response, body) {
+
+
+        let tmp: boolean = false;
+        console.log(response.statusCode);
+        if (error !== null && response.statusCode === 200) {
+            let arr = JSON.parse(body);
+            if (arr.length > 0) {
+                tmp = true;
+            }
+        }
+
+       
+        
+        
+        expect(tmp).to.equal(true);
+    });
+
+    
+    // chai.request('http://spb-mdspoc01.internal.corp:8080').get('/engine-rest/process-definition').end(function(err, res) {
+    //     expect(res).to.have.status(404);
+    //     expect(res.body.length).to.above(0);
+    // });
+    
 });
 
 Given(/^'Operator' lands on the 'Dashboard' page$/, async () => {
@@ -97,7 +128,7 @@ Then(/^'Operator' can see 'Last Running Date and Time' in 'Last Running' column$
 
     cellTexts = cellTexts.filter(item => item.match(regex));
 
-    //expect(cellTexts.length).to.equal(1);
+    expect(cellTexts.length).to.above(0);
 });
 
 
