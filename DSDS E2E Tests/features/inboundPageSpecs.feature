@@ -23,7 +23,7 @@ Feature: To test Inbound page functional
 Feature: File Management: List of inbound configurations
 
     As an Operator I want to be able to view a list of incoming configurations via DS portal
-    Background: At leat one Inbound Data Source exists
+    Background: At least one Inbound Data Source exists
     Given At least one 'Inbound Data Source' exists in the system
     And 'Operator' lands on the 'Dashboard' page
     And 'Operator' clicks on the 'Inbound' tab in top menu
@@ -67,34 +67,53 @@ Feature: File Management: List of inbound configurations
     | 3 | Inactive  | Grey  | 3 |
     | 11 | All  | Blue  | 11 |
 
-    #Feature: Future
-    
-    
-       Future tests
-    @DSDS-22
-    Scenario Outline: Test user can search for a data feed
-        Given There is at least one process run for selected 'Inbound Data Source'
-        When 'Operator' observes selected 'Inbound Data Source'
-        Then 'Operator' can see 'Last Running Date and Time' in 'Last Running' column
-            And 'Operator' can see a 'Feed Status' icon in 'Status' column
-    
+    Feature: File Management: Invalid feed email notification
+    As an Operator I want to get notifications if something goes wrong with the file load
+    @DSDS-39
+    Scenario: Test user gets a notification via email if file records have issues
+        Given 'Operator' is added to the 'Notification' list for selected 'Data Source'
+            And A 'Feed File' contains issues
+        When A feed process starts
+        Then Operator can see an error email in his mailbox
 
-    @SLA
-    Scenario: Test user can see a next running date
-        Given At least one Inbound configuration exists in the system
-        When Operator lands on the 'Dashboard' page
-            And Operator clicks on the 'Inbound' tab in top menu
-            And Operator observes the list
-        Then Operator can see a list of existing configurations    
+    @DSDS-39
+    Scenario: Test user can get a notification via email if a feed file is missing
+        Given 'Operator' is added to the 'Notification' list for selected 'Data Source'
+            And A 'Feed File' is missing
+        When A feed process starts
+        Then Operator can see an error email in his mailbox
 
-    @History
-    Scenario: Test user can see a date and time of the last process run
-        Given At least one Inbound configuration exists in the system
-        When Operator lands on the 'Dashboard' page
-            And Operator clicks on the 'Inbound' tab in top menu
-            And Operator observes the list
-        Then Operator can see a list of existing configurations
+    @DSDS-39
+    Scenario: Test user can get a notification via email if file is a duplicate
+        Given 'Operator' is added to the 'Notification' list for selected 'Data Source'
+        When A feed process starts
+        Then Operator can see an error email in his mailbox           
+
+    Feature: File Management: Process run history
     
+       As an Operator I want to be able to review every run status and check invalid records in Inbound process via DS user interface
+
+        Background: At least one Inbound Data Source exists
+    Given At least one 'Inbound Data Source' exists in the system
+    And 'Operator' lands on the 'Dashboard' page
+    And 'Operator' clicks on the 'Inbound' tab in top menu   
+
+    @DSDS-41
+    Scenario: Test user can view the history of process runs for a specific Data Source
+        Given A feed process starts
+        When  Operator clicks on 'Inbound Data Source' item in the list
+        Then Operator lands on  'Feed History' page
+            And Operator can see 'Process Run' log with following atributes: Status, Date, Success Rows, Failed Rows
+
+    @DSDS-41
+    Scenario: Test user can view the invalid records for specific Process Run
+        Given A feed process starts 
+        And A process is completed with 'Failed' status
+        When  Operator clicks on 'Inbound Data Source' item in the list
+        And Operator clicks on   'Feed History' page
+            And Operator can see 'Process Run' log with following atributes: Status, Date, Success Rows, Failed Rows        
+           
+
     
 
 
