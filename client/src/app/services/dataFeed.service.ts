@@ -9,7 +9,7 @@ import 'rxjs/add/observable/throw';
 import { IDataFeed, DataFeed, DataFeedDetails } from '../models/dataFeed';
 import { from } from 'rxjs';
 
-const API_URL = "http://localhost:49691";
+const API_URL = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'

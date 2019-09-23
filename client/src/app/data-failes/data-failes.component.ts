@@ -32,7 +32,6 @@ export class DataFailesComponent implements OnInit {
 
   ngOnInit() {
     this.runId = this.activatedRoute.snapshot.paramMap.get('id');
-    debugger;
 
     this.dataFeedService.getDataFeedFailesInfo(this.runId).subscribe({
       next: dataFeedFailes => {
