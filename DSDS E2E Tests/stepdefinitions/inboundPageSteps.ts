@@ -61,7 +61,7 @@ Given(/^At least one 'Inbound Data Source' exists in the system$/, async () => {
 
     request('http://spb-mdspoc01.internal.corp:8080/engine-rest/process-definition', function (error, response, body) {
 
-        if (error !== undefined && response.statusCode === 201) {
+        if (error !== undefined && response.statusCode === 200) {
             let arr = JSON.parse(body);
             if (arr.length > 0) {
                 flagBackground = true;
