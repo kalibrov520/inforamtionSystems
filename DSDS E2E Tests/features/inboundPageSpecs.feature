@@ -94,9 +94,9 @@ Feature: File Management: List of inbound configurations
        As an Operator I want to be able to review every run status and check invalid records in Inbound process via DS user interface
 
         Background: At least one Inbound Data Source exists
-    Given At least one 'Inbound Data Source' exists in the system
-    And 'Operator' lands on the 'Dashboard' page
-    And 'Operator' clicks on the 'Inbound' tab in top menu   
+        Given At least one 'Inbound Data Source' exists in the system
+            And 'Operator' lands on the 'Dashboard' page
+            And 'Operator' clicks on the 'Inbound' tab in top menu   
 
     @DSDS-41
     Scenario: Test user can view the history of process runs for a specific Data Source
@@ -108,11 +108,25 @@ Feature: File Management: List of inbound configurations
     @DSDS-41
     Scenario: Test user can view the invalid records for specific Process Run
         Given A feed process starts 
-        And A process is completed with 'Failed' status
-        When  Operator clicks on 'Inbound Data Source' item in the list
-        And Operator clicks on   'Feed History' page
-            And Operator can see 'Process Run' log with following atributes: Status, Date, Success Rows, Failed Rows        
-           
+            And A process is completed with 'Failed' status
+            And  Operator clicks on 'Inbound Data Source' item in the list
+        When Operator clicks on  the hyperlink with # of failed rows
+        Then Operator can see 'Invalid Records' log
+
+            
+    Feature: File Management: Trigger feed process
+        As an Operator I want to be able to manually trigger the file transmission process
+        Background: At least one Inbound Data Source exists
+        Given At least one 'Inbound Data Source' exists in the system
+            And 'Operator' lands on the 'Dashboard' page
+            And 'Operator' clicks on the 'Inbound' tab in top menu
+    @DSDS-55
+    Scenario: Test user can run file feed process by clicking a 'Run' button 
+        When Operator hits 'Run' next to the data feed
+        Then Operator can see a new 'Last Run' record on the Dashboard page for selected 'Data Source'
+        And Operator can see a new historical record in 'Invalid Records' log
+
+
 
     
 
