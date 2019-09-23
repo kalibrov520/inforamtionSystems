@@ -20,6 +20,7 @@ export const config: Config = {
 
     specs: [
         "../../features/*.feature",
+        "../../features/*/*.feature"
     ],
 
     onPrepare: () => {
