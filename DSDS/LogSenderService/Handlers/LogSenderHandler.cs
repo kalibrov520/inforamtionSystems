@@ -18,14 +18,12 @@ namespace LogSenderService.Handlers
         private bool _isUpdated;
         private string _email;
         private readonly SmtpService _smtpService;
-        private readonly LogItemsService _logItemsService;
         private readonly ILogger<LogSenderHandler> _logger;
         private readonly IApiSettings _settings;
 
-        public LogSenderHandler(SmtpService smtpService, LogItemsService logItemsService, ILogger<LogSenderHandler> logger, IApiSettings settings)
+        public LogSenderHandler(SmtpService smtpService, ILogger<LogSenderHandler> logger, IApiSettings settings)
         {
             _smtpService = smtpService;
-            _logItemsService = logItemsService;
             _logger = logger;
             _settings = settings;
         }
@@ -40,33 +38,12 @@ namespace LogSenderService.Handlers
         {
             try
             {
-                if (!_isUpdated)
+                using (var client = new WebClient())
                 {
-                    await _logItemsService.LogSingleItemAsync(new LogItem()
-                    {
-                        IsSucceeded = true,
-                        StartDate = DateTime.Now
-                    });
-                }
-                else
-                {
-                    using (var client = new WebClient())
-                    {
-                        var failedItems = client.DownloadString(_settings.DataTransformationApiUrl + RunId);
+                    var failedItems = client.DownloadString(_settings.DataTransformationApiUrl + RunId);
 
-                        var logItem = new LogItem()
-                        {
-                            IsSucceeded = string.IsNullOrWhiteSpace(failedItems),
-                            FailedRows = JsonConvert.DeserializeObject<List<string>>(failedItems),
-                            StartDate = DateTime.Now
-                        };
-
-                        await _logItemsService.LogSingleItemAsync(logItem);
-
-                        if (!string.IsNullOrWhiteSpace(failedItems))
-                            await _smtpService.SendEmailAsync(_email, "Error", failedItems);
-                    }
-
+                    if (!string.IsNullOrWhiteSpace(failedItems))
+                        await _smtpService.SendEmailAsync(_email, "Error", failedItems);
                 }
             }
             catch (Exception ex)
