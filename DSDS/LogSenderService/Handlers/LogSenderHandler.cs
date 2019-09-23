@@ -40,19 +40,12 @@ namespace LogSenderService.Handlers
         {
             try
             {
-                if (!_isUpdated)
-                {
-                    await _logItemsService.LogSingleItemAsync(new LogItem()
-                    {
-                        IsSucceeded = true,
-                        StartDate = DateTime.Now
-                    });
-                }
-                else
-                {
+                if (_isUpdated)
+                { 
                     using (var client = new WebClient())
                     {
-                        var failedItems = client.DownloadString(_settings.DataTransformationApiUrl + RunId);
+                        var url = _settings.DataTransformationApiUrl;
+                        var failedItems = client.DownloadString( $"{url}/api/DataTransformationLog/{RunId}");
 
                         var logItem = new LogItem()
                         {
@@ -60,8 +53,6 @@ namespace LogSenderService.Handlers
                             FailedRows = JsonConvert.DeserializeObject<List<string>>(failedItems),
                             StartDate = DateTime.Now
                         };
-
-                        await _logItemsService.LogSingleItemAsync(logItem);
 
                         if (!string.IsNullOrWhiteSpace(failedItems))
                             await _smtpService.SendEmailAsync(_email, "Error", failedItems);

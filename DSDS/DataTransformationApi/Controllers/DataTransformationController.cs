@@ -40,7 +40,8 @@ namespace DataTransformationApi.Controllers
             }
             catch (Exception e)
             {
-                //ignored
+                _logger.LogError("PostDataFeedInfoAsync error", e);
+                throw;
             }
         }
 
@@ -64,9 +65,7 @@ namespace DataTransformationApi.Controllers
                 {
                     var camundaUrl = _configuration.GetSection("CamundaApi").Value;
                     var response = client.DownloadString($"{camundaUrl}/process-definition");
-
-                    // TODO convert deploymetnId to GUID
-
+                    
                     var deploymentList = JArray.Parse(response).Select(x => new
                     {
                         DataFeedId = Guid.Parse(((string) x.SelectToken("id")).Split(":").Last()),
@@ -76,8 +75,7 @@ namespace DataTransformationApi.Controllers
 
                     var dataFeedList = await _repo.GetDataFeedsMainInfo(deploymentList.Select(x => x.DataFeedId));
                     var result = new List<DataFeedMainInfo>();
-
-
+                    
                     foreach (var info in dataFeedList)
                     {
                         var key = info.DeploymentId;
@@ -95,7 +93,8 @@ namespace DataTransformationApi.Controllers
                         result.Add(new DataFeedMainInfo()
                         {
                             DeploymentId = info.DataFeedId,
-                            DataFeed = info.DataFeedName
+                            DataFeed = info.DataFeedName,
+                            ProcessDefinitionId = info.ProcessDefinitionKey
                         });
                     }
 
@@ -104,7 +103,7 @@ namespace DataTransformationApi.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError("Get DataFeed Info error");
+                _logger.LogError("Get DataFeed Info error", e);
                 throw;
             }
         }
@@ -118,7 +117,7 @@ namespace DataTransformationApi.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError("GetDataFeedDetailsInfoAsync error", e);
                 throw;
             }
         }
@@ -132,7 +131,7 @@ namespace DataTransformationApi.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError("GetDataFeedFailsAsync error", e);
                 throw;
             }
         }
