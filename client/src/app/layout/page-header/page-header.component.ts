@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'ds-page-header',
@@ -6,13 +7,15 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./page-header.component.scss'],
 })
 export class PageHeaderComponent implements OnInit {
-
-  @Input() public pageTitle: string;
-  @Input() public pageSubtitle: string;
-
-  constructor() { }
+  pageTitle: string;
+  pageSubtitle: string;
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
+    this.pageTitle = this.activatedRoute.snapshot.paramMap.get('name');
+    
+    if (this.pageTitle === null)
+      this.pageTitle = "Inbound"
   }
 
 }

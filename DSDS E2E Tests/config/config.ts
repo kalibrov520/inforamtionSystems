@@ -14,7 +14,7 @@ export const config: Config = {
     capabilities: {
         browserName: "chrome",
     },
-
+    
     framework: "custom",
     frameworkPath: require.resolve("protractor-cucumber-framework"),
 
@@ -33,7 +33,6 @@ export const config: Config = {
         format: "json:./reports/json/cucumber_report.json",
         require: ["../../typeScript/stepdefinitions/*.js", "../../typeScript/support/*.js"],
         strict: true,
-        tags: "@SpaceSearch or @CleanButton",
     },
 
     onComplete: () => {

@@ -97,7 +97,7 @@ namespace DataTransformationApi.Data
 
             var res = _context.DataFeedRunLog.FirstOrDefault(r => r.RunDateTime == _context.DataFeedRunLog.Max(x => x.RunDateTime));
 
-            var totalRows = _context.DataFeedFileLoadingLog
+            var totalRows = res == null ? 0 : _context.DataFeedFileLoadingLog
                                 .FirstOrDefault(x => x.FileReadingLogId == res.FileReadingLogId)?.TotalRows;
 
             var dataFeedList = rows.GroupBy(k => k.DeploymentId, v => v, (k, v) =>
@@ -225,11 +225,12 @@ namespace DataTransformationApi.Data
                 var entity = _context.DataFeedFileLoadingLog.AsNoTracking()
                     .FirstOrDefault(x => x.DataFeedFileLoadingLogId.Equals(readingFileLogId));
 
-                entity.TotalRows = logItem.TotalRows;
-
-                _context.Entry(entity).State = EntityState.Modified;
-
-                await _context.SaveChangesAsync();
+                if (entity != null)
+                {
+                    entity.TotalRows = logItem == null ? 0 : logItem.TotalRows;
+                    _context.Entry(entity).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
             }
             catch (Exception e)
             {

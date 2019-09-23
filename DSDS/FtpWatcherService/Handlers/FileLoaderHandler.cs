@@ -77,7 +77,10 @@ namespace FtpWatcherService.FileLoader
 
                 await Task.WhenAll(_newFiles.Select(TaskUploadNewFile));
 
-                await _fileChecker.WriteNewFilesOnFileAsync(_newFiles);
+                if (_newFiles != null && _newFiles.Any())
+                {
+                    await _fileChecker.WriteNewFilesOnFileAsync(filesOnFtp);
+                }
 
                 await LogFileReading();
 

@@ -1,0 +1,26 @@
+@import 'project.config';
+
+.mos-t-circle--progress {
+	background-color: $amber-bright;
+}
+
+.mos-c-circle--xsm {
+	position: relative;
+	width: rem-calc(22);
+	height: rem-calc(22);
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: rem-calc(2);
+		left: rem-calc(2);
+		width: rem-calc(18);
+		height: rem-calc(18);
+		border: rem-calc(2) solid $mos-white-color;
+		border-radius: 50%;
+	}
+}
+
+.mos-t-circle--inactive {
+	background: $onyx-darker;
+}

@@ -13,6 +13,7 @@ export class DataFeedComponent implements OnInit {
   deploymentId: string;
   dataFeedDetails: DataFeedDetails[];
   errorMessage: string;
+  dataFeedName: string;
  
   public paginationInfo: PaginationInfo = {
     offset: 0,
