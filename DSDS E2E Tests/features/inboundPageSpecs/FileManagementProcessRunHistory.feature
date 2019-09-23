@@ -17,7 +17,7 @@ Feature: File Management: Process run history
     @DSDS-41
     Scenario: Test user can view the invalid records for specific Process Run
         Given A feed process starts 
-        And A process is completed with 'Failed' status
-        When  Operator clicks on 'Inbound Data Source' item in the list
-        And Operator clicks on   'Feed History' page
-        Then Operator can see 'Process Run' log with following atributes: Status, Date, Success Rows, Failed Rows   
+            And A process is completed with 'Failed' status
+            And  Operator clicks on 'Inbound Data Source' item in the list
+        When Operator clicks on  the hyperlink with # of failed rows
+        Then Operator can see 'Invalid Records' log
