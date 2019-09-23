@@ -14,7 +14,8 @@
                 {{row.successRows}}
             </td>
             <td>
-                <span>{{row.failedRows}}</span>
+                <a [routerLink]="['/failes', row.lastRunId, row.dataFeed]" class="link-danger" *ngIf="row.failedRows > 0">{{row.failedRows}}</a>
+                <span *ngIf="row.failedRows == 0">{{row.failedRows}}</span>
             </td>
             <td>
                 <a>

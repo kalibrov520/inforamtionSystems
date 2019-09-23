@@ -1,5 +1,6 @@
 export interface IDataFeed {
     deploymentId: string;
+    runId: string;
     processDefinitionId: string;
     status: string;
     dataFeed: string;
@@ -11,6 +12,7 @@ export interface IDataFeed {
 export class DataFeed implements IDataFeed {
     processDefinitionId: string;
     deploymentId: string;
+    runId: string;
     status: string;
     dataFeed: string;
     lastRunning: Date;

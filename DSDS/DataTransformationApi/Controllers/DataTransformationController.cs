@@ -80,6 +80,8 @@ namespace DataTransformationApi.Controllers
                     {
                         var key = info.DeploymentId;
                         var element = deploymentList.FirstOrDefault(x => x.DataFeedId.Equals(key));
+                        info.LastRunId = info.DataFeedRuns
+                            .FirstOrDefault(x => x.RunDate == info.DataFeedRuns.Max(r => r.RunDate)).RunId;
                         info.DataFeed = element?.DataFeedName;
                         info.DeploymentId = element.DataFeedId;
                         info.ProcessDefinitionId = element.ProcessDefinitionKey;
