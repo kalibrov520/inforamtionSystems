@@ -64,14 +64,12 @@ Given(/^At least one 'Inbound Data Source' exists in the system$/, async () => {
 
 
         let tmp: boolean = false;
-        console.log(response.statusCode);
-        if (error !== null && response.statusCode === 200) {
+        if (error !== undefined && response.statusCode === 200) {
             let arr = JSON.parse(body);
             if (arr.length > 0) {
                 tmp = true;
             }
         }
-
        
         
         
