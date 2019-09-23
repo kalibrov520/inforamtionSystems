@@ -10,6 +10,7 @@ const expect = chai.expect;
 const request = require("request");
 
 const inboundPage: InboundPageObject = new InboundPageObject();
+var flagBackground = false;
 
 
 Given(/^I am on "(.*?)" page$/, async (text) => {
@@ -56,31 +57,21 @@ Then(/^I see same rows Count in the table$/, async () => {
 
 //Background
 
-Given(/^At least one 'Inbound Data Source' exists in the system$/, async () => { //bugged
+Given(/^At least one 'Inbound Data Source' exists in the system$/, async () => { //?bugged
 
-    
-    
     request('http://spb-mdspoc01.internal.corp:8080/engine-rest/process-definition', function (error, response, body) {
 
-
-        let tmp: boolean = false;
-        if (error !== undefined && response.statusCode === 200) {
+        if (error !== undefined && response.statusCode === 201) {
             let arr = JSON.parse(body);
             if (arr.length > 0) {
-                tmp = true;
+                flagBackground = true;
             }
         }
-       
-        
-        
-        expect(tmp).to.equal(true);
+
     });
 
-    
-    // chai.request('http://spb-mdspoc01.internal.corp:8080').get('/engine-rest/process-definition').end(function(err, res) {
-    //     expect(res).to.have.status(404);
-    //     expect(res.body.length).to.above(0);
-    // });
+    expect(flagBackground).be.true;
+    flagBackground = false;
     
 });
 
