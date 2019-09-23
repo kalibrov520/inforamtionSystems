@@ -12,7 +12,9 @@
     [sortByInputOptions]="sortOption"
   >
     <ng-template mercer-table-row let-row="row" >
-      <td>{{row.status}}</td>
+      <td>
+        <ds-status-circle status="{{row.status}}"></ds-status-circle>
+      </td>
       <td>{{row.date | date:'medium'}}</td>
       <td>{{row.successRows}}</td>
       <td>
