@@ -1,6 +1,6 @@
 import { InboundPageObject } from "../pages/inboundPage";
 import { config } from "../config/config";
-import { browser, element, by, ElementFinder, ElementArrayFinder } from "protractor";
+import { browser, element, by, ExpectedConditions } from "protractor";
 import { TestObject } from "protractor/built/driverProviders";
 const { Given, When, Then, PendingException } = require("cucumber");
 const chai = require("chai").use(require("chai-as-promised"));
@@ -16,6 +16,7 @@ Given(/^I am on "(.*?)" page$/, async (text) => {
     switch(text) {
         case "inbound":
             await browser.get(config.baseUrl);
+            await browser.waitForAngular();
             await expect(browser.getTitle()).to.eventually.equal("DS-PoC");
         break;
     }
