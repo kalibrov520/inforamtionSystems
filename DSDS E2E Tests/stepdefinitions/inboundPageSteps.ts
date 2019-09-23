@@ -7,10 +7,9 @@ const chai = require("chai").use(require("chai-as-promised"));
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const expect = chai.expect;
-const request = require("request");
+const rp = require('request-promise');
 
 const inboundPage: InboundPageObject = new InboundPageObject();
-var flagBackground = false;
 
 
 Given(/^I am on "(.*?)" page$/, async (text) => {
@@ -59,20 +58,19 @@ Then(/^I see same rows Count in the table$/, async () => {
 
 Given(/^At least one 'Inbound Data Source' exists in the system$/, async () => { //?bugged
 
-    request('http://spb-mdspoc01.internal.corp:8080/engine-rest/process-definition', function (error, response, body) {
 
-        if (error !== undefined && response.statusCode === 200) {
-            let arr = JSON.parse(body);
-            if (arr.length > 0) {
-                flagBackground = true;
-            }
-        }
+    let options = {
+        uri: 'http://spb-mdspoc01.internal.corp:8080/engine-rest/process-definition',
+        json: true 
+    };
+     
+    await rp(options)
+        .then(function (repos) {
+            console.log('User has %d repos', repos.length);
+            expect(repos.length).above(0);
+        });
 
-    });
 
-    expect(flagBackground).be.true;
-    flagBackground = false;
-    
 });
 
 Given(/^'Operator' lands on the 'Dashboard' page$/, async () => {
