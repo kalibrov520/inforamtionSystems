@@ -21,7 +21,6 @@ export class FailesTableComponent implements OnInit {
   ngOnInit() { }
 
   ngOnChanges(): void {
-    debugger;
     if(!this.dataFeedFailes || this.dataFeedFailes.length == 0)
     {
       return;

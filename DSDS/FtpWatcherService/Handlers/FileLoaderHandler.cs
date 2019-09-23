@@ -23,8 +23,6 @@ namespace FtpWatcherService.FileLoader
     public class FileLoaderHandler : CamundaTaskHandler
     {
         private readonly ILogger<FileLoaderHandler> _logger;
-        private readonly IFileWriter _fileWriter;
-        private readonly IFileLoader _fileLoader;
         private readonly IFileChecker _fileChecker;
         private readonly IFileManager _fileManager;
         private readonly IApiSettings _settings;
