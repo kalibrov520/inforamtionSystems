@@ -160,7 +160,7 @@ Given(/^A 'Feed File' contains issues$/, async () => {
 });
 
 When(/^A feed process starts$/, async () => {
-    throw new PendingException();
+    await expect(element.all(by.xpath("//mercer-table/table/tbody/tr")).count()).to.eventually.above(0);
 });
 
 Then(/^Operator can see an error email in his mailbox$/, async () => {
@@ -181,15 +181,23 @@ Given(/^A 'Feed File' is missing$/, async () => {
 //@DSDS-41 Test user can view the history of process runs for a specific Data Source
 
 When(/^Operator clicks on 'Inbound Data Source' item in the list$/, async () => {
-    throw new PendingException();
+
+    let row = element.all(by.xpath("//mercer-table/table/tbody/tr"));
+    let links = row.all(by.tagName('a'));
+    let first = await links.first().getAttribute("href");
+
+    await browser.get(first);
 });
 
 Then(/^Operator lands on  'Feed History' page$/, async () => {
-    throw new PendingException();
+    await expect(browser.getCurrentUrl()).to.eventually.match(/dataFeed/);
 });
 
 Then(/^Operator can see 'Process Run' log with following atributes: Status, Date, Success Rows, Failed Rows$/, async () => {
-    throw new PendingException();
+    let row = element.all(by.xpath("//mercer-table/table/thead/tr"));
+    let text = await row.first().getText();
+    
+    expect(text).to.match(/Status Date Success Rows Failed Rows File/);
 });
 
 //@DSDS-41 Test user can view the invalid records for specific Process Run
@@ -201,3 +209,20 @@ Given(/^A process is completed with 'Failed' status$/, async () => {
 When(/^Operator clicks on 'Feed History' page$/, async () => {
     throw new PendingException();
 });
+
+//File Management: Trigger feed process
+
+//@DSDS-55 Test user can run file feed process by clicking a 'Run' button
+
+When(/^Operator hits 'Run' next to the data feed$/, async () => {
+    throw new PendingException();
+});
+
+Then(/^Operator can see a new 'Last Run' record on the Dashboard page for selected 'Data Source'$/, async () => {
+    throw new PendingException();
+});
+
+Then(/^Operator can see a new historical record in 'Invalid Records' log$/, async () => {
+    throw new PendingException();
+});
+
