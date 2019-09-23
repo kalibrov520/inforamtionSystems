@@ -5,12 +5,14 @@ import { DataFeedComponent } from './data-feed.component';
 import { CalendarRangeComponent } from './calendar-range/calendar-range.component';
 import { FeedTableComponent } from './feed-table/feed-table.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { StatusCircleComponent } from './status-circle/status-circle.component';
 
 @NgModule({
   declarations: [
     DataFeedComponent,
     CalendarRangeComponent,
-    FeedTableComponent
+    FeedTableComponent,
+    StatusCircleComponent
   ],
   imports: [
     CommonModule,

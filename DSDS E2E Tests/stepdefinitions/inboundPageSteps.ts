@@ -1,16 +1,22 @@
 import { InboundPageObject } from "../pages/inboundPage";
 import { config } from "../config/config";
-import { browser, element, by, ElementFinder, ElementArrayFinder } from "protractor";
+import { browser, element, by, ExpectedConditions } from "protractor";
+import { TestObject } from "protractor/built/driverProviders";
 const { Given, When, Then, PendingException } = require("cucumber");
 const chai = require("chai").use(require("chai-as-promised"));
+const chaiHttp = require('chai-http');
+chai.use(chaiHttp);
 const expect = chai.expect;
+const rp = require('request-promise');
 
 const inboundPage: InboundPageObject = new InboundPageObject();
 
+// old stuff
 Given(/^I am on "(.*?)" page$/, async (text) => {
     switch(text) {
         case "inbound":
             await browser.get(config.baseUrl);
+            await browser.waitForAngular();
             await expect(browser.getTitle()).to.eventually.equal("DS-PoC");
         break;
     }
@@ -48,11 +54,23 @@ Then(/^I see same rows Count in the table$/, async () => {
     await expect(element.all(by.xpath("//mercer-table/table/tbody/tr")).count()).to.eventually.equal(InboundPageObject.rowCount);
 });
 
-
+//File Management: List of inbound configurations
 //Background
 
-Given(/^At least one 'Inbound Data Source' exists in the system$/, async () => {
-    //skip for now
+Given(/^At least one 'Inbound Data Source' exists in the system$/, async () => { //?bugged
+
+
+    let options = {
+        uri: 'http://spb-mdspoc01.internal.corp:8080/engine-rest/process-definition',
+        json: true 
+    };
+     
+    await rp(options)
+        .then(function (repos) {
+            expect(repos.length).above(0);
+        });
+
+
 });
 
 Given(/^'Operator' lands on the 'Dashboard' page$/, async () => {
@@ -97,7 +115,7 @@ Then(/^'Operator' can see 'Last Running Date and Time' in 'Last Running' column$
 
     cellTexts = cellTexts.filter(item => item.match(regex));
 
-    //expect(cellTexts.length).to.equal(1);
+    expect(cellTexts.length).to.above(0);
 });
 
 
@@ -129,26 +147,57 @@ Then(/^'Operator' can see a "(.*?)" of 'Inbound Data Source' items in 'Chart'$/,
     throw new PendingException();
 });
 
-//@SLA
+//File Management: Invalid feed email notification
 
-Given(/^At least one Inbound configuration exists in the system$/, async () => {
+//@DSDS-39 Test user gets a notification via email if file records have issues
+
+Given(/^'Operator' is added to the 'Notification' list for selected 'Data Source'$/, async () => {
     throw new PendingException();
 });
 
-When(/^Operator lands on the 'Dashboard' page$/, async () => {
+Given(/^A 'Feed File' contains issues$/, async () => {
     throw new PendingException();
 });
 
-When(/^Operator clicks on the 'Inbound' tab in top menu$/, async () => {
+When(/^A feed process starts$/, async () => {
     throw new PendingException();
 });
 
-When(/^Operator observes the list$/, async () => {
+Then(/^Operator can see an error email in his mailbox$/, async () => {
     throw new PendingException();
 });
 
-Then(/^Operator can see a list of existing configurations$/, async () => {
+//@DSDS-39 Test user can get a notification via email if a feed file is missing
+
+Given(/^A 'Feed File' is missing$/, async () => {
     throw new PendingException();
 });
 
-//@History same as above for now
+//@DSDS-39 Test user can get a notification via email if file is a duplicate
+
+
+//File Management: Process run history
+
+//@DSDS-41 Test user can view the history of process runs for a specific Data Source
+
+When(/^Operator clicks on 'Inbound Data Source' item in the list$/, async () => {
+    throw new PendingException();
+});
+
+Then(/^Operator lands on  'Feed History' page$/, async () => {
+    throw new PendingException();
+});
+
+Then(/^Operator can see 'Process Run' log with following atributes: Status, Date, Success Rows, Failed Rows$/, async () => {
+    throw new PendingException();
+});
+
+//@DSDS-41 Test user can view the invalid records for specific Process Run
+
+Given(/^A process is completed with 'Failed' status$/, async () => {
+    throw new PendingException();
+});
+
+When(/^Operator clicks on 'Feed History' page$/, async () => {
+    throw new PendingException();
+});

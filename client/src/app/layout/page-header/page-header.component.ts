@@ -13,6 +13,9 @@ export class PageHeaderComponent implements OnInit {
 
   ngOnInit() {
     this.pageTitle = this.activatedRoute.snapshot.paramMap.get('name');
+    
+    if (this.pageTitle === null)
+      this.pageTitle = "Inbound"
   }
 
 }
