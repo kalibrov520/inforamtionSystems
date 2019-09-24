@@ -9,7 +9,7 @@ export const config: Config = {
 
     SELENIUM_PROMISE_MANAGER: false,
 
-    baseUrl: "http://spb-mdspoc01.internal.corp:4200/",
+    baseUrl: "https://spb-mdspoc.emergn.net/",
 
     capabilities: {
         browserName: "chrome",

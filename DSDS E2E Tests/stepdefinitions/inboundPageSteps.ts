@@ -213,7 +213,7 @@ Then(/^Operator can see 'Process Run' log with following atributes: Status, Date
     let row = element.all(by.xpath("//mercer-table/table/thead/tr"));
     let text = await row.first().getText();
 
-    expect(text).to.match(/Status Date Success Rows Failed Rows File/);
+    expect(text).to.match(/Status Date Success Rows Failed Rows/);
 });
 
 //@DSDS-41 Test user can view the invalid records for specific Process Run
