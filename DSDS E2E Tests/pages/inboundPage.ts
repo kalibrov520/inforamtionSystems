@@ -7,6 +7,7 @@ export class InboundPageObject {
     public searchButton: ElementFinder;
     public cleanButton: ElementFinder;
     public static rowCount: number;
+    public static lastRun: string;
 
     public inboundTab: ElementFinder;
     public inboundDataSource: ElementFinder;

@@ -244,7 +244,6 @@ When(/^Operator clicks on  the hyperlink with # of failed rows$/, async () => {
             
         
             if (first !== "javascript:;" && first !== "#") {
-                console.log(first);
                 flag = true;
                 break;
             }
@@ -268,16 +267,67 @@ Then(/^Operator can see 'Invalid Records' log$/, async () => {
 //File Management: Trigger feed process
 
 //@DSDS-55 Test user can run file feed process by clicking a 'Run' button
+//Remove throw Exception, and add click on Run button. It's might work fine.
 
 When(/^Operator hits 'Run' next to the data feed$/, async () => {
     throw new PendingException();
+    let row = element.all(by.xpath("//mercer-table/table/tbody/tr"));
+    let cells = row.all(by.tagName('td'));
+
+    let regex = /\w{3} \d{1,2}, \d{4}, \d{1,2}:\d{1,2}:\d{1,2} (PM|AM)/g;
+    
+
+    let cellTexts : string[] = await cells.map(function (elm) {
+        return elm.getText();
+    });
+
+    cellTexts = cellTexts.filter(item => item.match(regex));
+
+    InboundPageObject.lastRun = cellTexts[0];
+
+    //add here click on Run button
 });
 
 Then(/^Operator can see a new 'Last Run' record on the Dashboard page for selected 'Data Source'$/, async () => {
     throw new PendingException();
+
+    let row = element.all(by.xpath("//mercer-table/table/tbody/tr"));
+    let cells = row.all(by.tagName('td'));
+
+    let regex = /\w{3} \d{1,2}, \d{4}, \d{1,2}:\d{1,2}:\d{1,2} (PM|AM)/g;
+    
+
+    let cellTexts : string[] = await cells.map(function (elm) {
+        return elm.getText();
+    });
+
+    cellTexts = cellTexts.filter(item => item.match(regex));
+    
+    expect(InboundPageObject.lastRun).to.be.not.equal(cellTexts[0]);
 });
 
 Then(/^Operator can see a new historical record in 'Invalid Records' log$/, async () => {
     throw new PendingException();
+    let rows = element.all(by.xpath("//mercer-table/table/tbody/tr"));
+    let links = rows.all(by.tagName('a')); 
+    let first = await links.first().getAttribute("href");
+
+    await browser.get(first);
+
+
+
+    let row = element.all(by.xpath("//mercer-table/table/tbody/tr"));
+    let cells = row.all(by.tagName('td'));
+
+    let regex = /\w{3} \d{1,2}, \d{4}, \d{1,2}:\d{1,2}:\d{1,2} (PM|AM)/g;
+    
+
+    let cellTexts : string[] = await cells.map(function (elm) {
+        return elm.getText();
+    });
+
+    cellTexts = cellTexts.filter(item => item.match(regex));
+
+    expect(InboundPageObject.lastRun).to.be.equal(cellTexts[0]);
 });
 
