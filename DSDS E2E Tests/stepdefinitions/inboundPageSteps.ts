@@ -270,7 +270,6 @@ Then(/^Operator can see 'Invalid Records' log$/, async () => {
 //Remove throw Exception, and add click on Run button. It's might work fine.
 
 When(/^Operator hits 'Run' next to the data feed$/, async () => {
-    throw new PendingException();
     let row = element.all(by.xpath("//mercer-table/table/tbody/tr"));
     let cells = row.all(by.tagName('td'));
 
@@ -286,10 +285,13 @@ When(/^Operator hits 'Run' next to the data feed$/, async () => {
     InboundPageObject.lastRun = cellTexts[0];
 
     //add here click on Run button
+
+    let links = row.all(by.tagName('a')); 
+    await links.get(2).click();
+    
 });
 
 Then(/^Operator can see a new 'Last Run' record on the Dashboard page for selected 'Data Source'$/, async () => {
-    throw new PendingException();
 
     let row = element.all(by.xpath("//mercer-table/table/tbody/tr"));
     let cells = row.all(by.tagName('td'));
@@ -304,10 +306,10 @@ Then(/^Operator can see a new 'Last Run' record on the Dashboard page for select
     cellTexts = cellTexts.filter(item => item.match(regex));
     
     expect(InboundPageObject.lastRun).to.be.not.equal(cellTexts[0]);
+    InboundPageObject.lastRun = cellTexts[0];
 });
 
 Then(/^Operator can see a new historical record in 'Invalid Records' log$/, async () => {
-    throw new PendingException();
     let rows = element.all(by.xpath("//mercer-table/table/tbody/tr"));
     let links = rows.all(by.tagName('a')); 
     let first = await links.first().getAttribute("href");
