@@ -2,6 +2,7 @@ import { InboundPageObject } from "../../pages/inboundPage";
 import { config } from "../../config/config";
 import { browser, element, by, ExpectedConditions } from "protractor";
 import { TestObject } from "protractor/built/driverProviders";
+import { AssertionError } from "assert";
 const { Given, When, Then, PendingException } = require("cucumber");
 const chai = require("chai").use(require("chai-as-promised"));
 const chaiHttp = require('chai-http');
@@ -17,11 +18,11 @@ const inboundPage: InboundPageObject = new InboundPageObject();
 //@DSDS-42 Test user can see a list of Inbound configurations
 
 When(/^'Operator' observes the list of 'Inbound Data Source'$/, async () => {
-    await inboundPage.inboundDataSource.isPresent();
+    expect(await inboundPage.inboundDataSource.isPresent()).to.be.true;
 });
 
 Then(/^'Operator' can see a list of existing 'Inbound Data Source' items$/, async () => {
-    await inboundPage.inboundDataSource.isDisplayed();
+    expect(await inboundPage.inboundDataSource.isDisplayed()).to.be.true;
 });
 
 //@DSDS-42 Test user can see a status of the last process run in Inbound configurations
@@ -53,28 +54,103 @@ Then(/^'Operator' can see 'Last Running Date and Time' in 'Last Running' column$
 
 //@DSDS-42 Test user can filter feeds by status
 
-Given(/^There is "(.*?)" of 'Inbound Data Source' items in "(.*?)"$/, async (number, status) => {
-    throw new PendingException();
+Given(/^There is "(.*?)" of 'Inbound Data Source' items in "(.*?)"$/, async (number, status) => { //rewrite to get from api?
+    let charts = element.all(by.css(".status-presentation-row > .status-files > .status-visual-presentation > .files-amount > .number"));
+    let chartsText : string[] = await charts.map(function (elm) {
+        return elm.getText();
+    });
+
+    switch(status) {
+        case "Failed":
+            expect(number).to.be.equal(chartsText[0]);
+            break;
+        case "Success":
+            expect(number).to.be.equal(chartsText[1]);
+            break;
+        case "Late":
+            expect(number).to.be.equal(chartsText[2]);
+            break;
+        case "Inactive":
+            expect(number).to.be.equal(chartsText[3]);
+            break;
+        case "All":
+            expect(number).to.be.equal(chartsText[4]);
+            break;
+        default:
+            throw new Error("There is no such status");
+            break;
+    }
 });
 
 When(/^'Operator' clicks on a "(.*?)" 'Filter' icon$/, async (color) => {
-    throw new PendingException();
+    let filters = element.all(by.xpath("//ds-status-filter/div/ul/li/a"));
+
+    switch(color) {
+        case "Red":
+            filters.get(0).click();
+            break;
+        case "Green":
+            filters.get(1).click();
+            break;
+        case "Yellow":
+            filters.get(2).click();
+            break;
+        case "Grey":
+            filters.get(3).click();
+            break;
+        case "Blue":
+            filters.get(4).click();
+            break;
+        default:
+            throw new Error("There is no such filter");
+            break;
+    };
+
+    await browser.waitForAngular();
 });
 
 Then(/^'Operator' can see a "(.*?)" 'Inbound Data Source' items with selected 'Feed Status'$/, async (count) => {
-    throw new PendingException();
+    let rows = await element.all(by.xpath("//mercer-table/table/tbody/tr")).count();
+    console.log(rows);
+    expect(rows).to.be.equal(parseInt(count));
 });
 
 //@DSDS-42 Test user can see a status dashboard
 
 When(/^'Operator' observes the 'Chart' circles$/, async () => {
-    throw new PendingException();
+    let chart = element(by.css(".status-presentation-row"));
+    expect(await chart.isDisplayed()).to.be.true;
 });
 
-Then(/^'Operator' observes a "(.*?)" 'Chart' circle$/, async (circle_count) => {
-    throw new PendingException();
+Then(/^'Operator' observes a "(.*?)" 'Chart' circle$/, async (circle_color) => {
+    let elem ;
+
+    switch(circle_color) {
+        case "Red":
+            elem = await element(by.css(".cutoff-status-red"));
+            break;
+        case "Green":
+            elem = await element(by.css(".cutoff-status-green"));
+            break;
+        case "Yellow":
+            elem = await element(by.css(".cutoff-status-yellow"));
+            break;
+        case "Grey":
+            elem = await element(by.css(".cutoff-status-gray"));
+            break;
+        case "Blue":
+            elem = await element(by.css(".cutoff-status-blue"));
+            break;
+        default:
+            throw new Error("There is no such filter");
+            break;
+    };
+
+    expect(await elem).to.be.not.equal(undefined);
+    inboundPage.inboundChart = elem;
 });
 
 Then(/^'Operator' can see a "(.*?)" of 'Inbound Data Source' items in 'Chart'$/, async (count) => {
-    throw new PendingException();
+    let text = await inboundPage.inboundChart.getText();
+    expect(text[0]).to.be.equal(count);
 });

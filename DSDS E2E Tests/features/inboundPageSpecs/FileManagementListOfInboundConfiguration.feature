@@ -19,11 +19,11 @@ Feature: File Management: List of inbound configurations
     
     @DSDS-42
     Scenario Outline: Test user can filter feeds by status
-        Given There is "number" of 'Inbound Data Source' items in "status"
-        When 'Operator' clicks on a "color" 'Filter' icon 
-        Then 'Operator' can see a "count" 'Inbound Data Source' items with selected 'Feed Status' 
+        Given There is "<number>" of 'Inbound Data Source' items in "<status>"
+        When 'Operator' clicks on a "<color>" 'Filter' icon 
+        Then 'Operator' can see a "<count>" 'Inbound Data Source' items with selected 'Feed Status' 
     Examples:
-    | number | status | color | count|
+	| number | status | color | count|
     | 5 | Failed  | Red  | 5 |
     | 1 | Success  | Green  | 1 |
     | 2 | Late  | Yellow  | 2 |
@@ -32,13 +32,13 @@ Feature: File Management: List of inbound configurations
 
     @DSDS-42
     Scenario Outline: Test user can see a status dashboard
-        Given There is "number" of 'Inbound Data Source' items in "status"  
+        Given There is "<number>" of 'Inbound Data Source' items in "<status>"
         When 'Operator' observes the 'Chart' circles 
-        Then 'Operator' observes a "circle color" 'Chart' circle
-        And 'Operator' can see a "count" of 'Inbound Data Source' items in 'Chart'
+        Then 'Operator' observes a "<circle color>" 'Chart' circle
+        And 'Operator' can see a "<count>" of 'Inbound Data Source' items in 'Chart'
 
     Examples:
-    | number | status | circle color | count |
+	| number | status | color | count|
     | 5 | Failed  | Red  | 5 |
     | 1 | Success  | Green  | 1 |
     | 2 | Late  | Yellow  | 2 |
