@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 const expect = chai.expect;
 const rp = require('request-promise');
 
-const inboundPage: InboundPageObject = new InboundPageObject();
+var inboundPage: InboundPageObject = new InboundPageObject();
 
 
 
@@ -54,7 +54,11 @@ Then(/^'Operator' can see 'Last Running Date and Time' in 'Last Running' column$
 
 //@DSDS-42 Test user can filter feeds by status
 
-Given(/^There is "(.*?)" of 'Inbound Data Source' items in "(.*?)"$/, async (number, status) => { //rewrite to get from api?
+Given(/^There is "(.*?)" of 'Inbound Data Source' items in "(.*?)"$/, async (number, status) => { 
+    await browser.get("http://spb-mdspoc01.internal.corp:702/"); //site with static data
+    inboundPage = new InboundPageObject();
+
+
     let charts = element.all(by.css(".status-presentation-row > .status-files > .status-visual-presentation > .files-amount > .number"));
     let chartsText : string[] = await charts.map(function (elm) {
         return elm.getText();
