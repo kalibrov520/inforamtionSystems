@@ -34,7 +34,7 @@ Feature: File Management: List of inbound configurations
     Scenario Outline: Test user can see a status dashboard
         Given There is "<number>" of 'Inbound Data Source' items in "<status>"
         When 'Operator' observes the 'Chart' circles 
-        Then 'Operator' observes a "<circle color>" 'Chart' circle
+        Then 'Operator' observes a "<color>" 'Chart' circle
         And 'Operator' can see a "<count>" of 'Inbound Data Source' items in 'Chart'
 
     Examples:

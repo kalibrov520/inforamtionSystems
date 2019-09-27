@@ -54,7 +54,7 @@ Then(/^'Operator' can see 'Last Running Date and Time' in 'Last Running' column$
 
 //@DSDS-42 Test user can filter feeds by status
 
-Given(/^There is "(.*?)" of 'Inbound Data Source' items in "(.*?)"$/, async (number, status) => { 
+Given(/^There is "(.*?)" of 'Inbound Data Source' items in "(.*?)"$/,{timeout: 2 * 5000} ,async (number, status) => { 
     await browser.get("http://spb-mdspoc01.internal.corp:702/"); //site with static data
     inboundPage = new InboundPageObject();
 
@@ -114,9 +114,8 @@ When(/^'Operator' clicks on a "(.*?)" 'Filter' icon$/, async (color) => {
 });
 
 Then(/^'Operator' can see a "(.*?)" 'Inbound Data Source' items with selected 'Feed Status'$/, async (count) => {
-    let rows = await element.all(by.xpath("//mercer-table/table/tbody/tr")).count();
-    console.log(rows);
-    expect(rows).to.be.equal(parseInt(count));
+    let rows = await element.all(by.xpath("//mercer-table/table/tbody/tr")).getText();
+    expect(rows.length).to.be.equal(parseInt(count));
 });
 
 //@DSDS-42 Test user can see a status dashboard
@@ -126,10 +125,10 @@ When(/^'Operator' observes the 'Chart' circles$/, async () => {
     expect(await chart.isDisplayed()).to.be.true;
 });
 
-Then(/^'Operator' observes a "(.*?)" 'Chart' circle$/, async (circle_color) => {
+Then(/^'Operator' observes a "(.*?)" 'Chart' circle$/, async (color) => {
     let elem ;
-
-    switch(circle_color) {
+    console.log(color);
+    switch(color) {
         case "Red":
             elem = await element(by.css(".cutoff-status-red"));
             break;
@@ -149,8 +148,9 @@ Then(/^'Operator' observes a "(.*?)" 'Chart' circle$/, async (circle_color) => {
             throw new Error("There is no such filter");
             break;
     };
+    console.log(elem);
 
-    expect(await elem).to.be.not.equal(undefined);
+    expect(elem).to.be.not.equal(undefined);
     inboundPage.inboundChart = elem;
 });
 
