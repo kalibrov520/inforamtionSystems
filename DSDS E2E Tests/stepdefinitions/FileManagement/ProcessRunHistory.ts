@@ -61,7 +61,7 @@ Given(/^A process is completed with 'Failed' status$/, async () => {
     expect(rowsFailed.count()).to.eventually.above(0);
 });
 
-When(/^Operator clicks on  the hyperlink with # of failed rows$/, async () => {
+When(/^Operator clicks on  the hyperlink with # of failed rows$/,{timeout: 2 * 5000}, async () => {
     let rows = element.all(by.xpath("//mercer-table/table/tbody/tr"));
 
 

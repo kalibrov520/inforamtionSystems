@@ -1,6 +1,6 @@
 import { InboundPageObject } from "../../pages/inboundPage";
 import { config } from "../../config/config";
-import { browser, element, by, ExpectedConditions } from "protractor";
+import { browser, element, by, ExpectedConditions, protractor } from "protractor";
 import { TestObject } from "protractor/built/driverProviders";
 import { AssertionError } from "assert";
 const { Given, When, Then, PendingException } = require("cucumber");
@@ -56,6 +56,7 @@ Then(/^'Operator' can see 'Last Running Date and Time' in 'Last Running' column$
 
 Given(/^There is "(.*?)" of 'Inbound Data Source' items in "(.*?)"$/,{timeout: 2 * 5000} ,async (number, status) => { 
     await browser.get("http://spb-mdspoc01.internal.corp:702/"); //site with static data
+    await browser.waitForAngular();
     inboundPage = new InboundPageObject();
 
 
@@ -88,6 +89,8 @@ Given(/^There is "(.*?)" of 'Inbound Data Source' items in "(.*?)"$/,{timeout: 2
 
 When(/^'Operator' clicks on a "(.*?)" 'Filter' icon$/, async (color) => {
     let filters = element.all(by.xpath("//ds-status-filter/div/ul/li/a"));
+    await browser.wait(ExpectedConditions.presenceOf(filters.get(0)), 5000, 'Element taking too long to appear in the DOM');
+    console.log(await filters);
 
     switch(color) {
         case "Red":
@@ -110,12 +113,14 @@ When(/^'Operator' clicks on a "(.*?)" 'Filter' icon$/, async (color) => {
             break;
     };
 
-    await browser.waitForAngular();
+    
 });
 
 Then(/^'Operator' can see a "(.*?)" 'Inbound Data Source' items with selected 'Feed Status'$/, async (count) => {
-    let rows = await element.all(by.xpath("//mercer-table/table/tbody/tr")).getText();
-    expect(rows.length).to.be.equal(parseInt(count));
+    await browser.waitForAngular();
+    let rows = element.all(by.xpath("//mercer-table/table/tbody/tr"));
+    await browser.wait(ExpectedConditions.presenceOf(rows.get(0)), 5000, 'Element taking too long to appear in the DOM');
+    expect(await rows.count()).to.be.equal(parseInt(count));
 });
 
 //@DSDS-42 Test user can see a status dashboard
@@ -127,7 +132,6 @@ When(/^'Operator' observes the 'Chart' circles$/, async () => {
 
 Then(/^'Operator' observes a "(.*?)" 'Chart' circle$/, async (color) => {
     let elem ;
-    console.log(color);
     switch(color) {
         case "Red":
             elem = await element(by.css(".cutoff-status-red"));
@@ -148,7 +152,6 @@ Then(/^'Operator' observes a "(.*?)" 'Chart' circle$/, async (color) => {
             throw new Error("There is no such filter");
             break;
     };
-    console.log(elem);
 
     expect(elem).to.be.not.equal(undefined);
     inboundPage.inboundChart = elem;
